@@ -1,0 +1,146 @@
+{
+  "main": {
+    "id": "ac671a2f928afce8",
+    "type": "split",
+    "children": [
+      {
+        "id": "8ef35e4005cd742c",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "266eb77cf8b9cff5",
+            "type": "leaf",
+            "state": {
+              "type": "markdown",
+              "state": {
+                "file": "Progetto - Smart Parking.md",
+                "mode": "source",
+                "source": false
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "vertical"
+  },
+  "left": {
+    "id": "e877f9cd0652f9b5",
+    "type": "split",
+    "children": [
+      {
+        "id": "2a49ea13c6411ddf",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "30ff1c9243fd3a53",
+            "type": "leaf",
+            "state": {
+              "type": "file-explorer",
+              "state": {
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "94eaa96b298c99d8",
+            "type": "leaf",
+            "state": {
+              "type": "search",
+              "state": {
+                "query": "",
+                "matchingCase": false,
+                "explainSearch": false,
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical"
+              }
+            }
+          },
+          {
+            "id": "0463e49b55e3bb2f",
+            "type": "leaf",
+            "state": {
+              "type": "starred",
+              "state": {}
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300
+  },
+  "right": {
+    "id": "b9824d8a4f17e4b1",
+    "type": "split",
+    "children": [
+      {
+        "id": "85d2a9f001997f9e",
+        "type": "tabs",
+        "children": [
+          {
+            "id": "d3381f2c144f553e",
+            "type": "leaf",
+            "state": {
+              "type": "backlink",
+              "state": {
+                "file": "Progetto - Smart Parking.md",
+                "collapseAll": false,
+                "extraContext": false,
+                "sortOrder": "alphabetical",
+                "showSearch": false,
+                "searchQuery": "",
+                "backlinkCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "7d2a0661f8bd1f7f",
+            "type": "leaf",
+            "state": {
+              "type": "outgoing-link",
+              "state": {
+                "file": "Progetto - Smart Parking.md",
+                "linksCollapsed": false,
+                "unlinkedCollapsed": true
+              }
+            }
+          },
+          {
+            "id": "5f29958ee7d3a688",
+            "type": "leaf",
+            "state": {
+              "type": "tag",
+              "state": {
+                "sortOrder": "frequency",
+                "useHierarchy": true
+              }
+            }
+          },
+          {
+            "id": "484dc2ba2af853e6",
+            "type": "leaf",
+            "state": {
+              "type": "outline",
+              "state": {
+                "file": "Progetto - Smart Parking.md"
+              }
+            }
+          }
+        ]
+      }
+    ],
+    "direction": "horizontal",
+    "width": 300,
+    "collapsed": true
+  },
+  "active": "266eb77cf8b9cff5",
+  "lastOpenFiles": [
+    "Diagram 1.svg.md",
+    "Progetto - Smart Parking.md",
+    "demo-credential.png",
+    "Pasted image 20221019193259.png.md"
+  ]
+}

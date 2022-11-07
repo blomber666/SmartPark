@@ -14,7 +14,7 @@ Alcuni garage sono dotati di semafori per ogni spazio di parcheggio: se lo spazi
 
 -  **WebApp**
 	Il progetto dovrà essere sviluppato utilizzando le tecniche presentate a lezione e in particolare dovrà
-	- [] essere concordato in anticipo con i docenti (Marco Alberti, lbrmrc@unife.it, Damiano Azzolini, damiano.azzolini@unife.it)
+	- [x] essere concordato in anticipo con i docenti (Marco Alberti, lbrmrc@unife.it, Damiano Azzolini, damiano.azzolini@unife.it)
 	- [x] essere svolto da non più di due studenti
 	- [] essere accompagnato da una relazione scritta da discutere o da una presentazione
 	- [] avere una specifica dei requisiti almeno parziale
