@@ -13,13 +13,24 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Progetto - Smart Parking.md",
+                "file": "Specifica dei Requisiti.md",
                 "mode": "source",
                 "source": false
               }
             }
+          },
+          {
+            "id": "377bb243b8be0820",
+            "type": "leaf",
+            "state": {
+              "type": "image",
+              "state": {
+                "file": "demo-credential.png"
+              }
+            }
           }
-        ]
+        ],
+        "currentTab": 1
       }
     ],
     "direction": "vertical"
@@ -69,7 +80,8 @@
       }
     ],
     "direction": "horizontal",
-    "width": 300
+    "width": 300,
+    "collapsed": true
   },
   "right": {
     "id": "b9824d8a4f17e4b1",
@@ -85,7 +97,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Progetto - Smart Parking.md",
+                "file": "demo-credential.png",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -102,7 +114,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Progetto - Smart Parking.md",
+                "file": "demo-credential.png",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -125,7 +137,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Progetto - Smart Parking.md"
+                "file": "demo-credential.png"
               }
             }
           }
@@ -136,11 +148,16 @@
     "width": 300,
     "collapsed": true
   },
-  "active": "266eb77cf8b9cff5",
+  "active": "30ff1c9243fd3a53",
   "lastOpenFiles": [
-    "Diagram 1.svg.md",
+    "Pasted image 20221019193259.png",
+    "queue-service-tb.png",
     "Progetto - Smart Parking.md",
+    "Industria 4.0.md",
+    "Specifica dei Requisiti.md",
     "demo-credential.png",
+    "Diagram 1.svg",
+    "Diagram 1.svg.md",
     "Pasted image 20221019193259.png.md"
   ]
 }

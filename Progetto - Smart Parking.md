@@ -1,6 +1,6 @@
 ![[Pasted image 20221019193259.png|500]]
 
-In particolare, per individuare gli spazi disponibili, si possono **embeddare sensori nel terreno, o  installare telecamere sui pali della luce o sulle mura degli edifici**. Un software di riconoscimento di immagini traduce le immagini riprese dalle telecamere pre-installate in dati relativi all’occupazione del suolo. In questo modo i sensori sono in grado di individuare la presenza di veicoli all’interno di un parcheggio.
+In particolare, per individuare gli spazi disponibili, si possono **embeddare sensori nel terreno, o installare telecamere sui pali della luce o sulle mura degli edifici**. Un software di riconoscimento di immagini traduce le immagini riprese dalle telecamere pre-installate in dati relativi all’occupazione del suolo. In questo modo i sensori sono in grado di individuare la presenza di veicoli all’interno di un parcheggio.
 
 Alcuni garage sono dotati di semafori per ogni spazio di parcheggio: se lo spazio è libero scatta la luce verde, se occupato quella rossa. Questo è reso possibile dai sensori collocati in ciascuna area, in grado di individuare se è occupata o no. I dati vengono poi inviati via wireless a un gateway e rilasciati su una piattaforma di smart parking sul cloud. Aggregati con altri dati relativi ai parcheggi, contribuiscono a formare una mappa complessiva dei parcheggi in real time.
 
