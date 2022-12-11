@@ -1,0 +1,11 @@
+name: SmartParking
+
+dependencies:
+  - python
+  - numpy
+  - requests
+  - flask
+  - pip
+  - pip:
+    - Flask-Testing
+    - tb-mqtt-client
