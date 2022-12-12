@@ -9,3 +9,6 @@ dependencies:
   - pip:
     - Flask-Testing
     - tb-mqtt-client
+    - flask-mqtt
+    - jsonify
+    
