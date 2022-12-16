@@ -30,11 +30,9 @@
 					{{ login_form.password }}
 					<button name="login">Login</button>
 					{% if messages %}
-					<ul class="messages">
-					  {% for message in messages %}
-						<li class="{{ message.tags }}">{{ message }}</li>
-					  {% endfor %}
-					</ul>
+	 					{% for message in messages %}
+						<div class="message_info">{{ message }}</div>
+					    {% endfor %}
 				  {% endif %}
 				</form>
 			</div>

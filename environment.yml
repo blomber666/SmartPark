@@ -10,4 +10,4 @@ dependencies:
     - tb-rest-client
     - psycopg2
     - django
-    
+    - folium

@@ -5,6 +5,45 @@ from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
 from django.contrib import messages
 from .forms import LoginForm, SignupForm
+import folium
+
+def create_map():    
+    map = folium.Map(location=[44.83895673644131, 11.614725304456822], zoom_start=14)
+
+    folium.Marker(
+        location = [44.8333320, 11.6166670],
+        popup = "<a href=/park>Park 1</a>", 
+        tooltip = "Click me!", 
+        icon = folium.Icon(color="darkred",icon="home", prefix="fa")
+        ).add_to(map)
+    '''
+    for i in range(len(f["attrazioni"])):
+        folium.Marker(
+            location = [f["attrazioni"][i]["x"],f["attrazioni"][i]["y"]],
+            popup = f["attrazioni"][i]["nome"],
+            icon = folium.Icon(color="darkred", icon="map", prefix="fa")
+            ).add_to(map)
+    wexcel(tour, fun_name, iteration)
+    route(tour)
+
+    folium.GeoJson("percorso.geojson", name=fun_name).add_to(map)
+    folium.LayerControl().add_to(map)
+    
+    for k in tour[0][1:-1]:
+        folium.Marker(
+            location = [f["attrazioni"][(k-1)]["x"],f["attrazioni"][(k-1)]["y"]],
+            popup = f["attrazioni"][(k-1)]["nome"], 
+            tooltip = tour[0].index(k),
+            icon = folium.Icon(color="darkpurple", icon="map", prefix="fa")
+            ).add_to(map)
+    '''
+
+    map.save("web2/users/templates/map.html")
+    #wb.open(fun_name+"\\#"+str(iteration)+".html")
+    #del(map)
+
+def park(request):
+    return render(request,'test.html')
 
 def home(request):
     if request.method == 'POST':
@@ -18,12 +57,13 @@ def home(request):
                 username = login_form.cleaned_data.get('username')
                 password = login_form.cleaned_data.get('password')
                 user = authenticate(username=username, password=password)
-                print("useris none?")
+                print("user is none?")
                 print(user is None)
                 if user is not None:
                     login(request, user)
                     messages.info(request, f"You are now logged in as {username}.")
-                    return render(request, 'test.html', context)
+                    create_map()
+                    return render(request, 'map.html', context)
             else:
                 messages.error(request,"Invalid username or password.")
                 return render(request, 'login.html', context)

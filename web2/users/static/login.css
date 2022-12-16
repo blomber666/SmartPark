@@ -21,8 +21,23 @@ body{
 #chk{
 	display: none;
 }
-message{
-	color:red
+.message_info{
+	width: 50%;
+	height: 40px;
+	margin: auto;
+	text-align: center;
+	padding-top: 15px;
+	padding-bottom: 0px;
+	justify-content: center;
+	display: block;
+	color: rgba(255, 255, 255, 0.815);
+	background:  rgb(143, 0, 0);
+	font-size: 1em;
+	font-weight: bold;
+	outline: none;
+	border: none;
+	border-radius: 5px;
+	transition: .2s ease-in;
 }
 .login{
 	position: relative;
