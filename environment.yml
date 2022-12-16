@@ -4,17 +4,10 @@ dependencies:
   - python
   - numpy
   - requests
-  - flask
   - pip
   - pip:
-    - Flask-Testing
     - tb-mqtt-client
-    - flask-mqtt
     - tb-rest-client
     - psycopg2
-    - flask-sqlalchemy
-    - flask-login
-    - Flask-Migrate
-    - flask_script
     - django
     
