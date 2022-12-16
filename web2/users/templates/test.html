@@ -5,5 +5,12 @@
     </head>
     <body>
         <div align="center">Hello World!</div>
+		{% if messages %}
+		<ul class="messages">
+		  {% for message in messages %}
+			<li class="{{ message.tags }}">{{ message }}</li>
+		  {% endfor %}
+		</ul>
+	  {% endif %}
     </body>
 </html>
