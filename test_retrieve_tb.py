@@ -10,7 +10,7 @@ logging.basicConfig(level=logging.DEBUG,
                     datefmt='%Y-%m-%d %H:%M:%S')
 
 # ThingsBoard REST API URL
-url = "http://10.1.22.45:8080"
+url = "http://192.168.1.197:8080"
 # Default Tenant Administrator credentials
 username = "tenant@thingsboard.org"
 password = "tenant"
@@ -33,11 +33,14 @@ with RestClientCE(base_url=url) as rest_client:
         # Auth with credentials
         rest_client.login(username=username, password=password)
 
+        # retrieve telemetry for proximity_sensor_1
+        telemetry = rest_client.get_latest_timeseries(EntityId("69482ca0-7d65-11ed-b021-03cf31a5a03e","DEVICE" ))
+        print(telemetry)
         # Creating an Asset
-        asset = Asset(name="Building 1", type="building")
-        asset = rest_client.save_asset(asset)
+        # asset = Asset(name="Building 1", type="building")
+        # asset = rest_client.save_asset(asset)
 
-        logging.info("Asset was created:\n%r\n", asset)
+        # logging.info("Asset was created:\n%r\n", asset)
 
         # # creating a Device
         # device = Device(name="Thermometer 1", type="thermometer")
@@ -49,6 +52,6 @@ with RestClientCE(base_url=url) as rest_client:
         # relation = EntityRelation(_from=asset.id, to=device.id, type="Contains")
         # relation = rest_client.save_relation(relation)
 
-        logging.info(" Relation was created:\n%r\n", relation)
+        #logging.info(" Relation was created:\n%r\n", relation)
     except ApiException as e:
         logging.exception(e)
