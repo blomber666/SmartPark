@@ -4,16 +4,25 @@ from django.shortcuts import render
 from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
 from django.contrib import messages
-from django.contrib.auth.forms import UserCreationForm
 from .forms import LoginForm, SignupForm
 
 def home(request):
     if request.method == 'POST':
         if 'login' in request.POST:
             signup_form = SignupForm()
-            login_form = LoginForm(request.POST)
-            context = {'form': login_form}
-            print("logging in")
+            login_form = LoginForm(request.POST, data=request.POST)
+            context = {'login_form': login_form, 'signup_form':signup_form}
+            if login_form.is_valid():
+                username = login_form.cleaned_data.get('username')
+                password = login_form.cleaned_data.get('password')
+                user = authenticate(username=username, password=password)
+                if user is not None:
+                    login(request, user)
+                    messages.info(request, f"You are now logged in as {username}.")
+                    return render(request, 'mango.html', context)
+                else:
+                    messages.error(request,"Invalid username or password.")
+
             return render(request, 'test.html', context)
 
         elif 'signup' in request.POST:
