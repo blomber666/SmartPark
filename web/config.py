@@ -9,7 +9,7 @@ basedir = os.path.abspath(os.path.dirname(__file__))
 DEBUG = True
 
 # Connect to the database
-#SQLALCHEMY_DATABASE_URI = 'your psycopg2 URI connection'
+SQLALCHEMY_DATABASE_URI = '192.168.1.197'
 
 # Turn off the Flask-SQLAlchemy event system and warning
 SQLALCHEMY_TRACK_MODIFICATIONS = False
