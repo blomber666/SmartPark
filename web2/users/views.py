@@ -9,7 +9,6 @@ from .forms import LoginForm, SignupForm
 
 def home(request):
     if request.method == 'POST':
-        print(request.POST)
         if 'login' in request.POST:
             signup_form = SignupForm()
             login_form = LoginForm(request.POST)
@@ -26,7 +25,6 @@ def home(request):
                 messages.success(request, f'Your account has been created. You can log in now!')    
                 return redirect('succesfully login')
             else:
-                print(signup_form.errors)
                 messages.warning(request, f'Invalid input. Please try again.')
                 return render(request, 'login.html', context)
     else:
