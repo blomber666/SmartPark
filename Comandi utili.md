@@ -27,8 +27,13 @@ DROP DATABASE <database name>;
 ```
 
 ## Conda
-aggiorna enviroment da file
+aggiorna Conda
+```bash
+conda update -n base -c defaults conda
+```
 
-```python
-conda env update --name myenv --file local.yml --prune
+aggiorna enviroment da file
+```bash
+#conda env update --name myenv --file local.yml --prune
+conda env update --name SmartParking --file .\environment.yml --prune
 ```
