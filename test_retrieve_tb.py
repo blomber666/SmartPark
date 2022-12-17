@@ -5,6 +5,7 @@ from tb_rest_client.rest_client_ce import *
 from tb_rest_client.rest import ApiException
 
 
+
 logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s - %(levelname)s - %(module)s - %(lineno)d - %(message)s',
                     datefmt='%Y-%m-%d %H:%M:%S')
@@ -33,9 +34,22 @@ with RestClientCE(base_url=url) as rest_client:
         # Auth with credentials
         rest_client.login(username=username, password=password)
 
-        # retrieve telemetry for proximity_sensor_1
+        # retrieve telemetry for sensor_1_1
         telemetry = rest_client.get_latest_timeseries(EntityId("69482ca0-7d65-11ed-b021-03cf31a5a03e","DEVICE" ))
         print(telemetry)
+        
+        #get park assets
+        parks = []
+        parks_retrieved = rest_client.get_tenant_assets(page_size=100, page=0, type="park").data
+        for park in parks_retrieved:
+            contained_devices = rest_client.find_info_by_from(park.id.id, park.id.entity_type, "CONTAINS" )
+            parks.append({"name": park.name, "id": park.id.id, "devices": [
+                {"name": device.to_name, "id": device.to.id} for device in contained_devices
+            ]})
+
+
+        #attributes = rest_client.get_attributes(EntityId("69482ca0-7d65-11ed-b021-03cf31a5a03e","DEVICE" ))
+        
         # Creating an Asset
         # asset = Asset(name="Building 1", type="building")
         # asset = rest_client.save_asset(asset)
