@@ -4,6 +4,7 @@ dependencies:
   - python
   - numpy
   - requests
+  - os
   - pip
   - pip:
     - tb-mqtt-client

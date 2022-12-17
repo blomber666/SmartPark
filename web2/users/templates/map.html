@@ -1,5 +1,7 @@
 <!DOCTYPE html>
-<head>    
+<html>
+<head>
+    
     <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
     
         <script>
@@ -9,43 +11,46 @@
     
     <style>html, body {width: 100%;height: 100%;margin: 0;padding: 0;}</style>
     <style>#map {position:absolute;top:0;bottom:0;right:0;left:0;}</style>
-    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.6.0/dist/leaflet.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.js"></script>
     <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
-    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
-    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.6.0/dist/leaflet.css"/>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap.min.css"/>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.2.0/css/bootstrap-theme.min.css"/>
-    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@fortawesome/fontawesome-free@6.2.0/css/all.min.css"/>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
     
             <meta name="viewport" content="width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
             <style>
-                #map_2ec35574cd898448ecb1378127d389cc {
+                #map_33568eec0f8a5b2f0c4d318cc0f88f38 {
                     position: relative;
                     width: 100.0%;
                     height: 100.0%;
                     left: 0.0%;
                     top: 0.0%;
                 }
+                .leaflet-container { font-size: 1rem; }
             </style>
         
 </head>
-<body>    
+<body>
     
-            <div class="folium-map" id="map_2ec35574cd898448ecb1378127d389cc" ></div>
+    
+            <div class="folium-map" id="map_33568eec0f8a5b2f0c4d318cc0f88f38" ></div>
         
 </body>
-<script>    
+<script>
     
-            var map_2ec35574cd898448ecb1378127d389cc = L.map(
-                "map_2ec35574cd898448ecb1378127d389cc",
+    
+            var map_33568eec0f8a5b2f0c4d318cc0f88f38 = L.map(
+                "map_33568eec0f8a5b2f0c4d318cc0f88f38",
                 {
                     center: [44.83895673644131, 11.614725304456822],
                     crs: L.CRS.EPSG3857,
-                    zoom: 14,
+                    zoom: 15,
                     zoomControl: true,
                     preferCanvas: false,
                 }
@@ -55,42 +60,37 @@
 
         
     
-            var tile_layer_37399a55daf6dad98ba63d3671596f96 = L.tileLayer(
+            var tile_layer_8d89e68f0ebd9ebca4b7f44d0c77ae1e = L.tileLayer(
                 "https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png",
-                {"attribution": "Data by \u0026copy; \u003ca href=\"http://openstreetmap.org\"\u003eOpenStreetMap\u003c/a\u003e, under \u003ca href=\"http://www.openstreetmap.org/copyright\"\u003eODbL\u003c/a\u003e.", "detectRetina": false, "maxNativeZoom": 18, "maxZoom": 18, "minZoom": 0, "noWrap": false, "opacity": 1, "subdomains": "abc", "tms": false}
-            ).addTo(map_2ec35574cd898448ecb1378127d389cc);
+                {"attribution": "Data by \u0026copy; \u003ca target=\"_blank\" href=\"http://openstreetmap.org\"\u003eOpenStreetMap\u003c/a\u003e, under \u003ca target=\"_blank\" href=\"http://www.openstreetmap.org/copyright\"\u003eODbL\u003c/a\u003e.", "detectRetina": false, "maxNativeZoom": 18, "maxZoom": 18, "minZoom": 0, "noWrap": false, "opacity": 1, "subdomains": "abc", "tms": false}
+            ).addTo(map_33568eec0f8a5b2f0c4d318cc0f88f38);
         
     
-            var marker_8a2be4df9e4199adf600a8ab120f97c7 = L.marker(
+            var marker_4e266410895f72c20ac7bb27fd09c58b = L.marker(
                 [44.833332, 11.616667],
                 {}
-            ).addTo(map_2ec35574cd898448ecb1378127d389cc);
+            ).addTo(map_33568eec0f8a5b2f0c4d318cc0f88f38);
         
     
-            var icon_edb479cdbc817c898f40ca83370721c4 = L.AwesomeMarkers.icon(
-                {"extraClasses": "fa-rotate-0", "icon": "home", "iconColor": "white", "markerColor": "darkred", "prefix": "fa"}
+            var icon_c9b6446e3953ec92324af34017e05571 = L.AwesomeMarkers.icon(
+                {"extraClasses": "fa-rotate-0", "icon": "square-parking", "iconColor": "white", "markerColor": "darkpurple", "prefix": "fa"}
             );
-            marker_8a2be4df9e4199adf600a8ab120f97c7.setIcon(icon_edb479cdbc817c898f40ca83370721c4);
+            marker_4e266410895f72c20ac7bb27fd09c58b.setIcon(icon_c9b6446e3953ec92324af34017e05571);
         
     
-        var popup_f9160942610c0b3dfadcf15e0e2b07f9 = L.popup({"maxWidth": "100%"});
+        var popup_56b4992601964609c824f2ce757ddd79 = L.popup({"maxWidth": "100%"});
 
         
-            var html_4cae4f8ec6fc954171c95b290f227e75 = $(`<div id="html_4cae4f8ec6fc954171c95b290f227e75" style="width: 100.0%; height: 100.0%;"><a href=/park>Park 1</a></div>`)[0];
-            popup_f9160942610c0b3dfadcf15e0e2b07f9.setContent(html_4cae4f8ec6fc954171c95b290f227e75);
+            
+                var html_49ed3bd17765f8a8be13d0a1e92ba6f6 = $(`<div id="html_49ed3bd17765f8a8be13d0a1e92ba6f6" style="width: 100.0%; height: 100.0%;"><a href=/park>Park 1</a></div>`)[0];
+                popup_56b4992601964609c824f2ce757ddd79.setContent(html_49ed3bd17765f8a8be13d0a1e92ba6f6);
+            
         
 
-        marker_8a2be4df9e4199adf600a8ab120f97c7.bindPopup(popup_f9160942610c0b3dfadcf15e0e2b07f9)
+        marker_4e266410895f72c20ac7bb27fd09c58b.bindPopup(popup_56b4992601964609c824f2ce757ddd79)
         ;
 
         
     
-    
-            marker_8a2be4df9e4199adf600a8ab120f97c7.bindTooltip(
-                `<div>
-                     Click me!
-                 </div>`,
-                {"sticky": true}
-            );
-        
 </script>
+</html>

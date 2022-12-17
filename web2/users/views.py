@@ -1,21 +1,18 @@
 from django.shortcuts import render
-
-
-from django.shortcuts import render, redirect
 from django.contrib.auth import login, authenticate
 from django.contrib import messages
 from .forms import LoginForm, SignupForm
-import folium
+import folium, os
 
 def create_map():    
-    map = folium.Map(location=[44.83895673644131, 11.614725304456822], zoom_start=14)
+    map = folium.Map(location=[44.83895673644131, 11.614725304456822], zoom_start=15)
 
     folium.Marker(
         location = [44.8333320, 11.6166670],
         popup = "<a href=/park>Park 1</a>", 
-        tooltip = "Click me!", 
-        icon = folium.Icon(color="darkred",icon="home", prefix="fa")
+        icon = folium.Icon(color="darkpurple",icon="square-parking", prefix="fa")
         ).add_to(map)
+    
     '''
     for i in range(len(f["attrazioni"])):
         folium.Marker(
@@ -40,7 +37,7 @@ def create_map():
 
     map.save("web2/users/templates/map.html")
     #wb.open(fun_name+"\\#"+str(iteration)+".html")
-    #del(map)
+    del(map)
 
 def park(request):
     return render(request,'test.html')
@@ -62,7 +59,8 @@ def home(request):
                 if user is not None:
                     login(request, user)
                     messages.info(request, f"You are now logged in as {username}.")
-                    create_map()
+                    if not os.path.exists("web2/users/templates/map.html"): 
+                        create_map()
                     return render(request, 'map.html', context)
             else:
                 messages.error(request,"Invalid username or password.")
