@@ -25,6 +25,8 @@
 			<div class="login">
 				<form method="post">
 					<label for="chk" aria-hidden="true">Login</label>
+
+					
 					{% csrf_token %}
 					{{ login_form.username }}
 					{{ login_form.password }}

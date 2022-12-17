@@ -11,12 +11,8 @@
             "id": "71928d2b86af3f43",
             "type": "leaf",
             "state": {
-              "type": "markdown",
-              "state": {
-                "file": "other/Industria 4.0.md",
-                "mode": "source",
-                "source": false
-              }
+              "type": "empty",
+              "state": {}
             }
           },
           {
@@ -151,8 +147,13 @@
   },
   "active": "4e52368929eedcba",
   "lastOpenFiles": [
-    "other/Industria 4.0.md",
+    "other/demo-credential.png",
+    "other/queue-service-tb.png",
     "other/Specifica dei Requisiti.md",
-    "other/Progetto - Smart Parking.md"
+    "other/Progetto - Smart Parking.md",
+    "other/src/Diagram 1.svg",
+    "other/src/Pasted image 20221019193259.png",
+    "other/Industria 4.0.md",
+    "Comandi utili.md"
   ]
 }

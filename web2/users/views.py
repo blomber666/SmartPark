@@ -9,7 +9,7 @@ def create_map():
 
     folium.Marker(
         location = [44.8333320, 11.6166670],
-        popup = "<a href=/park>Park 1</a>", 
+        popup = "<a href=/park>Parking 1</a>", 
         icon = folium.Icon(color="darkpurple",icon="square-parking", prefix="fa")
         ).add_to(map)
     
@@ -17,7 +17,7 @@ def create_map():
     for i in range(len(f["attrazioni"])):
         folium.Marker(
             location = [f["attrazioni"][i]["x"],f["attrazioni"][i]["y"]],
-            popup = f["attrazioni"][i]["nome"],
+            popup = "Parcheggio "+str(i),
             icon = folium.Icon(color="darkred", icon="map", prefix="fa")
             ).add_to(map)
     wexcel(tour, fun_name, iteration)
@@ -31,11 +31,11 @@ def create_map():
             location = [f["attrazioni"][(k-1)]["x"],f["attrazioni"][(k-1)]["y"]],
             popup = f["attrazioni"][(k-1)]["nome"], 
             tooltip = tour[0].index(k),
-            icon = folium.Icon(color="darkpurple", icon="map", prefix="fa")
+            icon = folium.Icon(color="darkpurple",icon="square-parking", prefix="fa")
             ).add_to(map)
     '''
 
-    map.save("web2/users/templates/map.html")
+    map.save("web2/parkings/templates/map.html")
     #wb.open(fun_name+"\\#"+str(iteration)+".html")
     del(map)
 
@@ -59,7 +59,7 @@ def home(request):
                 if user is not None:
                     login(request, user)
                     messages.info(request, f"You are now logged in as {username}.")
-                    if not os.path.exists("web2/users/templates/map.html"): 
+                    if not os.path.exists("web2/parkings/templates/map.html"): 
                         create_map()
                     return render(request, 'map.html', context)
             else:
@@ -82,5 +82,4 @@ def home(request):
         signup_form = SignupForm()
         context = {'login_form': login_form, 'signup_form': signup_form}
 
-    
     return render(request, 'login.html', context)

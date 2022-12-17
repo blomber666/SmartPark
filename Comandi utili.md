@@ -21,18 +21,18 @@ CREATE DATABASE <database name>;
 ```
 DROP DATABASE <database name>;
 ```
-- connettiiti al  db 
+- connettiti al  db 
 ```
 \c <database name>;
 ```
 
 ## Conda
-aggiorna Conda
+- aggiorna Conda
 ```bash
 conda update -n base -c defaults conda
 ```
 
-aggiorna enviroment da file
+- aggiorna enviroment da file
 ```bash
 #conda env update --name myenv --file local.yml --prune
 conda env update --name SmartParking --file .\environment.yml --prune
