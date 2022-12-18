@@ -22,5 +22,5 @@ from parkings import views as park_views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', users_views.home, name='home'),
-    path('park/', park_views.parkings, name='park'),
+    path('park_1/', park_views.park_1, name='park_1'),
 ]
