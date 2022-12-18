@@ -31,5 +31,5 @@ class SignupForm(UserCreationForm):
         widget=forms.PasswordInput(attrs={"autocomplete": "new-password", "placeholder": "Confirm Password"}),
     )
 
-a = SignupForm()
-print(a)
+#a = SignupForm()
+#print(a)
