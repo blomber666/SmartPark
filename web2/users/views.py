@@ -35,7 +35,7 @@ def create_map():
             ).add_to(map)
     '''
 
-    map.save("web2/parkings/templates/map.html")
+    map.save("parkings/templates/map.html")
     #wb.open(fun_name+"\\#"+str(iteration)+".html")
     del(map)
 
@@ -59,7 +59,7 @@ def home(request):
                 if user is not None:
                     login(request, user)
                     messages.info(request, f"You are now logged in as {username}.")
-                    if not os.path.exists("web2/parkings/templates/map.html"): 
+                    if not os.path.exists("parkings/templates/map.html"): 
                         create_map()
                     return render(request, 'map.html', context)
             else:
@@ -81,5 +81,4 @@ def home(request):
         login_form = LoginForm()
         signup_form = SignupForm()
         context = {'login_form': login_form, 'signup_form': signup_form}
-
-    return render(request, 'login.html', context)
+        return render(request, 'login.html', context)
