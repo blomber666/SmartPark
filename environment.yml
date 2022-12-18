@@ -12,3 +12,5 @@ dependencies:
     - psycopg2
     - django
     - folium
+    - matplotlib
+    - opencv-python

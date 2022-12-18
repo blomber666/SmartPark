@@ -17,9 +17,10 @@ from django.contrib import admin
 from django.urls import path
 from web_django import views
 from users import views as users_views
+from parkings import views as park_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('', users_views.home, name='home'),
-    path('park/', users_views.park, name='park')
+    path('park/', park_views.parkings, name='park'),
 ]

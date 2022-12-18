@@ -39,8 +39,8 @@ def create_map():
     #wb.open(fun_name+"\\#"+str(iteration)+".html")
     del(map)
 
-def park(request):
-    return render(request,'test.html')
+# def park(request):
+#     return render(request,'test.html')
 
 def home(request):
     if request.method == 'POST':
