@@ -1,17 +1,20 @@
 import logging
 from tb_device_mqtt import TBDeviceMqttClient, TBPublishInfo
 from tb_rest_client.rest_client_ce import *
+# Importing the API exception
 from tb_rest_client.rest import ApiException
 #get name from command line
 import argparse
 from thingsboard_api_tools import TbApi
 
 '''
-send a telemetry to a device
+create a new sensor and add the relation 'CONTAINS' to the park
+-make sure the park exists and the sensor does not exist
+-make sure the name is in the format: name_PARKID_SENSORID
 usage:
-python push_sensor_telemetry.py DEVICE_NAME VALUE
+python new_sensor.py SENSOR_NAME DEVICE_TYPE
 example:
-python push_sensor_telemetry.py sensor_1_1 1
+python new_sensor.py sensor_1_1 default
 '''
 class bcolors:
     OK = '\033[92m' #GREEN
@@ -41,36 +44,47 @@ def printc(*args):
 
 def parse_opt():
     parser = argparse.ArgumentParser()
-    parser.add_argument("name", help="the sensor name like: sensor_1_1", type=str, default="sensor_1_1")
-    parser.add_argument("value", help="the value to send 0(occupied) or 1(free)", type=int, default=1)
+    parser.add_argument("name", help="the sensor name like: sensor_1_1", type=str, default="defaultname_1_1")
+    parser.add_argument("device_type", help="the value to send 0(occupied) or 1(free)", type=str, default="default")
 
-    opt = parser.parse_args()
+    opt = parser.parse_args(['test_1_1', 'default'])
     return opt
 
 
-def main( name, value):
+
+
+def main( name, device_type):
     # ThingsBoard REST API URL
     url = "http://192.168.1.197:8080"
     # Default Tenant Administrator credentials
     username = "tenant@thingsboard.org"
     password = "tenant"
     tbapi = TbApi(url, username, password)
-    devices = tbapi.get_tenant_devices()
+    #get the park number from the name (sensor_1_6 -> 1)
+    park_number = name.split("_")[-2]
 
-    #find the device using the name
-    for d in devices:
-        if d['name'] == name:
-            device = d
-            break
+    #get selected profile
+    profile = tbapi.get_device_profiles(name=device_type)
+    # creating a Device
+    device = tbapi.add_device(name, device_type)
+    #get the device name
+    name = tbapi.get_device_by_id(device['id']['id'])['name']
+    printc("GREEN", "\nDevice created:")
+    print(name)
 
-    token = tbapi.get_device_token(device)
 
-    telemetry = { "free": value} 
+    #get park assets
+    park = tbapi.get_tenant_asset(name="park_"+park_number)
+    #get the park name
+    park_name = park['name']
 
-    result = tbapi.send_telemetry(token, telemetry)
-    #check if result is an empty dict
-    if not result:
-        printc("OK", "Sent ", telemetry, "to device: ", name)
+
+    # Creating relations from device to asset
+
+    relation = tbapi.add_relation(park['id'], device['id'], "Contains")
+    printc("GREEN", "\nRelation created:")
+    print(park_name, " contains ", name)
+
 
 
 if __name__ == '__main__':

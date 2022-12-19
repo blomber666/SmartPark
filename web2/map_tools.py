@@ -25,6 +25,7 @@ import logging
 from tb_rest_client.rest_client_ce import *
 # Importing the API exception
 from tb_rest_client.rest import ApiException
+from thingsboard_api_tools import TbApi
 
 
 logging.basicConfig(level=logging.DEBUG,
@@ -92,45 +93,43 @@ def generate_map(filename):
         x = rectangle[0][0] + width/3
         #draw the text at middle x and y
         cv2.putText(map, key, (int(x),int((rectangle[0][1]+rectangle[-1][1])/2)), cv2.FONT_HERSHEY_SIMPLEX, 2, (255,255,255), 1, cv2.LINE_AA)
-        
-    
 
-    # Creating the REST client object with context manager to get auto token refresh
-    with RestClientCE(base_url=url) as rest_client:
-        try:
-            # Auth with credentials
-            rest_client.login(username=username, password=password)
 
-            # retrieve telemetry for sensor_1_1
-            telemetry = rest_client.get_latest_timeseries(EntityId("69482ca0-7d65-11ed-b021-03cf31a5a03e","DEVICE" ))
-            print(telemetry)
-            
-            #get park assets
-            parks = []
-            parks_retrieved = rest_client.get_tenant_assets(page_size=100, page=0, type="park").data
-            for park in parks_retrieved:
-                contained_devices = rest_client.find_info_by_from(park.id.id, park.id.entity_type, "CONTAINS" )
-                parks.append({"name": park.name, "id": park.id.id, "devices": [
-                    {"name": device.to_name, "id": device.to.id} for device in contained_devices
-                ]})
+    # ThingsBoard REST API URL
+    url = "http://192.168.1.197:8080"
+    # Default Tenant Administrator credentials
+    username = "tenant@thingsboard.org"
+    password = "tenant"
+    tbapi = TbApi(url, username, password)
 
-            #get the park_1 devices attributes
-            for device in parks[0]['devices']:
 
-                telemetry = rest_client.get_latest_timeseries(EntityId(device['id'],"DEVICE" ))
-                #get the position of the device using id from positions
-                positions[device['name'][-1]]
+    #get park assets
+    park_name = filename.split("/")[-1].split(".")[0]
+    park = tbapi.get_tenant_asset(name=park_name)
 
-                print(device['name'],telemetry['free'])
+    relations = tbapi.get_relations_by_from(park['id'], "Contains")
+    #get the park_1 devices attributes
+    devices = [r['to'] for r in relations]
+    counter = 0
+    for device in devices:
 
-                #if the device is free, fill a polygon with green
-                if int(telemetry['free'][0]['value']):
-                    overlay = map.copy()
-                    cv2.fillPoly(overlay, [np.array(positions[device['name'][-1]])], (93, 252, 136))
-                    alpha = 0.5
-                    map = cv2.addWeighted(overlay, alpha, map, 1-alpha, 0)
-            #save the map as png
-            cv2.imwrite("web2/parkings/static/park_1.png", map)
+        telemetry = tbapi.get_telemetry(device['id'], telemetry_keys=["free"])
+        #get the latest free attribute
+        free = telemetry['free'][0]['value']
+        #get the device name
+        name = tbapi.get_device_by_id(device['id'])['name']
+        print(name,free)
+
+        #if the device is free, fill a polygon with green
+        if int(free):
+            counter += 1
+            overlay = map.copy()
+            cv2.fillPoly(overlay, [np.array(positions[name[-1]])], (93, 252, 136))
+            alpha = 0.5
+            map = cv2.addWeighted(overlay, alpha, map, 1-alpha, 0)
+    #save the map as png
+    print("free spaces:",counter)
+    cv2.imwrite("parkings/static/park_1.png", map)
             #attributes = rest_client.get_attributes(EntityId("69482ca0-7d65-11ed-b021-03cf31a5a03e","DEVICE" ))
             
             # Creating an Asset
@@ -150,5 +149,7 @@ def generate_map(filename):
             # relation = rest_client.save_relation(relation)
 
             #logging.info(" Relation was created:\n%r\n", relation)
-        except ApiException as e:
-            logging.exception(e)
+
+
+if __name__ == "__main__":
+    generate_map('web2/parkings/static/park_1.json')

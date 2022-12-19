@@ -11,8 +11,12 @@
             "id": "71928d2b86af3f43",
             "type": "leaf",
             "state": {
-              "type": "empty",
-              "state": {}
+              "type": "markdown",
+              "state": {
+                "file": "Comandi utili.md",
+                "mode": "source",
+                "source": false
+              }
             }
           }
         ]
@@ -81,6 +85,7 @@
             "state": {
               "type": "backlink",
               "state": {
+                "file": "Comandi utili.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -97,6 +102,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
+                "file": "Comandi utili.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -118,7 +124,9 @@
             "type": "leaf",
             "state": {
               "type": "outline",
-              "state": {}
+              "state": {
+                "file": "Comandi utili.md"
+              }
             }
           }
         ]
@@ -128,7 +136,7 @@
     "width": 300,
     "collapsed": true
   },
-  "active": "4062d66bd5189ea1",
+  "active": "71928d2b86af3f43",
   "lastOpenFiles": [
     "other/demo-credential.png",
     "other/Diagram 1.svg",

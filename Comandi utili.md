@@ -37,3 +37,9 @@ conda update -n base -c defaults conda
 #conda env update --name myenv --file local.yml --prune
 conda env update --name SmartParking --file .\environment.yml --prune
 ```
+
+## Docker
+- Aggiorna container da yml
+```
+docker-compose up --force-recreate --build -d
+```
