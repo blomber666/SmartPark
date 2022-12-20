@@ -21,6 +21,7 @@ from parkings import views as park_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('', users_views.home, name='home'),
+    path('', users_views.home, name='login'),
+    path('home/', users_views.map_view, name='home'),
     path('park_1/', park_views.park_1, name='park_1'),
 ]

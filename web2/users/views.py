@@ -39,8 +39,10 @@ def create_map():
     #wb.open(fun_name+"\\#"+str(iteration)+".html")
     del(map)
 
-# def park(request):
-#     return render(request,'test.html')
+def map_view(request):
+    #if not os.path.exists("parkings/templates/map.html"): 
+    #    create_map()
+    return render(request, 'map.html', {})
 
 def home(request):
     if request.method == 'POST':
@@ -58,10 +60,8 @@ def home(request):
                 print(user is None)
                 if user is not None:
                     login(request, user)
-                    messages.info(request, f"You are now logged in as {username}.")
-                    if not os.path.exists("parkings/templates/map.html"): 
-                        create_map()
-                    return render(request, 'map.html', context)
+                    #messages.info(request, f"You are now logged in as {username}.")
+                    return map_view(request)
             else:
                 messages.error(request,"Invalid username or password.")
                 return render(request, 'login.html', context)
