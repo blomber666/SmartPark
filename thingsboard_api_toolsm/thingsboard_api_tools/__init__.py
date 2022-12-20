@@ -339,7 +339,7 @@ class TbApi:
         """
         Returns a list of all devices starting with the specified name
         """
-        return self.get(f"/api/tenant/devices?limit=99999&textSearch={device_name_prefix}", f"Error fetching devices with name matching '{device_name_prefix}'")["data"]
+        return self.get(f"/api/tenant/devices?{device_name_prefix}", f"Error fetching devices with name matching '{device_name_prefix}'")["data"]
 
 
     def get_all_devices(self):

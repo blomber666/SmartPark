@@ -9,9 +9,9 @@ from thingsboard_api_tools import TbApi
 '''
 send a telemetry to a device
 usage:
-python push_sensor_telemetry.py DEVICE_NAME VALUE
+python push_telemetry.py DEVICE_NAME KEY VALUE
 example:
-python push_sensor_telemetry.py sensor_1_1 1
+python push_telemetry.py sensor_1_1 1
 '''
 class bcolors:
     OK = '\033[92m' #GREEN
@@ -42,20 +42,21 @@ def printc(*args):
 def parse_opt():
     parser = argparse.ArgumentParser()
     parser.add_argument("name", help="the sensor name like: sensor_1_1", type=str, default="sensor_1_1")
-    parser.add_argument("value", help="the value to send 0(occupied) or 1(free)", type=int, default=1)
+    parser.add_argument("key", help="the key of the value", type=str, default="free")
+    parser.add_argument("value", help="the value to send", type=str, default=1)
 
     opt = parser.parse_args()
     return opt
 
 
-def main( name, value):
+def main( name, key, value):
     # ThingsBoard REST API URL
     url = "http://192.168.1.197:8080"
     # Default Tenant Administrator credentials
     username = "tenant@thingsboard.org"
     password = "tenant"
     tbapi = TbApi(url, username, password)
-    devices = tbapi.get_tenant_devices()
+    devices = tbapi.get_tenant_device()
 
     #find the device using the name
     for d in devices:
@@ -65,7 +66,7 @@ def main( name, value):
 
     token = tbapi.get_device_token(device)
 
-    telemetry = { "free": value} 
+    telemetry = { str(key): value} 
 
     result = tbapi.send_telemetry(token, telemetry)
     #check if result is an empty dict

@@ -47,7 +47,7 @@ def parse_opt():
     parser.add_argument("name", help="the sensor name like: sensor_1_1", type=str, default="defaultname_1_1")
     parser.add_argument("device_type", help="the value to send 0(occupied) or 1(free)", type=str, default="default")
 
-    opt = parser.parse_args(['test_1_1', 'default'])
+    opt = parser.parse_args()
     return opt
 
 
