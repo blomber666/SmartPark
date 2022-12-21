@@ -43,6 +43,7 @@
 					<label for="chk" aria-hidden="true">Sign up</label>
 					{% csrf_token %}
 					{{ signup_form.username }}
+					{{ signup_form.plate }}
 					{{ signup_form.password1 }}
 					{{ signup_form.password2 }}
 					{{ signup_form.errors }}

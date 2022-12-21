@@ -2,6 +2,8 @@ from django import forms
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.forms import AuthenticationForm 
 from django.utils.translation import gettext_lazy as _
+from users.models import User
+
 
 class LoginForm(AuthenticationForm):
     username = forms.CharField(widget=forms.TextInput(attrs={'class':'validate','placeholder': 'Email'}))
@@ -21,7 +23,11 @@ class SignupForm(UserCreationForm):
         label=_("Email"),
         widget=forms.TextInput(attrs={"class":"validate","placeholder": "Email"})
         )        
-    
+    plate = forms.CharField(
+        label=_("Plate"),
+        widget=forms.TextInput(attrs={"class":"validate","placeholder": "Plate"})
+        )
+
     password1 = forms.CharField(
         label=_("Password"),
         widget=forms.PasswordInput(attrs={"autocomplete": "new-password", "placeholder": "Password"}),
@@ -30,6 +36,17 @@ class SignupForm(UserCreationForm):
         label=_("Password confirmation"),
         widget=forms.PasswordInput(attrs={"autocomplete": "new-password", "placeholder": "Confirm Password"}),
     )
+
+    class Meta:
+        model = User
+        fields = ("username", "plate")
+
+    # def save(self, commit: bool = True):
+    #     user = super(self).save(commit=False)
+    #     user.plate = self.cleaned_data["plate"]
+    #     if commit:
+    #         user.save()
+    # #     return user
 
 #a = SignupForm()
 #print(a)
