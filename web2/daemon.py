@@ -6,6 +6,14 @@ from tb_rest_client.rest import ApiException
 import argparse
 from thingsboard_api_tools import TbApi
 import time
+import os
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'web_django.settings')
+
+import django
+django.setup()
+from stops.models import Stop
+
+
 
 
 '''
@@ -77,6 +85,10 @@ def control_gate(tbapi, gate_name, old_presence, camera_name, plate):
             #get plate from camera 1
             plate = get_plate(tbapi, camera_name)
             printc("CYAN",f"plate: {plate}")
+            #save to db
+            stop = Stop(plate=plate, start_time=0, end_time=0)
+            stop.save()
+
 
         if not presence and plate is not None:
             #delete plate

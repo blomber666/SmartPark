@@ -40,7 +40,8 @@ INSTALLED_APPS = [
     'prova',
     # 'users.apps.UsersConfig',
     'users',
-    'parkings'
+    'parkings',
+    'stops'
 ]
 
 MIDDLEWARE = [

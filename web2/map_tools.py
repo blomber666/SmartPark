@@ -88,11 +88,11 @@ def generate_map(filename):
         #get the vertices of the rectangle
         vertices = [(vertex[0]-min_x,vertex[1]-min_y) for vertex in rectangle]
         #draw the rectangle border
-        cv2.polylines(map, np.array([vertices]), True, (255,255,255), 1)
+        cv2.polylines(map, np.array([vertices]), True, (255,255,255), 3)
         width = max([vertex[0] for vertex in vertices]) - min([vertex[0] for vertex in vertices])
         x = rectangle[0][0] + width/3
         #draw the text at middle x and y
-        cv2.putText(map, key, (int(x),int((rectangle[0][1]+rectangle[-1][1])/2)), cv2.FONT_HERSHEY_SIMPLEX, 2, (255,255,255), 1, cv2.LINE_AA)
+        cv2.putText(map, key, (int(x),int((rectangle[0][1]+rectangle[-1][1])/2)), cv2.FONT_HERSHEY_SIMPLEX, 2, (255,255,255), 3, cv2.LINE_AA)
 
 
     # ThingsBoard REST API URL

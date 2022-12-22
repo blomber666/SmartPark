@@ -97,6 +97,11 @@ class TbApi:
         """
         return self.get("/api/tenant/devices?pageSize=10000&page=0", "Error retrieving devices for tenant")["data"]
 
+    def get_tenant_device(self, name):
+        """
+        Returns the device with the specified name for current tenant
+        """
+        return self.get(f"/api/tenant/devices?deviceName={name}", "Error retrieving devices for tenant")
 
     def get_customer_devices(self, cust):
         """
@@ -696,7 +701,7 @@ class TbApi:
         """
         Returns list of relation objects for the specified entity by the 'from' direction
         """
-        return self.get(f"/api/relations?fromId={from_id}&fromType={from_type}&relationTypeGroup={relation_type}", "Error retrieving relations")["data"]
+        return self.get(f"/api/relations?fromId={from_id}&fromType={from_type}&relationTypeGroup={relation_type}", "Error retrieving relations")
     @staticmethod
     def pretty_print_request(req):
         print("{}\n{}\n{}\n\n{}".format("-----------START-----------", req.method + " " + req.url, "\n".join("{}: {}".format(k, v) for k, v in req.headers.items()), req.body, ))

@@ -27,6 +27,11 @@ DROP DATABASE <database name>;
 ```
 
 ## Conda
+- crea enviroment
+```
+conda create --name myenv
+```
+
 - aggiorna Conda
 ```bash
 conda update -n base -c defaults conda

@@ -1,0 +1,19 @@
+{% load static %}
+<!DOCTYPE html>
+<link rel="stylesheet" href="{% static 'base.css' %}">
+<html>
+<head>
+    <title>{% block title %}My amazing site{% endblock %}</title>
+    <div class="header">
+        {%block header%}
+        <div class="username">{{user.username}}</div>
+        <div class="plate">{{user.plate}}</div>
+        <button  onclick="location.href = '/';">Logout</button>
+        {%endblock%}
+    </div>
+</head>
+<body>
+    {% block content %}
+    {% endblock %}
+</html>
+
