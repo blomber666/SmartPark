@@ -30,9 +30,19 @@
                 "source": false
               }
             }
+          },
+          {
+            "id": "e5a55b3ef678afa6",
+            "type": "leaf",
+            "state": {
+              "type": "image",
+              "state": {
+                "file": "other/queue-service-tb.png"
+              }
+            }
           }
         ],
-        "currentTab": 1
+        "currentTab": 2
       }
     ],
     "direction": "vertical"
@@ -98,7 +108,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "Comandi utili.md",
+                "file": "other/queue-service-tb.png",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -115,7 +125,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "Comandi utili.md",
+                "file": "other/queue-service-tb.png",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -138,7 +148,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "Comandi utili.md"
+                "file": "other/queue-service-tb.png"
               }
             }
           }
@@ -159,16 +169,16 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "0484809d080a4692",
+  "active": "e5a55b3ef678afa6",
   "lastOpenFiles": [
+    "other/Specifica dei Requisiti.md",
+    "other/demo-credential.png",
+    "other/Progetto - Smart Parking.md",
     "Comandi utili-SURFACE-FOGLI.md",
     "Comandi utili.md",
-    "other/demo-credential.png",
     "other/Diagram 1.svg",
     "other/Industria 4.0.md",
     "other/Pasted image 20221019193259.png",
-    "other/Progetto - Smart Parking.md",
-    "other/queue-service-tb.png",
-    "other/Specifica dei Requisiti.md"
+    "other/queue-service-tb.png"
   ]
 }

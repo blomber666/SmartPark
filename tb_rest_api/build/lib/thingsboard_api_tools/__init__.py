@@ -85,23 +85,25 @@ class TbApi:
         """
         if name is not None:
             resp = self.get(f"/api/tenant/assets?pageSize={pageSize}&page={page}&textSearch={name}", "Error retrieving deivece profiles")["data"]
-            assert len(resp) == 1, "More than one asset found with this name"
+            assert len(resp) == 1, "0 or more than 1 asset found with this name"
             return resp[0]
         else:
             return self.get(f"/api/tenant/assets?pageSize={pageSize}&page={page}", "Error retrieving deivece profiles")["data"]
        
         
-    def get_tenant_devices(self):
+    def get_tenant_device(self, name=None, type=None, pageSize=10000, page=0):
         """
-        Returns a list of all devices for current tenant
+        Returns a device if name is specified,
+        otherwise returns a list of all devices for current tenant
         """
-        return self.get("/api/tenant/devices?pageSize=10000&page=0", "Error retrieving devices for tenant")["data"]
+        if name is not None:
+            resp = self.get(f"/api/tenant/devices?pageSize={pageSize}&page={page}&textSearch={name}", "Error retrieving devices for tenant")["data"]
+            assert len(resp) == 1, "0 or more than 1 device found with this name"
+            return resp[0]
+        else:
+            return self.get(f"/api/tenant/devices?pageSize={pageSize}&page={page}", "Error retrieving devices for tenant")["data"]
 
-    def get_tenant_device(self, name):
-        """
-        Returns the device with the specified name for current tenant
-        """
-        return self.get(f"/api/tenant/devices?deviceName={name}", "Error retrieving devices for tenant")
+
 
     def get_customer_devices(self, cust):
         """
@@ -344,7 +346,7 @@ class TbApi:
         """
         Returns a list of all devices starting with the specified name
         """
-        return self.get(f"/api/tenant/devices?{device_name_prefix}", f"Error fetching devices with name matching '{device_name_prefix}'")["data"]
+        return self.get(f"/api/tenant/devices?limit=99999&textSearch={device_name_prefix}", f"Error fetching devices with name matching '{device_name_prefix}'")["data"]
 
 
     def get_all_devices(self):
@@ -662,7 +664,7 @@ class TbApi:
         if name is not None:
 
             resp = self.get(f"/api/deviceProfiles?pageSize={pageSize}&page={page}&textSearch={name}", "Error retrieving deivece profiles")["data"]
-            assert len(resp) == 1, "More than one device profile found with this name"
+            assert len(resp) == 1,  "0 or more than 1 device profile found with this name"
             return resp[0]
         else:
             return self.get(f"/api/deviceProfiles?pageSize={pageSize}&page={page}", "Error retrieving deivece profiles")["data"]
@@ -697,11 +699,16 @@ class TbApi:
     
         return relation
 
-    def get_relations_by_from(self, from_id, from_type, relation_type=''):
+    def get_relations_by_from(self, from_id:dict,  relation_type=''):
         """
         Returns list of relation objects for the specified entity by the 'from' direction
+        from must be a dict with keys 'id' and 'entityType'
         """
-        return self.get(f"/api/relations?fromId={from_id}&fromType={from_type}&relationTypeGroup={relation_type}", "Error retrieving relations")
+        id = from_id['id']
+        from_type = from_id['entityType']
+
+        return self.get(f"/api/relations?fromId={id}&fromType={from_type}&relationTypeGroup={relation_type}", "Error retrieving relations")
+        
     @staticmethod
     def pretty_print_request(req):
         print("{}\n{}\n{}\n\n{}".format("-----------START-----------", req.method + " " + req.url, "\n".join("{}: {}".format(k, v) for k, v in req.headers.items()), req.body, ))

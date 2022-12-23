@@ -11,7 +11,8 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'web_django.settings')
 
 import django
 django.setup()
-from stops.models import Stop
+from stops.models import Stop, Payment
+
 
 
 
@@ -73,14 +74,16 @@ def get_car_presence(tbapi, gate_name):
     else:
         return False
 
-def control_gate(tbapi, gate_name, old_presence, camera_name, plate):
+def control_entry_gate(tbapi, park_number, old_presence, plate):
+    #get the entry_gate of the park
+    gate_name = "gate_"+park_number+"_1"
+    #get the entry_camera of the park
+    camera_name = "camera_"+park_number+"_1"
+
     #get the gate telemetry
+    presence = get_car_presence(tbapi, gate_name)
 
-        presence = get_car_presence(tbapi, gate_name)
-
-        #print the gate name in green if the gate is open
-        gate_string = "entry" if gate_name.split("_")[-1] == "1" else "exit"
-
+    if presence != old_presence:
         if presence and plate is None:
             #get plate from camera 1
             plate = get_plate(tbapi, camera_name)
@@ -89,25 +92,66 @@ def control_gate(tbapi, gate_name, old_presence, camera_name, plate):
             stop = Stop(plate=plate, start_time=0, end_time=0)
             stop.save()
 
-
         if not presence and plate is not None:
             #delete plate
             plate = None
 
-        if presence:
-            printc("GREEN",f"{gate_string}")
+        if plate:
+            printc('YELLOW',"entry opened")
         else:
-            printc("MAGENTA",f"{gate_string}")
+            printc('YELLOW',"entry closed")
+        #control the gate
 
-        if presence != old_presence:
-            if presence:
-                printc('YELLOW',f"{gate_name} opened")
+    if plate:
+        printc("GREEN", "entry")
+    else:
+        printc("MAGENTA","entry")
+
+    return presence, plate
+
+def control_exit_gate(tbapi, park_number, old_presence, plate):
+
+    #get the entry_gate of the park
+    gate_name = "gate_"+park_number+"_2"
+    #get the entry_camera of the park
+    camera_name = "camera_"+park_number+"_2"
+
+    #get the gate telemetry
+    presence = get_car_presence(tbapi, gate_name)
+
+    if presence != old_presence:
+        if presence and plate is None:
+            #get plate from camera 2
+            plate = get_plate(tbapi, camera_name)
+            printc("CYAN",f"plate: {plate}")
+            #check if payed
+            last_stop = Stop.objects.filter(plate=plate).order_by('-start_time')[0]
+
+            #find the payment with the same stop id
+            payment = Payment.objects.filter(stop_id=last_stop.stop_id)
+            if payment:
+                printc("GREEN",f"payed{payment}")
+                #update the stop
+                last_stop.end_time = time.time()
             else:
-                printc('YELLOW',f"{gate_name} closed")
-            return presence, plate
-
+                printc("RED","not payed")
+                plate = None
+                
+        if not presence and plate is not None:
+            #delete plate
+            plate = None
+        if plate:
+            printc('YELLOW',"exit opened")
         else:
-            return old_presence, plate
+            printc('YELLOW',"exit closed")
+
+    if plate:
+        printc("GREEN","exit")
+    else:
+        printc("MAGENTA","exit")
+
+    return presence, plate
+     
 
 def get_plate(tbapi, camera_name):
     camera = tbapi.get_tenant_device(name=camera_name)
@@ -127,33 +171,18 @@ def main(park_name):
     #get park number
     park_number = park['name'].split("_")[1]
 
-    #get the entry_gate of the park
-    entry_gate_name = "gate_"+park_number+"_1"
-    #get the exit_gate of the park
-    exit_gate_name = "gate_"+park_number+"_2"
-
-    #get the entry_camera of the park
-    entry_camera_name = "camera_"+park_number+"_1"
-    #get the exit_camera of the park
-    exit_camera_name = "camera_"+park_number+"_2"
-
-    print(f"entry_gate_name: {entry_gate_name}")
-    print(f"entry_camera_name: {entry_camera_name}")
-    print(f"exit_gate_name: {exit_gate_name}")
-    print(f"exit_camera_name: {exit_camera_name}")
-
-
     entry_presence = False
     exit_presence = False
-    plate = None
+    entry_plate = None
+    exit_plate = None
 
     while 1:
 
         time.sleep(1)
 
-        entry_presence, plate = control_gate(tbapi, entry_gate_name, entry_presence, entry_camera_name, plate)
+        entry_presence, entry_plate = control_entry_gate(tbapi, park_number, entry_presence, entry_plate)
 
-        #exit_presence = control_gate(tbapi, exit_gate_name, exit_presence, camera_name)
+        exit_presence, exit_plate = control_exit_gate(tbapi, park_number, exit_presence, exit_plate)
 
         print("\n")
 

@@ -2,7 +2,7 @@
 {% load static %}
 {% block content %}
 <!DOCTYPE html>
-<link rel="stylesheet" href="{% static 'header.css' %}">
+<link rel="stylesheet" href="{% static 'park.css' %}">
 <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
 <meta http-equiv="Pragma" content="no-cache" />
 <meta http-equiv="Expires" content="0" />
@@ -27,7 +27,16 @@
       <img class="park" src="{% static '/park_1.png' %}?{% now "U" %}">
 
     </body>
-    {{ plate }}
-    {{ start }}
+    <div class='last_stop'>
+        {{ plate }}
+        {{ start }}
+        {{ end }}
+        {{ price }}
+    </div>
+
+    <form action='pay' method='GET'>
+        <button type='submit'> Pay</button>
+    </form>
+
  </html>
 {% endblock %}
