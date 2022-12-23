@@ -9,7 +9,7 @@
 <html>
 <head>
     <!--each second-->
-    <meta http-equiv="refresh" content="5">
+    <meta http-equiv="refresh" content="10">
     <style>
         .park {
             display: block;
@@ -27,5 +27,7 @@
       <img class="park" src="{% static '/park_1.png' %}?{% now "U" %}">
 
     </body>
+    {{ plate }}
+    {{ start }}
  </html>
 {% endblock %}

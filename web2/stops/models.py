@@ -11,5 +11,5 @@ class Stop(models.Model):
 
     #return the plate number when printing the object
     def __str__(self):
-        return self.plate
+        return f"{self.plate} {self.start_time} {self.end_time}"
 
