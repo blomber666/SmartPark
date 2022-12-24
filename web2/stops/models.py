@@ -7,8 +7,7 @@ class Stop(models.Model):
     stop_id = models.AutoField(primary_key=True)
     plate = models.CharField(max_length=8)
     start_time = models.DateTimeField(auto_now_add=True)
-    end_time = models.DateTimeField(auto_now=True, null=True)
-    price = models.DecimalField(max_digits=5, decimal_places=2, null=True)
+    end_time = models.DateTimeField(null=True)
 
     #return the plate number when printing the object
     def __str__(self):
@@ -22,3 +21,5 @@ class Payment(models.Model):
 
     def __str__(self):
         return f"{self.stop_id} {self.payment_time} {self.amount}"
+
+

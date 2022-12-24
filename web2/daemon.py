@@ -13,7 +13,7 @@ import django
 django.setup()
 from stops.models import Stop, Payment
 
-
+from django.utils import timezone
 
 
 
@@ -88,8 +88,8 @@ def control_entry_gate(tbapi, park_number, old_presence, plate):
             #get plate from camera 1
             plate = get_plate(tbapi, camera_name)
             printc("CYAN",f"plate: {plate}")
-            #save to db
-            stop = Stop(plate=plate, start_time=0, end_time=0)
+            #save to db withou end time
+            stop = Stop(plate=plate, start_time=0, end_time=None)
             stop.save()
 
         if not presence and plate is not None:
@@ -124,15 +124,20 @@ def control_exit_gate(tbapi, park_number, old_presence, plate):
             #get plate from camera 2
             plate = get_plate(tbapi, camera_name)
             printc("CYAN",f"plate: {plate}")
+
             #check if payed
-            last_stop = Stop.objects.filter(plate=plate).order_by('-start_time')[0]
+            last_stop = Stop.objects.filter(plate=plate).order_by('-start_time')
+            assert len(last_stop) > 0 , 'someone is trying to exit without entering'
+            last_stop = last_stop[0]
 
             #find the payment with the same stop id
             payment = Payment.objects.filter(stop_id=last_stop.stop_id)
+            #TODO check if the payment_time is less than 15 minutes ago
             if payment:
                 printc("GREEN",f"payed{payment}")
                 #update the stop
-                last_stop.end_time = time.time()
+                last_stop.end_time = timezone.now()
+                last_stop.save()
             else:
                 printc("RED","not payed")
                 plate = None

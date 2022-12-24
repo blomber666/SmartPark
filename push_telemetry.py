@@ -1,8 +1,3 @@
-import logging
-from tb_device_mqtt import TBDeviceMqttClient, TBPublishInfo
-from tb_rest_client.rest_client_ce import *
-from tb_rest_client.rest import ApiException
-#get name from command line
 import argparse
 from thingsboard_api_tools import TbApi
 
