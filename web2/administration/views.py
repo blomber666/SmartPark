@@ -1,10 +1,15 @@
 from django.shortcuts import render
-from django.http import HttpResponseRedirect
+from django.shortcuts import redirect
 from stops.models import Stop, Payment
-# Create your views here.
+from django.contrib import messages
+
+
 
 def administration(request):
-    if request.user.is_authenticated:
+    if not request.user.is_authenticated:
+        messages.info(request,'HTTP ERROR: 401 - Unauthorized', status=401)
+        return redirect('')
+    else:
         if request.user.is_superuser:
             #get all active stops
             active_stops = Stop.objects.filter(end_time=None)
@@ -13,4 +18,4 @@ def administration(request):
             context['completed_stops'] = completed_stops
             return render(request, 'administration.html', context)
         else:
-            return HttpResponseRedirect('/home')
+            return redirect('/home')

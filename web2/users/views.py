@@ -1,10 +1,12 @@
 from django.shortcuts import render
-from django.contrib.auth import login, authenticate
+from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from .forms import LoginForm, SignupForm
 from administration.views import administration
 import folium, os
-from django.http import HttpResponseRedirect
+from django.http import HttpResponse
+from django.shortcuts import redirect
+
 
 def create_map():    
     map = folium.Map(location=[44.83895673644131, 11.614725304456822], zoom_start=15)
@@ -41,10 +43,23 @@ def create_map():
     #wb.open(fun_name+"\\#"+str(iteration)+".html")
     del(map)
 
+
+
+def user_logout(request):
+    logout(request)
+    return redirect('/')
+
+
+
 def map_view(request):
     #if not os.path.exists("parkings/templates/map.html"): 
     #    create_map()
-    return render(request, 'map.html', {})
+    if request.user.is_authenticated:
+        return render(request, 'map.html', {})
+    else: 
+        messages.info(request,'HTTP ERROR: 401 - Unauthorized', status=401)
+        return redirect('')
+
 
 def home(request):
     if request.method == 'POST':
@@ -52,23 +67,22 @@ def home(request):
             signup_form = SignupForm()
             login_form = LoginForm(request.POST, data=request.POST)
             context = {'login_form': login_form, 'signup_form':signup_form}
-            print("login form is valid?")
-            print(login_form.is_valid())
+            #print("login form is valid?")
+            #print(login_form.is_valid())
             if login_form.is_valid():
                 username = login_form.cleaned_data.get('username')
                 password = login_form.cleaned_data.get('password')
                 user = authenticate(username=username, password=password)
-                print("user is none?")
-                print(user is None)
+                #print("user is none?")
+                #print(user is None)
                 if user is not None:
                     if user.is_superuser:
                         login(request, user)
                         #messages.info(request, f"You are now logged in as {username}.")
-                        return HttpResponseRedirect('/administration/')
+                        return redirect('/administration')
                     else:
-                        login(request, user)
-                        #messages.info(request, f"You are now logged in as {username}.")
-                        return map_view(request)
+                        login(request, user)        
+                        return redirect('/home')
             else:
                 messages.error(request,"Invalid username or password.")
                 return render(request, 'login.html', context)
@@ -89,3 +103,4 @@ def home(request):
         signup_form = SignupForm()
         context = {'login_form': login_form, 'signup_form': signup_form}
         return render(request, 'login.html', context)
+

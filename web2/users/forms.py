@@ -6,7 +6,7 @@ from users.models import User
 
 
 class LoginForm(AuthenticationForm):
-    username = forms.CharField(widget=forms.TextInput(attrs={'class':'validate','placeholder': 'Email'}))
+    username = forms.CharField(widget=forms.TextInput(attrs={'class':'validate','placeholder': 'Username'}))
     password = forms.CharField(widget=forms.PasswordInput(attrs={'placeholder':'Password'}))
 
 # creating a form

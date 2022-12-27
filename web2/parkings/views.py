@@ -2,13 +2,20 @@ from django.shortcuts import render
 from parkings.map_tools import generate_map
 from users import views as users_views
 from stops.models import Stop, Payment
-from django.http import HttpResponseRedirect
+from django.shortcuts import redirect
 from django.utils import timezone
+from django.contrib import messages
+
+
 
 # Create your views here.
 def park_1(request, context=None):
-    print(request.user.is_authenticated)
-    print(request.user)
+    #print(request.user.is_authenticated)
+    #print(request.user)
+    if not request.user.is_authenticated:
+        messages.info(request,'HTTP ERROR: 401 - Unauthorized', status=401)
+        return redirect('')
+
     #get the stop with the plate of the user
     stop = Stop.objects.filter(plate=request.user.plate).last()
     plate = request.user.plate 
@@ -41,6 +48,7 @@ def pay(request):
         else:
             context={'plate': request.user.plate, 'start': stop.start_time, 'payed': False}
 
-        return HttpResponseRedirect('/park_1')
+        return redirect('/park_1')
     else:
-        return users_views.home(request)
+        messages.info(request,'HTTP ERROR: 401 - Unauthorized', status=401)
+        return redirect('')

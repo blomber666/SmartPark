@@ -1,3 +1,17 @@
+main{
+    width: 80%;
+    height: 70%;
+    overflow: hidden;
+    background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e);
+    border-radius: 10px;
+    box-shadow: 5px 20px 50px #000;
+    margin: 0;
+    position: absolute;
+    top: 55%;
+    left: 50%;
+    margin-right: -50%;
+    transform: translate(-50%, -50%);
+}
 .last_stop {
     background-color: #f0f0f0;
     border: 1px solid #ccc;
@@ -10,4 +24,25 @@
     font-size: 1.5em;
     font-weight: bold;
     color: rgb(242, 0, 0);
+}
+.park {
+    display: block;
+    background-color: #f1f1f1;
+    float: left;
+    background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e);
+}
+.info{
+    float: right;
+    height: max-content;
+    width: 50%;
+    padding: 2%;
+    margin-right: 8%;
+}
+li {
+    color: whitesmoke;
+    padding: 3px;
+}
+h2 {
+    color: white;
+    margin-top: 12px;
 }

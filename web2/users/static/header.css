@@ -15,7 +15,6 @@ body{
     border-radius: 10px;
     display: block;
     box-shadow: 5px 20px 50px #000;
-    background: #32313c;
 }
 label{
     color: #fff;
@@ -27,7 +26,6 @@ label{
     font-weight: bold;
     cursor: pointer;
     float: left;
-
 }
 button{
     height: 40px;
@@ -43,31 +41,4 @@ button{
     cursor: pointer;
     position: relative;
     float: right;
-}
-.username{
-    color: #fff;
-    width: min-content;
-    font-size: 1.3em;
-    display: block;
-    margin-left: 50px;
-    font-weight: bold;
-    cursor: pointer;
-    float: left;
-    text-align: center;
-    margin-top: 2%;
-}
-.admin {
-    margin-top: 10px;
-}
-.plate{
-    color: #fff;
-    width: min-content;
-    font-size: 1.3em;
-    justify-content: left;
-    display: block;
-    margin-left: 50px;
-    font-weight: bold;
-    cursor: pointer;
-    float: left;
-    text-align: center;
 }
