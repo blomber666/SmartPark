@@ -1,0 +1,72 @@
+body{
+    margin: 0;
+    padding: 0px;
+    justify-content: center;
+    align-items: flex-start;
+    min-height: 100vh;
+    font-family: 'Jost', sans-serif;
+    background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e);
+    flex-direction: row;
+    align-content: center;
+}
+.header{
+    width: inherit;
+    overflow: hidden;
+    border-radius: 10px;
+    display: block;
+    box-shadow: 5px 20px 50px #000;
+    background: #32313c;
+}
+label{
+    color: #fff;
+    width: min-content;
+    font-size: 3.3em;
+    justify-content: left;
+    display: block;
+    margin-left: 50px;
+    font-weight: bold;
+    cursor: pointer;
+    float: left;
+
+}
+button{
+    height: 40px;
+    margin: 20px;
+    display: block;
+    color: #fff;
+    background: #573b8a;
+    font-size: 1em;
+    font-weight: bold;
+    outline: none;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    position: relative;
+    float: right;
+}
+
+.username{
+    color: #fff;
+    width: min-content;
+    font-size: 1.3em;
+    justify-content: left;
+    display: block;
+    margin-left: 50px;
+    font-weight: bold;
+    cursor: pointer;
+    float: left;
+    text-align: center;
+}
+
+.plate{
+    color: #fff;
+    width: min-content;
+    font-size: 1.3em;
+    justify-content: left;
+    display: block;
+    margin-left: 50px;
+    font-weight: bold;
+    cursor: pointer;
+    float: left;
+    text-align: center;
+}

@@ -2,7 +2,9 @@ from django.shortcuts import render
 from django.contrib.auth import login, authenticate
 from django.contrib import messages
 from .forms import LoginForm, SignupForm
+from administration.views import administration
 import folium, os
+from django.http import HttpResponseRedirect
 
 def create_map():    
     map = folium.Map(location=[44.83895673644131, 11.614725304456822], zoom_start=15)
@@ -59,9 +61,14 @@ def home(request):
                 print("user is none?")
                 print(user is None)
                 if user is not None:
-                    login(request, user)
-                    #messages.info(request, f"You are now logged in as {username}.")
-                    return map_view(request)
+                    if user.is_superuser:
+                        login(request, user)
+                        #messages.info(request, f"You are now logged in as {username}.")
+                        return HttpResponseRedirect('/administration/')
+                    else:
+                        login(request, user)
+                        #messages.info(request, f"You are now logged in as {username}.")
+                        return map_view(request)
             else:
                 messages.error(request,"Invalid username or password.")
                 return render(request, 'login.html', context)

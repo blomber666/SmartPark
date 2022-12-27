@@ -69,7 +69,7 @@ def get_car_presence(tbapi, gate_name):
     distances.sort(key=lambda x: x['ts'])
     distance = float(distances[-1]['value'])
     
-    if distance < 1:
+    if distance < 30:
         return True
     else:
         return False

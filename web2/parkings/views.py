@@ -4,6 +4,7 @@ from users import views as users_views
 from stops.models import Stop, Payment
 from django.http import HttpResponseRedirect
 from django.utils import timezone
+
 # Create your views here.
 def park_1(request, context=None):
     print(request.user.is_authenticated)

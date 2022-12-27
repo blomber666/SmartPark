@@ -25,7 +25,7 @@ SECRET_KEY = 'django-insecure-05u39w4clj8b6j6b1s-4w3o2r_bd*-eu&wm=-_9h-e=sij18yy
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 AUTH_USER_MODEL = 'users.User'
 # Application definition
@@ -41,7 +41,8 @@ INSTALLED_APPS = [
     # 'users.apps.UsersConfig',
     'users',
     'parkings',
-    'stops'
+    'stops',
+    'administration'
 ]
 
 MIDDLEWARE = [

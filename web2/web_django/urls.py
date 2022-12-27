@@ -18,6 +18,7 @@ from django.urls import path
 from web_django import views
 from users import views as users_views
 from parkings import views as park_views
+from administration import views as admin_views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -25,4 +26,5 @@ urlpatterns = [
     path('home/', users_views.map_view, name='home'),
     path('park_1/', park_views.park_1, name='park_1'),
     path('park_1/pay/', park_views.pay, name='pay'),
+    path('administration/', admin_views.administration, name='administration')
 ]
