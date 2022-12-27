@@ -4,7 +4,6 @@ dependencies:
   - python
   - numpy
   - requests
-  - os
   - pip
   - pip:
     - tb-mqtt-client
@@ -14,3 +13,4 @@ dependencies:
     - folium
     - matplotlib
     - opencv-python
+    - tb_rest_api

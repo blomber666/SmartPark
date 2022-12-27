@@ -62,6 +62,9 @@ def map_view(request):
 
 
 def home(request):
+    if request.user.is_authenticated:
+        return redirect('/home')
+        
     if request.method == 'POST':
         if 'login' in request.POST:
             signup_form = SignupForm()
