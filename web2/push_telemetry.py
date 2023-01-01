@@ -44,7 +44,7 @@ def parse_opt():
     return opt
 
 
-def main( name, key, value):
+def main(name, key, value):
     # ThingsBoard REST API URL
     url = "http://192.168.1.197:8080"
     # Default Tenant Administrator credentials

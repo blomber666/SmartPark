@@ -7,51 +7,57 @@
 <meta http-equiv="Pragma" content="no-cache" />
 <meta http-equiv="Expires" content="0" />
 <html>
-<head>
-    <!--each second-->
-    <!-- <meta http-equiv="refresh" content="10"> -->
-    <style>
-        .park {
-            display: block;
-            background-color: #f1f1f1;
+  <head>
+      <!--each second-->
+      <!-- <meta http-equiv="refresh" content="10"> -->
+      <style>
+          .park {
+              display: block;
+              background-color: #f1f1f1;
 
-        }
-    </style>
-<title>Benvenuto</title>
-</head>
-</html>
-<html>
-    <head>
-    </head>
-    <body>
-       <main>
-            <img class="park" src="{% static '/park_1.png' %}?{% now 'U' %}">
-      
-            <div class='info'>
-              <div class='active_stops'>
-                <h2>Active Stops</h2>
-                  <ul>
-                    {% for stop in active_stops %}
-                      <li>{{stop}}</li>
-                    {% endfor %}
-                  </ul>
-              </div>
-              <div class='completed_stops'>
-                <h2>Completed Stops</h2>
-                  <ul>
-                    {% for stop in completed_stops %}
-                      <li>{{stop}}</li>
-                    {% endfor %}
-                  </ul>
-              </div>
-            
-              <form action='pay' method='GET'>
-                <button type='submit'> Pay</button>
-              </form>
-            </div>
-       
-         
-       </main>
+          }
+      </style>
+  <title>Benvenuto</title>
+  </head>
+
+  <body>
+    <main>
+      <img class="park" src="{% static '/park_1.png' %}?{% now 'U' %}">
+  
+      <div class='info'>
+        <div class='active_stops'>
+          <h2>Active Stops</h2>
+            <ul>
+              {% for stop in active_stops %}
+                <li>{{stop}}</li>
+              {% endfor %}
+            </ul>
+        </div>
+        <div class='completed_stops'>
+          <h2>Completed Stops</h2>
+            <ul>
+              {% for stop in completed_stops %}
+                <li>{{stop}}</li>
+              {% endfor %}
+            </ul>
+        </div>
+      </div>
+
+      <div class='gates_override'>
+        <form action='override/' method='POST'>
+          {% csrf_token %}
+          <input type='submit' name='entry_open' value='Open Entry Gate'>
+          <input type='submit' name='entry_close' value='Close Entry Gate'>
+          <input type='submit' name='entry_normal' value='Normal Entry Gate'>
+          <br>
+
+          <input type='submit' name='exit_open' value='Open Exit Gate'>
+          <input type='submit' name='exit_close' value='Close Exit Gate'>
+          <input type='submit' name='exit_normal' value='Normal Exit Gate'>
+        </form>
+      </div>
+
+    </main>
   </body>
 </html>
 {% endblock %}

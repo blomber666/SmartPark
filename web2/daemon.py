@@ -5,14 +5,15 @@ from tb_rest_client.rest import ApiException
 #get name from command line
 import argparse
 from thingsboard_api_tools import TbApi
+from push_telemetry import main as push_telemetry
 import time
+
 import os
 os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'web_django.settings')
-
 import django
 django.setup()
-from stops.models import Stop, Payment
 
+from stops.models import Stop, Payment
 from django.utils import timezone
 
 
@@ -79,84 +80,137 @@ def control_entry_gate(tbapi, park_number, old_presence, plate):
     gate_name = "gate_"+park_number+"_1"
     #get the entry_camera of the park
     camera_name = "camera_"+park_number+"_1"
+    #get the gate override name
+    override_entry_name = "override_"+park_number+"_1"
 
-    #get the gate telemetry
-    presence = get_car_presence(tbapi, gate_name)
+    door_name = "door_"+park_number+"_1"
 
-    if presence != old_presence:
-        if presence and plate is None:
-            #get plate from camera 1
-            plate = get_plate(tbapi, camera_name)
-            printc("CYAN",f"plate: {plate}")
-            #save to db withou end time
-            stop = Stop(plate=plate, start_time=0, end_time=None)
-            stop.save()
+    #get the override telemetry
+    override_gate = tbapi.get_tenant_device(name=override_entry_name)
+    override = tbapi.get_telemetry(override_gate['id'], telemetry_keys=["value"])
+    override_value = override['value'][0]['value']
 
-        if not presence and plate is not None:
-            #delete plate
-            plate = None
+    if  override_value != 'null':
+        if override_value == 'open':
+            printc('GREEN',"entry(override)")
+            push_telemetry(door_name, "open", 1)
+            return True, None
+
+        elif override_value == 'close':
+            printc('MAGENTA',"entry(override)")
+            push_telemetry(door_name, "open", 0)
+            return False, None
+        
+        else:
+            printc('RED',"unknown override value, entry gate not active")
+            return False, None
+
+    else:
+        #get the gate telemetry
+        presence = get_car_presence(tbapi, gate_name)
+
+        if presence != old_presence:
+            if presence and plate is None:
+                #get plate from camera 1
+                plate = get_plate(tbapi, camera_name)
+                printc("CYAN",f"plate: {plate}")
+                #save to db withou end time
+                stop = Stop(plate=plate, start_time=0, end_time=None)
+                stop.save()
+
+            if not presence and plate is not None:
+                #delete plate
+                plate = None
+
+            if plate:
+                printc('YELLOW',"entry opened")
+                push_telemetry(door_name, "open", 1)
+            else:
+                printc('YELLOW',"entry closed")
+                push_telemetry(door_name, "open", 0)
+            #control the gate
 
         if plate:
-            printc('YELLOW',"entry opened")
+            printc("GREEN", "entry")
+
         else:
-            printc('YELLOW',"entry closed")
-        #control the gate
+            printc("MAGENTA","entry")
 
-    if plate:
-        printc("GREEN", "entry")
-    else:
-        printc("MAGENTA","entry")
-
-    return presence, plate
+        return presence, plate
 
 def control_exit_gate(tbapi, park_number, old_presence, plate):
-
     #get the entry_gate of the park
     gate_name = "gate_"+park_number+"_2"
     #get the entry_camera of the park
     camera_name = "camera_"+park_number+"_2"
+    #get the gate override name
+    override_exit_name = "override_"+park_number+"_2"
 
-    #get the gate telemetry
-    presence = get_car_presence(tbapi, gate_name)
+    door_name = "door_"+park_number+"_2"
 
-    if presence != old_presence:
-        if presence and plate is None:
-            #get plate from camera 2
-            plate = get_plate(tbapi, camera_name)
-            printc("CYAN",f"plate: {plate}")
+    #get the override telemetry
+    override_gate = tbapi.get_tenant_device(name=override_exit_name)
+    override = tbapi.get_telemetry(override_gate['id'], telemetry_keys=["value"])
+    override_value = override['value'][0]['value']
 
-            #check if payed
-            last_stop = Stop.objects.filter(plate=plate).order_by('-start_time')
-            assert len(last_stop) > 0 , 'someone is trying to exit without entering'
-            last_stop = last_stop[0]
+    if  override_value != 'null':
+        if override_value == 'open':
+            printc('GREEN',"exit(override)")
+            push_telemetry(door_name, "open", 1)
+            return True, None
 
-            #find the payment with the same stop id
-            payment = Payment.objects.filter(stop_id=last_stop.stop_id)
-            #TODO check if the payment_time is less than 15 minutes ago
-            if payment:
-                printc("GREEN",f"payed{payment}")
-                #update the stop
-                last_stop.end_time = timezone.now()
-                last_stop.save()
-            else:
-                printc("RED","not payed")
-                plate = None
-                
-        if not presence and plate is not None:
-            #delete plate
-            plate = None
-        if plate:
-            printc('YELLOW',"exit opened")
+        elif override_value == 'close':
+            printc('MAGENTA',"exit(override)")
+            push_telemetry(door_name, "open", 0)
+            return False, None
+
         else:
-            printc('YELLOW',"exit closed")
+            printc('RED',"unknown override value, exit gate not active")
+            return False, None
 
-    if plate:
-        printc("GREEN","exit")
     else:
-        printc("MAGENTA","exit")
+        #get the gate telemetry
+        presence = get_car_presence(tbapi, gate_name)
 
-    return presence, plate
-     
+        if presence != old_presence:
+            if presence and plate is None:
+                #get plate from camera 2
+                plate = get_plate(tbapi, camera_name)
+                printc("CYAN",f"plate: {plate}")
+
+                #check if payed
+                last_stop = Stop.objects.filter(plate=plate).order_by('-start_time')
+                assert len(last_stop) > 0 , 'someone is trying to exit without entering'
+                last_stop = last_stop[0]
+
+                #find the payment with the same stop id
+                payment = Payment.objects.filter(stop_id=last_stop.stop_id)
+                #TODO check if the payment_time is less than 15 minutes ago
+                if payment:
+                    printc("GREEN",f"payed{payment}")
+                    #update the stop
+                    last_stop.end_time = timezone.now()
+                    last_stop.save()
+                else:
+                    printc("RED","not payed")
+                    plate = None
+                    
+            if not presence and plate is not None:
+                #delete plate
+                plate = None
+            if plate:
+                printc('YELLOW',"exit opened")
+                push_telemetry(door_name, "open", 1)
+            else:
+                printc('YELLOW',"exit closed")
+                push_telemetry(door_name, "open", 0)
+
+        if plate:
+            printc("GREEN","exit")
+        else:
+            printc("MAGENTA","exit")
+
+        return presence, plate
 
 def get_plate(tbapi, camera_name):
     camera = tbapi.get_tenant_device(name=camera_name)

@@ -27,5 +27,6 @@ urlpatterns = [
     path('home/', users_views.map_view, name='home'),
     path('park_1/', park_views.park_1, name='park_1'),
     path('park_1/pay/', park_views.pay, name='pay'),
-    path('administration/', admin_views.administration, name='administration')
+    path('administration/', admin_views.administration, name='administration'),
+    path('administration/override/', admin_views.override, name='override')
 ]
