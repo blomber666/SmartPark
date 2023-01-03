@@ -2,9 +2,9 @@ from django.shortcuts import render
 from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from .forms import LoginForm, SignupForm
-from administration.views import administration
-import folium, os
-from django.http import HttpResponse
+#from administration.views import administration
+import folium
+#from django.http import HttpResponse
 from django.shortcuts import redirect
 
 
@@ -66,29 +66,28 @@ def home(request):
         return redirect('/home')
         
     if request.method == 'POST':
+
         if 'login' in request.POST:
             signup_form = SignupForm()
             login_form = LoginForm(request.POST, data=request.POST)
             context = {'login_form': login_form, 'signup_form':signup_form}
-            #print("login form is valid?")
-            #print(login_form.is_valid())
+
             if login_form.is_valid():
                 username = login_form.cleaned_data.get('username')
                 password = login_form.cleaned_data.get('password')
                 user = authenticate(username=username, password=password)
-                #print("user is none?")
-                #print(user is None)
+
                 if user is not None:
+                    
                     if user.is_superuser:
                         login(request, user)
-                        #messages.info(request, f"You are now logged in as {username}.")
                         return redirect('/administration')
                     else:
                         login(request, user)        
                         return redirect('/home')
             else:
                 messages.error(request,"Invalid username or password.")
-                return render(request, 'login.html', context)
+                return render(request, 'theme/templates/login.html', context)
 
         elif 'signup' in request.POST:
             login_form = LoginForm()
