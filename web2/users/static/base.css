@@ -70,3 +70,14 @@ button{
     float: left;
     text-align: center;
 }
+
+footer{
+    width: 100%;
+    overflow: hidden;
+    border-radius: 10px;
+    display: block;
+    position: absolute;
+    box-shadow: 5px 20px 50px #000;
+    background: #32313c;
+    text-align: center;
+}

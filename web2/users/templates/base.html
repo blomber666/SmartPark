@@ -8,12 +8,19 @@
         {%block header%}
         <div class="username">{{user.username}}</div>
         <div class="plate">{{user.plate}}</div>
-        <button  onclick="location.href = '/';">Logout</button>
+        <button  onclick="location.href = '/logout';">Logout</button>
         {%endblock%}
     </div>
 </head>
 <body>
     {% block content %}
+    {% endblock %}
+</body>
+<footer>
+    {% block footer %}
+    <div class="home">Home</div>
+    <div class="contatti">Contatti</div>
+    <div class="about">About</div>
     {% endblock %}
 </html>
 

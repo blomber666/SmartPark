@@ -111,7 +111,8 @@ def generate_map(filename):
     #get the park_1 devices attributes
     related_devices = [r['to'] for r in relations]
 
-    counter = 0
+    sensor_counter = 0
+    free_counter = 0
     for d in related_devices:
         #get the device
         device = tbapi.get_device_by_id(d['id'])
@@ -119,7 +120,7 @@ def generate_map(filename):
         
         if device_type == "park_sensor":
             name = device['name']
-
+            sensor_counter += 1
             telemetry = tbapi.get_telemetry(d['id'], telemetry_keys=["free"])
             #get the latest free attribute
             free = telemetry['free'][0]['value']
@@ -128,13 +129,12 @@ def generate_map(filename):
 
             #if the device is free, fill a polygon with green
             if int(free):
-                counter += 1
+                free_counter += 1
                 overlay = map.copy()
                 cv2.fillPoly(overlay, [np.array(positions[name[-1]])], (93, 252, 136))
                 alpha = 0.5
                 map = cv2.addWeighted(overlay, alpha, map, 1-alpha, 0)
     #save the map as png
-    print("free spaces:",counter)
     cv2.imwrite("parkings/static/park_1.png", map)
             #attributes = rest_client.get_attributes(EntityId("69482ca0-7d65-11ed-b021-03cf31a5a03e","DEVICE" ))
             
@@ -155,7 +155,7 @@ def generate_map(filename):
             # relation = rest_client.save_relation(relation)
 
             #logging.info(" Relation was created:\n%r\n", relation)
-
+    return sensor_counter - free_counter
 
 if __name__ == "__main__":
     generate_map('web2/parkings/static/park_1.json')

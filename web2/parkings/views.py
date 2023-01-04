@@ -15,19 +15,19 @@ def park_1(request, context=None):
     if not request.user.is_authenticated:
         messages.info(request,'HTTP ERROR: 401 - Unauthorized', status=401)
         return redirect('')
-
-    #get the stop with the plate of the user
-    stop = Stop.objects.filter(plate=request.user.plate).last()
-    plate = request.user.plate 
-    start = stop.start_time if stop else None
-    end = stop.end_time if stop else None
-    payment = Payment.objects.filter(stop_id=stop.stop_id).last()
-    amount = payment.amount if payment else None
-    context = {'plate': plate, 'start': start, 'end': end , 'amount': amount
-    }
     
     if request.user.is_authenticated:
-        generate_map('parkings/static/park_1.json')
+        free_spaces = generate_map('parkings/static/park_1.json')
+        #get the stop with the plate of the user
+        stop = Stop.objects.filter(plate=request.user.plate).last()
+        plate = request.user.plate 
+        start = stop.start_time if stop else None
+        end = stop.end_time if stop else None
+        payment = Payment.objects.filter(stop_id=stop.stop_id).last() if stop else None
+        amount = payment.amount if payment else None
+        print('spazi liberi', free_spaces)
+        context = {'plate': plate, 'start': start, 'end': end , 'amount': amount , 'free_spaces': free_spaces
+        }
 
         return render(request, 'park_1.html', context)
     else:
