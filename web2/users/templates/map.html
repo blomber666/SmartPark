@@ -23,7 +23,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.css"/>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/gh/python-visualization/folium/folium/templates/leaflet.awesome.rotate.min.css"/>
     
-    <link rel="stylesheet" href="{% static 'header.css' %}">
+    <link rel="stylesheet" href="{% static 'base.css' %}">
     
             <meta name="viewport" content="width=device-width,
                 initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
@@ -41,8 +41,15 @@
 </head>
 <body>
     <div class="header">
+        {%block header%}
         <label>SmartPark</label>
-        <button  onclick="location.href = '/logout';">Logout</button>
+        <div class="user">
+            <div class="username">{{user.username}}
+                <div class="admin"></div>
+            </div>
+            <button  onclick="location.href = '/logout';">Logout</button>
+        </div>
+        {%endblock%}
     </div>
 
     <div class="folium-map" id="map_33568eec0f8a5b2f0c4d318cc0f88f38" ></div>

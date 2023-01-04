@@ -38,7 +38,7 @@ conda update -n base -c defaults conda
 ```
 
 - aggiorna enviroment da file
-```bash
+```
 #conda env update --name myenv --file local.yml --prune
 conda env update --name SmartParking --file .\environment.yml --prune
 ```
@@ -55,4 +55,16 @@ docker-compose up --force-recreate --build -d
 ```
 1.  cd into the root directory where setup.py is located 
 2.  Enter: python setup.py install
+```
+
+- Collect all static file in folder './static'
+
+```
+python .\manage.py collectstatic --noinput  
+```
+
+- Run server with auto signed ssl certificates
+
+```
+python .\manage.py runsslserver --certificate .\certs\server.crt --key .\certs\server.key
 ```

@@ -1,14 +1,18 @@
 {% load static %}
 <!DOCTYPE html>
-<link rel="stylesheet" href="{% static 'base_admin.css' %}">
+<link rel="stylesheet" href="{% static 'base.css' %}">
 <html>
 <head>
     <title>{% block title %}Administration{% endblock %}</title>
     <div class="header">
         {%block header%}
-        <div class="username">{{user.username}}</div>
-        <div class="admin">ADMIN</div>
-        <button  onclick="location.href = '/logout';">Logout</button>
+        <label>SmartPark</label>
+        <div class="user">
+            <div class="username">{{user.username}}
+                <div class="admin">ADMIN</div>
+            </div>
+            <button  onclick="location.href = '/logout';">Logout</button>
+        </div>
         {%endblock%}
     </div>
 </head>

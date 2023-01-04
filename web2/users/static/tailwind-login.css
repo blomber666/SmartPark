@@ -1,0 +1,98 @@
+/* 9/14 base rules are converted successfully. */
+/* Gather results from the console with `copy(window.cssToTailwindResults)` */
+
+/* ℹ️ Base selector: body */
+/* ✨ TailwindCSS: "flex items-center justify-center m-0 min-h-screen overflow-hidden p-0" */
+/* ⚠️ Some properties could not be matched with Tailwind classes. Use @apply to extend a CSS rule: */
+body {
+    @apply flex items-center justify-center m-0 min-h-screen overflow-hidden p-0;
+    font-family: "Jost", sans-serif;
+  }
+  
+  /* ℹ️ Base selector: .main */
+  /* ✨ TailwindCSS: "overflow-hidden" */
+  /* ⚠️ Some properties could not be matched with Tailwind classes. Use @apply to extend a CSS rule: */
+  .main {
+    @apply overflow-hidden;
+    width: 600px;
+    height: 750px;
+    border-radius: 10px;
+    box-shadow: 5px 20px 50px #000;
+  }
+  
+  /* ℹ️ Base selector: #chk */
+  /* ✨ TailwindCSS: "hidden" */
+  
+  /* ℹ️ Base selector: .message_info */
+  /* ✨ TailwindCSS: "rounded block justify-center h-10 text-base m-auto pb-0 pt-4 text-center w-1/2" */
+  /* ⚠️ Some properties could not be matched with Tailwind classes. Use @apply to extend a CSS rule: */
+  .message_info {
+    @apply rounded block justify-center h-10 text-base m-auto pb-0 pt-4 text-center w-1/2;
+    color: rgba(245, 245, 245, 1);
+    background-color: rgba(139, 0, 0, 1);
+    font-weight: bold;
+    outline: none;
+    transition: 0.2s ease-in;
+  }
+  
+  /* ℹ️ Base selector: .login */
+  /* ✨ TailwindCSS: "h-full relative w-full" */
+  
+  /* ℹ️ Base selector: label */
+  /* ✨ TailwindCSS: "cursor-pointer flex justify-center text-5xl m-16 text-white" */
+  /* ⚠️ Some properties could not be matched with Tailwind classes. Use @apply to extend a CSS rule: */
+  label {
+    @apply cursor-pointer flex justify-center text-5xl m-16 text-white;
+    font-weight: bold;
+    transition: 0.5s ease-in-out;
+  }
+  
+  /* ℹ️ Base selector: input */
+  /* ✨ TailwindCSS: "rounded flex justify-center h-5 my-5 mx-auto p-2" */
+  /* ⚠️ Some properties could not be matched with Tailwind classes. Use @apply to extend a CSS rule: */
+  input {
+    @apply rounded flex justify-center h-5 my-5 mx-auto p-2;
+    width: 60%;
+    background-color: rgba(224, 222, 222, 1);
+    outline: none;
+  }
+  
+  /* ℹ️ Base selector: button */
+  /* ✨ TailwindCSS: "rounded cursor-pointer block justify-center h-10 text-base mx-auto mb-2 mt-5 text-white" */
+  /* ⚠️ Some properties could not be matched with Tailwind classes. Use @apply to extend a CSS rule: */
+  button {
+    @apply rounded cursor-pointer block justify-center h-10 text-base mx-auto mb-2 mt-5 text-white;
+    width: 60%;
+    background-color: rgba(87, 59, 138, 1);
+    font-weight: bold;
+    outline: none;
+    transition: 0.2s ease-in;
+  }
+  /* ⚠️ Some properties are requiring specific variants, but the variant does not support those. Consider extending your Tailwind config.
+  hover:
+      background-color: rgba(109, 68, 184, 1);
+  */
+  
+  /* ℹ️ Base selector: .signup */
+  /* ❌ Could not match any TailwindCSS classes. */
+  
+  /* ℹ️ Base selector: .signup label */
+  /* ✨ TailwindCSS: "text-white" */
+  /* ⚠️ Some properties could not be matched with Tailwind classes. Use @apply to extend a CSS rule: */
+  .signup label {
+    @apply text-white;
+    transform: scale(0.6);
+  }
+  
+  /* ℹ️ Base selector: #chk:checked ~ .signup */
+  /* ❌ Could not match any TailwindCSS classes. */
+  
+  /* ℹ️ Base selector: #chk:checked ~ .login */
+  /* ❌ Could not match any TailwindCSS classes. */
+  
+  /* ℹ️ Base selector: #chk:checked ~ .signup label */
+  /* ❌ Could not match any TailwindCSS classes. */
+  
+  /* ℹ️ Base selector: #chk:checked ~ .login label */
+  /* ❌ Could not match any TailwindCSS classes. */
+  

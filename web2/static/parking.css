@@ -1,5 +1,14 @@
+body {
+    margin: 0;
+    padding: 0px;
+    min-height: 100vh;
+    font-family: 'Jost', sans-serif;
+    background-image: url(/static/background-map.png);
+    backdrop-filter: blur(2px);
+    background-size: contain;
+}
 main{
-    width: 80%;
+    width: auto;
     height: 70%;
     overflow: hidden;
     background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e);
@@ -45,11 +54,13 @@ main{
     background-color: #f1f1f1;
     float: left; 
     background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e);
-    position: relative;
+    width: 40%;
+    height: 100%;
 }
 .info{
-    height: max-content;
-    width: 100%;
+    float: right;
+    width: 45%;
+    height: 100%;
     padding: 2%;
     margin: 8%
 }

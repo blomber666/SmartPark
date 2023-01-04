@@ -5,17 +5,20 @@ body{
     align-items: flex-start;
     min-height: 100vh;
     font-family: 'Jost', sans-serif;
-    background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e);
+    background: #32313c;
     flex-direction: row;
     align-content: center;
 }
 .header{
     width: inherit;
+    height: auto;
     overflow: hidden;
     border-radius: 10px;
-    display: block;
+    display: flex;
+    justify-content: space-between;
     box-shadow: 5px 20px 50px #000;
-    background: #32313c;
+    background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e);
+    flex-direction: row;
 }
 label{
     color: #fff;
@@ -27,31 +30,41 @@ label{
     font-weight: bold;
     cursor: pointer;
     float: left;
-
+    padding: 20px;
 }
-button{
+.user{
+    display: flex;
+    flex-direction: row;
+    align-content: center;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    padding-right: 50px;
+}
+button {
     height: 40px;
-    margin: 20px;
-    display: block;
+    width: 100px;
+    display: flex;
     color: #fff;
     background: #573b8a;
     font-size: 1em;
     font-weight: bold;
+    text-align: center;
     outline: none;
     border: none;
     border-radius: 5px;
     cursor: pointer;
     position: relative;
     float: right;
+    justify-content: center;
+    align-items: center;
 }
-
-.username{
+.username {
     color: #fff;
     width: min-content;
-    font-size: 1.3em;
-    justify-content: left;
-    display: block;
-    margin-left: 50px;
+    font-size: 1.5em;
+    display: flex;
+    justify-items: baseline;
+    margin-right: 50px;
     font-weight: bold;
     cursor: pointer;
     float: left;
