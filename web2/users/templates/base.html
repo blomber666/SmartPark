@@ -3,24 +3,19 @@
 <link rel="stylesheet" href="{% static 'base.css' %}">
 <html>
 <head>
-    <title>{% block title %}My amazing site{% endblock %}</title>
     <div class="header">
         {%block header%}
-        <div class="username">{{user.username}}</div>
-        <div class="plate">{{user.plate}}</div>
-        <button  onclick="location.href = '/logout';">Logout</button>
+        <label>SmartPark</label>
+        <div class="user">
+            <div class="username">{{user.username}}
+                <div class="plate">{{user.plate}}</div>
+            </div>
+            <button  onclick="location.href = '/logout';">Logout</button>
+        </div>
         {%endblock%}
     </div>
 </head>
 <body>
     {% block content %}
     {% endblock %}
-</body>
-<footer>
-    {% block footer %}
-    <div class="home">Home</div>
-    <div class="contatti">Contatti</div>
-    <div class="about">About</div>
-    {% endblock %}
 </html>
-
