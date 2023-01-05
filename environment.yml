@@ -14,5 +14,4 @@ dependencies:
     - folium
     - matplotlib
     - opencv-python
-    - django-tailwind
     - django-sslserver

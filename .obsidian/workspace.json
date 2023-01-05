@@ -40,9 +40,19 @@
                 "file": "other/queue-service-tb.png"
               }
             }
+          },
+          {
+            "id": "868df96184c97815",
+            "type": "leaf",
+            "state": {
+              "type": "release-notes",
+              "state": {
+                "currentVersion": "1.1.9"
+              }
+            }
           }
         ],
-        "currentTab": 2
+        "currentTab": 3
       }
     ],
     "direction": "vertical"
@@ -169,7 +179,7 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "e5a55b3ef678afa6",
+  "active": "868df96184c97815",
   "lastOpenFiles": [
     "other/Specifica dei Requisiti.md",
     "other/demo-credential.png",

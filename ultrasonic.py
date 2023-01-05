@@ -64,8 +64,27 @@ class Ultrasonic:
     def __del__(self):
         GPIO.cleanup()
 
+class Door:
+    def __init__(self, green, red):
+        self.green = green
+        self.red = red
+        GPIO.setup(self.green, GPIO.OUT)
+        GPIO.setup(self.red, GPIO.OUT)
+        GPIO.output(self.green, False)
+        GPIO.output(self.red, False)
+    def open(self):
+        GPIO.output(self.green, True)
+        GPIO.output(self.red, False)
+    def close(self):
+        GPIO.output(self.green, False)
+        GPIO.output(self.red, True)
+    def __del__(self):
+        GPIO.cleanup()
+
 sensor1 = Ultrasonic(18, 24)
 sensor2 = Ultrasonic(20, 21)
+door1 = Door(25, 8)
+door2 = Door(16, 12)
 
 # ThingsBoard REST API URL
 url = "http://192.168.1.197:8080"
@@ -81,13 +100,24 @@ for d in devices:
     if d['name'] == 'gate_1_1':
         gate_1_1 = d
         break
-token_1 = tbapi.get_device_token(gate_1_1)
+gate_1_1_token = tbapi.get_device_token(gate_1_1)
 
 for d in devices:
     if d['name'] == 'gate_1_2':
         gate_1_2 = d
         break
-token_2 = tbapi.get_device_token(gate_1_2)
+gate_1_2_token = tbapi.get_device_token(gate_1_2)
+
+for d in devices:
+    if d['name'] == 'door_1_1':
+        door_1_1 = d
+        break
+
+for d in devices:
+    if d['name'] == 'door_1_2':
+        door_1_2 = d
+        break
+
 
 if __name__ == '__main__':
     try:
@@ -98,18 +128,30 @@ if __name__ == '__main__':
             print("Measured Distance 2 = %.1f cm" % dist2)
 
             telemetry_1 = { str('distance'): dist1} 
-            result_1 = tbapi.send_telemetry(token_1, telemetry_1)
+            result_1 = tbapi.send_telemetry(gate_1_1_token, telemetry_1)
             #check if result is an empty dict
             if not result_1:
                 printc("OK", "Sent ", telemetry_1, "to device: ", gate_1_1['name'])
 
             #do the same for the second device
             telemetry_2 = { str('distance'): dist2}
-            result_2 = tbapi.send_telemetry(token_2, telemetry_2)
+            result_2 = tbapi.send_telemetry(gate_1_2_token, telemetry_2)
             #check if result is an empty dict
             if not result_2:
                 printc("OK", "Sent ", telemetry_2, "to device: ", gate_1_2['name'])
 
+            door_1_1_telemetry = tbapi.get_telemetry(door_1_1['id'], telemetry_keys=["open"])   
+            door_1_2_telemetry = tbapi.get_telemetry(door_1_2['id'], telemetry_keys=["open"])
+
+            if int(door_1_1_telemetry['open'][0]['value']) == 1:
+                door1.open()
+            else:
+                door1.close()
+
+            if int(door_1_2_telemetry['open'][0]['value']) == 1:
+                door2.open()
+            else:
+                door2.close()
             print("\n\n")
             time.sleep(0.5)
 
