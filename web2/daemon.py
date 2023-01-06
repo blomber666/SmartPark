@@ -172,7 +172,8 @@ def control_exit_gate(tbapi, park_number, old_presence, plate):
         #get the gate telemetry
         presence = get_car_presence(tbapi, gate_name)
 
-        if presence != old_presence:
+        #if presence changed or there is someone waiting to exit
+        if presence != old_presence or presence:
             if presence and plate is None:
                 #get plate from camera 2
                 plate = get_plate(tbapi, camera_name)
