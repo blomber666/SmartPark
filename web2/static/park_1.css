@@ -22,33 +22,20 @@ main{
     transform: translate(-50%, -50%);
 }
 .last_stop {
-    background-color: #f0f0f0;
-    border: 1px solid #ccc;
-    border-radius: 5px;
     padding: 5px;
     margin: 5px;
     width: 100%;
-    height: 100%;
     text-align: center;
     font-size: 1.5em;
-    font-weight: bold;
-    color: rgb(242, 0, 0);
+    text-size-adjust: auto;
 }
-
 .free_spaces {
-    background-color: #f0f0f0;
-    border: 1px solid #ccc;
-    border-radius: 5px;
     padding: 5px;
-    margin: 5px;
-    width: 100%;
-    height: 100%;
+    width: fit-content;
     text-align: center;
     font-size: 1.5em;
-    font-weight: bold;
-    color: rgb(242, 0, 0);
+    color:white;
 }
-
 .park {
     display: block;
     background-color: #f1f1f1;
@@ -57,18 +44,29 @@ main{
     width: 40%;
     height: 100%;
 }
-.info{
-    float: right;
-    width: 45%;
-    height: 100%;
+.info {
+    float: left;
+    width: 40%;
+    height: inherit;
     padding: 2%;
-    margin: 8%
 }
-li {
-    color: whitesmoke;
+p{
+    color: white;
     padding: 3px;
 }
 h2 {
     color: white;
     margin-top: 12px;
+}
+.plate{
+    color: #fff;
+    width: min-content;
+    font-size: 1em;
+    /* justify-content: left; */
+    display: block;
+    margin-left: 50px;
+    /* font-weight: bold; */
+    /* cursor: pointer; */
+    /* float: left; */
+    /* text-align: center; */
 }
