@@ -113,6 +113,10 @@ def control_entry_gate(tbapi, park_number, old_presence, plate):
             if presence and plate is None:
                 #get plate from camera 1
                 plate = get_plate(tbapi, camera_name)
+                if plate is None:
+                    printc("RED","plate not found")
+                    return False, None
+
                 printc("CYAN",f"plate: {plate}")
                 #save to db withou end time
                 stop = Stop(plate=plate, start_time=0, end_time=None)
@@ -177,6 +181,9 @@ def control_exit_gate(tbapi, park_number, old_presence, plate):
             if presence and plate is None:
                 #get plate from camera 2
                 plate = get_plate(tbapi, camera_name)
+                if plate is None:
+                    printc("RED","plate not found")
+                    return False, None
                 printc("CYAN",f"plate: {plate}")
 
                 #check if payed
@@ -214,15 +221,24 @@ def control_exit_gate(tbapi, park_number, old_presence, plate):
         return presence, plate
 
 def get_plate(tbapi, camera_name):
-    camera = tbapi.get_tenant_device(name=camera_name)
-    telemetry = tbapi.get_telemetry(camera['id'], telemetry_keys=["plate"])
-    #get the latest telemetry (the first one)
-    plates = telemetry['plate']
-    #plates is a list of dictionaries
-    #get the ones with the grater value for key "ts"
-    plates.sort(key=lambda x: x['ts'])
-    plate = plates[-1]['value']
-    return plate
+    i = 0
+    #try to get the plate for 10 seconds
+    while i < 10:
+        camera = tbapi.get_tenant_device(name=camera_name)
+        telemetry = tbapi.get_telemetry(camera['id'], telemetry_keys=["plate"])
+        #get the latest telemetry (the first one)
+        plates = telemetry['plate']
+        #plates is a list of dictionaries
+        #get the ones with the grater value for key "ts"
+        plates.sort(key=lambda x: x['ts'])
+        #if the time is less than 3 seconds ago
+        if time.time() - plates[-1]['ts']/1000 < 3:
+            plate = plates[-1]['value']
+            return plate
+        #wait 1 second
+        time.sleep(1)
+        i+=1
+    return None
 
 def main(park_name):
     printc("GREEN","starting daemon for park:",park_name)
