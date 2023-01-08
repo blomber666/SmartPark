@@ -1,4 +1,4 @@
-{% load static %}
+{% load static tailwind_tags%}
 
 	<!--if signup_forms.errors set autofocus on the password1 of the signup form-->
 	{% if signup_form.errors %}
@@ -6,51 +6,53 @@
 			window.onload = function() {
 				document.getElementById("id_password1").focus();
 			}
+
 		</script>
 	{% endif %}
 
 
-<!DOCTYPE html>
+<!DOCTYPE html>   
 <html>
-<head>
-	<title>SmartPark: Login - Sign Up</title>
-	<link rel="stylesheet" href="{% static 'login.css' %}">
-<link href="https://fonts.googleapis.com/css2?family=Jost:wght@500&display=swap" rel="stylesheet">
+    <head>
+		<title>SmartPark: Login - Sign Up</title>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<meta http-equiv="X-UA-Compatible" content="ie=edge">
+    	<link href="https://fonts.googleapis.com/css2?family=Jost:wght@500&amp;display=swap" rel="stylesheet">
+		{% tailwind_preload_css %}
+		{% tailwind_css %} 
+	</head>
+	<body class="body-card bg-gradient-to-b from-sfA via-sfB to-sfC text-white">
+		<div class="main-card  justify-center flex flex-row flex-wrap items-center ">
+			<input type="checkbox" id="chk" class="hidden">
 
-</head>
-<body>
-	<div class="main">  	
-		<input type="checkbox" id="chk" aria-hidden="true" >
+	        <div class="login">
+	            <form method="post" class="w-full min-w-[400px] flex flex-col items-center justify-center" data-np-autofill-type="login" data-np-checked="1" data-np-watching="1">
+	                <label for="chk" aria-hidden="true">Login</label>
+	                {% csrf_token %}
+	                {{ login_form.username }}
+	                {{ login_form.password }}
+	                <button name="login" class="text-[20px] w-[200px]">Login</button>
+	                {% if messages %}
+	                {% for message in messages %}
+	                <div class="message_info">{{ message }}</div>
+	                {% endfor %}
+	                {% endif %}
+	            </form>
+	        </div>
 
-			<div class="login">
-				<form method="post">
-					<label for="chk" aria-hidden="true">Login</label>
-
-					{% csrf_token %}
-					{{ login_form.username }}
-					{{ login_form.password }}
-					<button name="login">Login</button>
-					{% if messages %}
-	 					{% for message in messages %}
-						<div class="message_info">{{ message }}</div>
-					    {% endfor %}
-				    {% endif %}
-				</form>
-			</div>
 			<div class="signup">
-				<form method="post">
+				<form method="post" class="flex flex-col justify-center items-center" data-np-autofill-type="register" data-np-checked="1" data-np-watching="1">
 					<label for="chk" aria-hidden="true">Sign up</label>
-					{% csrf_token %}
-					{{ signup_form.username }}
-					{{ signup_form.plate }}
-					{{ signup_form.password1 }}
-					{{ signup_form.password2 }}
-					{{ signup_form.errors }}
-					<button name="signup">Sign up</button>
+						{% csrf_token %}
+						{{ signup_form.username }}
+						{{ signup_form.plate }}
+						{{ signup_form.password1 }}
+						{{ signup_form.password2 }}
+						{{ signup_form.errors }}
+					<button name="signup" class="text-[20px] w-[200px]">Sign up</button>
 				</form>
 			</div>
-
-			
-	</div>
-</body>
+      	</div>
+	</body>
 </html>

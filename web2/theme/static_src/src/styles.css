@@ -1,3 +1,47 @@
 @tailwind base;
 @tailwind components;
 @tailwind utilities;
+
+.body-card {
+  @apply flex items-center justify-center min-w-full min-h-screen overflow-hidden;
+  font-family: "Jost", sans-serif;
+}
+.main-card {
+  @apply overflow-hidden w-[650px] h-[700px] max-w-[70%] max-h-[80%] rounded-[5px] shadow-ff bg-gradient-to-b from-sfA via-sfB to-sfC;
+}
+.p{
+  @apply text-white p-[5px] flex text-[16px] m-[10px];
+}
+.message_info {
+  @apply rounded-[5px] flex flex-col justify-center h-[40px] bg-red-700 text-white text-[15px] m-[4px] text-center min-w-[200px] w-fit font-bold ease-in duration-200;
+}
+label {
+  @apply cursor-pointer flex justify-center text-[48px] m-[5%] my-[20%] text-white font-bold ease-in-out duration-500 scale-75;
+}
+input {
+  @apply h-[40px] min-w-[250px] m-[2%] text-left text-[20px] text-black;
+}
+button{
+  @apply cursor-pointer justify-center my-[10%] outline-none ease-in duration-200 font-bold hover:bg-purple-700 bg-[#573b8a] max-h-[60px] text-white;
+  border-radius: 5px;
+} 
+
+.signup{
+	@apply bg-[#fafafa4d] translate-y-[12%] flex flex-col flex-wrap items-center justify-start ease-in-out duration-1000 shadow-ff h-[100%] w-[100%];
+	border-radius: 50% / 10%;
+}
+.login{
+  @apply ease-in-out duration-1000 flex flex-col flex-wrap items-center justify-start;
+}
+#chk:checked ~ .signup{
+	@apply translate-y-[-55%];
+}
+#chk:checked ~ .login{
+  @apply ease-in-out duration-1000;
+  filter: blur(30px);
+}
+#chk:checked ~ .signup label{
+  @apply scale-100;	
+}
+
+

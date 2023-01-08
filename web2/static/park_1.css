@@ -6,8 +6,10 @@ body {
     background-image: url(/static/background-map.png);
     backdrop-filter: blur(2px);
     background-size: contain;
+
 }
-main{
+/*vfbbdsaafbbbbwsrgbnssrfgdtfbnbn98989888*/
+main {
     width: auto;
     height: 70%;
     overflow: hidden;
@@ -19,13 +21,16 @@ main{
     top: 55%;
     left: 50%;
     margin-right: -50%;
+    display: flex;
     transform: translate(-50%, -50%);
+    justify-content: flex-start;
+    align-content: center;
+    flex-wrap: wrap;
 }
 .last_stop {
     padding: 5px;
     margin: 5px;
     width: 100%;
-    text-align: center;
     font-size: 1.5em;
     text-size-adjust: auto;
 }
@@ -38,28 +43,36 @@ main{
 }
 .park {
     display: block;
-    background-color: #f1f1f1;
-    float: left; 
+    /* background-color: #f1f1f1; */
+    float: left;
     background: linear-gradient(to bottom, #0f0c29, #302b63, #24243e);
-    width: 40%;
+    width: 50%;
     height: 100%;
 }
 .info {
     float: left;
     width: 40%;
     height: inherit;
-    padding: 2%;
+    /* padding: 2%; */
+    margin: auto;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
 }
-p{
+p {
     color: white;
     padding: 3px;
+    display: flex;
+    margin-left: 5%;
+    font-size: larger;
 }
 h2 {
     color: white;
     margin-top: 12px;
+    text-align: center;
 }
 .plate{
-    color: #fff;
+    color: white;
     width: min-content;
     font-size: 1em;
     /* justify-content: left; */

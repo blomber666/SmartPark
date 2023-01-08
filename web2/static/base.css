@@ -1,4 +1,4 @@
-body{
+base-body{
     margin: 0;
     padding: 0px;
     justify-content: center;
@@ -9,7 +9,7 @@ body{
     flex-direction: row;
     align-content: center;
 }
-.header {
+.base-header {
     width: inherit;
     height: 100px;
     overflow: hidden;
@@ -80,3 +80,6 @@ button{
     flex-direction: row;
     justify-content: flex-end;
 }
+
+
+
