@@ -16,3 +16,7 @@ class UrlTest(TestCase):
     def test_administration(self):
         response = self.client.post('/administration/', self.credentials, follow=True)
         self.assertEqual(response.status_code, 200)
+
+    def test_override(self):
+        response = self.client.post('/administration/override/', self.credentials, follow=True)
+        self.assertEqual(response.status_code, 200)

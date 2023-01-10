@@ -50,7 +50,7 @@ def override(request):
     based on which button inside administration.html is pressed
     '''
     if not request.user.is_authenticated:
-        messages.info(request,'HTTP ERROR: 401 - Unauthorized', status=401)
+        messages.info(request,'HTTP ERROR: 401 - Unauthorized')
         return redirect('/home')
     else:
         if request.user.is_superuser:
