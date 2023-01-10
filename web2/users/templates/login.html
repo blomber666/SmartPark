@@ -23,20 +23,20 @@
 		{% tailwind_css %} 
 	</head>
 	<body class="body-card bg-gradient-to-b from-sfA via-sfB to-sfC text-white">
-		<div class="main-card  justify-center flex flex-row flex-wrap items-center ">
+		<div class="main-card w-[50%] h-screen justify-center flex flex-row flex-wrap items-center ">
 			<input type="checkbox" id="chk" class="hidden">
 
 	        <div class="login">
-	            <form method="post" class="w-full min-w-[400px] flex flex-col items-center justify-center" data-np-autofill-type="login" data-np-checked="1" data-np-watching="1">
+	            <form method="post" class="flex flex-col items-center justify-center" data-np-autofill-type="login" data-np-checked="1" data-np-watching="1">
 	                <label for="chk" aria-hidden="true">Login</label>
 	                {% csrf_token %}
 	                {{ login_form.username }}
 	                {{ login_form.password }}
-	                <button name="login" class="text-[20px] w-[200px]">Login</button>
+	                <button name="login" class="text-[100%] w-[65%]">Login</button>
 	                {% if messages %}
 	                {% for message in messages %}
-	                <div class="message_info">{{ message }}</div>
-	                {% endfor %}
+	                <div class="message_info">{{ message }} {% endfor %}</div>
+	                
 	                {% endif %}
 	            </form>
 	        </div>
@@ -50,7 +50,7 @@
 						{{ signup_form.password1 }}
 						{{ signup_form.password2 }}
 						{{ signup_form.errors }}
-					<button name="signup" class="text-[20px] w-[200px]">Sign up</button>
+					<button name="signup" class="text-[100%] w-[65%]">Sign up</button>
 				</form>
 			</div>
       	</div>

@@ -2,7 +2,6 @@
 {% block content %}
 {% load static tailwind_tags%}
 <!DOCTYPE html>
-<!-- <link rel="stylesheet" href="{% static 'park_1.css' %}"> -->
 <!-- <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
 <meta http-equiv="Pragma" content="no-cache" />
 <meta http-equiv="Expires" content="0" /> -->
@@ -13,30 +12,25 @@
     <style>html, body {width: 100%;height: 100%;margin: 0;padding: 0;}</style>
     <!--each 10 second-->
     <!-- <meta http-equiv="refresh" content="10"> -->
-    <!-- <style>html, body {width: 100%;height: 100%;margin: 0;padding: 0;}</style>
-		<meta name="viewport" content="width=device-width, initial-scale=1.0,  maximum-scale=1.0, user-scalable=no">
-    	<link href="https://fonts.googleapis.com/css2?family=Jost:wght@500&amp;display=swap" rel="stylesheet"> -->
 		{% tailwind_preload_css %}
 		{% tailwind_css %}
-
   </head>
 
   <body>
     <div class="body-card bg-[url(/static/background-map.png)]">
-    <div class="main-card mb-20 max-w-fit min-w-[1000px] max-h-[570px]">
-      <img class="block float-left w-6/12 h-full" src="{% static '/park_1.png' %}?{% now 'U' %}"> 
-      <div class="flex flex-wrap flex-col w-[40%] m-[60px] pl-[5%]">
+    <div class="absolute bottom-8 right-0 main-card mb-20 w-max max-w-[60%] flex flex-wrap flex-row justify-between" style="transform: scale(.85);">
+      <img class="flex flex-wrap align-middle object-contain max-w-[42%]" src="{% static '/park_1.png' %}?{% now 'U' %}"> 
+      <div class="flex flex-wrap flex-col w-[55%] p-[5%]">
 
-        <h2 class="flex  text-[40px] text-white w-fit">Last Stop</h2><br>
-            <div class="p">PLATE: {{ plate }}</div>
-            <div class="p">START: {{ start }}</div>
-            <div class="p">END: {{ end }}</div>
-            <div class="p">PRICE: {{ price }}</div> <br>
-
-        <div class='p'>Free spaces: {{free_spaces}}</div>
+        <h2 class="flex text-[200%] text-white w-fit font-semibold">Last Stop</h2><br>
+            <div class="p font-medium bg-gradient-to-b from-sfB to-sfA via-black rounded-md justify-center flex-wrap items-center">PLATE:   <div class="p"> {{plate}} </div></div>
+            <div class="p font-medium bg-gradient-to-b from-sfB to-sfA via-black rounded-md justify-center flex-wrap items-center">START:  <div class="p"> {{start}} </div></div>
+            <div class="p font-medium bg-gradient-to-b from-sfB to-sfA via-black rounded-md justify-center flex-wrap items-center">END:  <div class="p"> {{end}} </div></div>
+            <div class="p font-medium bg-gradient-to-b from-sfB to-sfA via-black rounded-md justify-center flex-wrap items-center">PRICE:  <div class="p"> {{price}} </div></div>
+            <div class="p font-medium bg-gradient-to-b from-sfB to-sfA via-black rounded-md justify-center items-center flex-wrap flex-col">Free spaces<div class="bg-green-800 rounded-md w-[20%] justify-center p"> {{free_spaces}} </div></div>
 
         <form action='pay' method='GET'>
-           <button class="bg-[#573b8a] w-20 mt-[20px]" type='submit'>Pay</button>
+           <button class="bg-[#573b8a] w-20 mt-[5%]" type='submit'>Pay</button>
         </form>
        </div>
       </div>
