@@ -1,38 +1,46 @@
 {% extends "base.html" %}
-{% load static %}
 {% block content %}
+{% load static tailwind_tags%}
 <!DOCTYPE html>
-<link rel="stylesheet" href="{% static 'park_1.css' %}">
+<!-- <link rel="stylesheet" href="{% static 'park_1.css' %}"> -->
 <!-- <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
 <meta http-equiv="Pragma" content="no-cache" />
 <meta http-equiv="Expires" content="0" /> -->
 <html>
   <head>
+    <title>PARKING 1</title>
+    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+    <style>html, body {width: 100%;height: 100%;margin: 0;padding: 0;}</style>
     <!--each 10 second-->
     <!-- <meta http-equiv="refresh" content="10"> -->
-    <title>Benvenuto</title>
+    <!-- <style>html, body {width: 100%;height: 100%;margin: 0;padding: 0;}</style>
+		<meta name="viewport" content="width=device-width, initial-scale=1.0,  maximum-scale=1.0, user-scalable=no">
+    	<link href="https://fonts.googleapis.com/css2?family=Jost:wght@500&amp;display=swap" rel="stylesheet"> -->
+		{% tailwind_preload_css %}
+		{% tailwind_css %}
+
   </head>
 
   <body>
-    <main>
-      <img class="park" src="{% static '/park_1.png' %}?{% now 'U' %}">
-      <div class="info">
-        <div class='last_stop'>
-        <h2>Last Stop</h2>
-            <div class="plate">PLATE: {{ plate }}</div>
-            <br><p>START: {{ start }}</p><br>
-            <p>END: {{ end }}</p><br>
-            <p>PRICE: {{ price }}</p>
-        </div>
-        <div class='free_spaces'>
-          Free spaces: {{free_spaces}}
-        </div>
+    <div class="body-card bg-[url(/static/background-map.png)]">
+    <div class="main-card mb-20 max-w-fit min-w-[1000px] max-h-[570px]">
+      <img class="block float-left w-6/12 h-full" src="{% static '/park_1.png' %}?{% now 'U' %}"> 
+      <div class="flex flex-wrap flex-col w-[40%] m-[60px] pl-[5%]">
+
+        <h2 class="flex  text-[40px] text-white w-fit">Last Stop</h2><br>
+            <div class="p">PLATE: {{ plate }}</div>
+            <div class="p">START: {{ start }}</div>
+            <div class="p">END: {{ end }}</div>
+            <div class="p">PRICE: {{ price }}</div> <br>
+
+        <div class='p'>Free spaces: {{free_spaces}}</div>
 
         <form action='pay' method='GET'>
-           <button type='submit'>Pay</button>
+           <button class="bg-[#573b8a] w-20 mt-[20px]" type='submit'>Pay</button>
         </form>
        </div>
-    </main>
-    </body>
+      </div>
+    </div>
+  </body>
  </html>
 {% endblock %}

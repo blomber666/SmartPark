@@ -1,21 +1,22 @@
-{% load static %}
+{% load static tailwind_tags %}
 <!DOCTYPE html>
-<link rel="stylesheet" href="{% static 'base.css' %}">
 <html>
 <head>
-    <div class="header">
-        {%block header%}
-        <label>SmartPark</label>
-        <div class="user">
-            <div class="username">{{user.username}}
-                <div class="plate">{{user.plate}}</div>
-            </div>
-            <button  onclick="location.href = '/logout';">Logout</button>
+	{% tailwind_preload_css %}
+	{% tailwind_css %}
+    <div class="relative p-[8px] px-[15px] w-screen h-[100px] outline-none text-white font-bold overflow-hidden flex flex-row justify-between content-center flex-wrap items-center rounded-b-[8px] shadow-ff bg-gradient-to-b from-sfA via-sfB to-sfC" style="font-family: 'Jost', sans-serif;">
+        <div class="absolute inset flex justify-center text-[60px]">SmartPark</div>
+        <div class="absolute right-[100px] flex flex-row justify-between content-center flex-wrap">
+            <div class="flex content-center flex-wrap text-[20px] mx-[10px]">{{user.username}}</div>
+            <div class="flex content-center flex-wrap text-[20px] mx-[10px] mr-[50px]">{{user.plate}}</div>
+            <button class="text-[20px] w-[100px] h-[40px] rounded-[5px]" name="logout">Logout</button>
         </div>
-        {%endblock%}
     </div>
-</head>
-<body>
+
+</div>
+<body class="overflow-hidden">
     {% block content %}
     {% endblock %}
+</body>
 </html>
+

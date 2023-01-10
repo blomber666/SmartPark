@@ -65,13 +65,13 @@ def home(request):
     if request.user.is_authenticated:
         return redirect('/home')
         
-    if request.method == 'POST':
+    elif request.method == 'POST':
 
         if 'login' in request.POST:
             signup_form = SignupForm()
             login_form = LoginForm(request.POST, data=request.POST)
             context = {'login_form': login_form, 'signup_form':signup_form}
-
+    
             if login_form.is_valid():
                 username = login_form.cleaned_data.get('username')
                 password = login_form.cleaned_data.get('password')
@@ -85,9 +85,13 @@ def home(request):
                     else:
                         login(request, user)        
                         return redirect('/home')
+                
+                else:
+                    messages.error(request,"Invalid username or password.")
+                    return render(request, 'login.html', context)
             else:
-                messages.error(request,"Invalid username or password.")
-                return render(request, 'theme/templates/login.html', context)
+                    messages.error(request,"Invalid username or password.")
+                    return render(request, 'login.html', context)
 
         elif 'signup' in request.POST:
             login_form = LoginForm()
