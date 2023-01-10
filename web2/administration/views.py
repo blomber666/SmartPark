@@ -9,8 +9,8 @@ from push_telemetry import main as push_telemetry
 
 def administration(request):
     if not request.user.is_authenticated:
-        messages.info(request,'HTTP ERROR: 401 - Unauthorized', status=401)
-        return redirect('')
+        messages.info(request,'HTTP ERROR: 401 - Unauthorized')
+        return redirect('/')
     else:
         if request.user.is_superuser:
             # ThingsBoard REST API URL
@@ -51,7 +51,7 @@ def override(request):
     '''
     if not request.user.is_authenticated:
         messages.info(request,'HTTP ERROR: 401 - Unauthorized', status=401)
-        return redirect('')
+        return redirect('/home')
     else:
         if request.user.is_superuser:
             if request.method == 'POST':

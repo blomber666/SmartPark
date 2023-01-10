@@ -1,3 +1,4 @@
 *.pyc
 */__pycache__/*
 web2/parkings/static/park_1.png
+plates_recognition/datasets/*

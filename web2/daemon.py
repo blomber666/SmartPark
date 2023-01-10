@@ -231,8 +231,8 @@ def get_plate(tbapi, camera_name):
         #plates is a list of dictionaries
         #get the ones with the grater value for key "ts"
         plates.sort(key=lambda x: x['ts'])
-        #if the time is less than 3 seconds ago
-        if time.time() - plates[-1]['ts']/1000 < 3:
+        #if the time is less than 5 seconds ago
+        if time.time() - plates[-1]['ts']/1000 < 5:
             plate = plates[-1]['value']
             return plate
         #wait 1 second

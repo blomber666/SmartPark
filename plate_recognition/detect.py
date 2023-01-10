@@ -62,6 +62,12 @@ for d in devices:
         break
 camera_1_1_token = tbapi.get_device_token(camera_1_1)
 
+for d in devices:
+    if d['name'] == 'camera_1_2':
+        camera_1_2 = d
+        break
+camera_1_2_token = tbapi.get_device_token(camera_1_2)
+
 from models.common import DetectMultiBackend
 from utils.dataloaders import IMG_FORMATS, VID_FORMATS, LoadImages, LoadScreenshots, LoadStreams
 from utils.general import (LOGGER, Profile, check_file, check_img_size, check_imshow, check_requirements, colorstr, cv2,
@@ -125,6 +131,8 @@ def fix_plate(text):
         if not (text[-1].isalpha() and text[-2].isalpha() and text[-3].isnumeric()):
             text = text[:-1]
             continue
+        else:
+            break
     if validate_plate(text):
         return text
     else:
@@ -257,37 +265,40 @@ def run(
                         annotator.box_label(xyxy, label, color=colors(c, True))
                     if save_crop:
                         save_one_box(xyxy, imc, file=save_dir / 'crops' / names[c] / f'{p.stem}.jpg', BGR=True)
-                    print("conf: ", conf)
-                    print("cls: ", cls)
-                    print("xyxy: ", xyxy)
-                    cropped = img_copy[int(xyxy[1]):int(xyxy[3]), int(xyxy[0]):int(xyxy[2])]
-                    #read the plate with tesseract
-                    cropped = cv2.cvtColor(cropped, cv2.COLOR_BGR2GRAY)
-                    cropped = cv2.GaussianBlur(cropped, (5, 5), 0)
-                    #save the cropped image
-                    cv2.imwrite("cropped.jpg", cropped)
-                    #pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR'
-                    plate_text = pytesseract.image_to_string(cropped, lang ='eng', config ='--oem 3 --psm 7 -c tessedit_char_whitelist=ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789')
-                    plate_text = "".join(plate_text.split()).replace(":", "").replace("-", "")
+                    
+                    if conf > 0.75:
+                        cropped = img_copy[int(xyxy[1]):int(xyxy[3]), int(xyxy[0]):int(xyxy[2])]
+                        #read the plate with tesseract
+                        cropped = cv2.cvtColor(cropped, cv2.COLOR_BGR2GRAY)
+                        cropped = cv2.GaussianBlur(cropped, (5, 5), 0)
+                        #save the cropped image
+                        cv2.imwrite("cropped.jpg", cropped)
+                        #pytesseract.pytesseract.tesseract_cmd = r'C:\Program Files\Tesseract-OCR'
+                        plate_text = pytesseract.image_to_string(cropped, lang ='eng', config ='--oem 3 --psm 7 -c tessedit_char_whitelist=ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789')
+                        plate_text = "".join(plate_text.split()).replace(":", "").replace("-", "")
 
-                    plate_text = fix_plate(plate_text)
-                    
-                    if plate_text is not None and validate_plate(plate_text):
-                        plates.append(plate_text)
-                        print("fixed plate: ", plate_text)
-                    
-                    #if last 3 plates are the same, then we have a valid plate
-                    if len(plates) > 3:
-                        if plates[-1] == plates[-2] == plates[-3]:
-                            print("plate read 3 times, sending: ", plates[-1])
-                            plate = plates[-1]
-                            #send the plate to the server
-                            telemetry_1 = {"plate": plate}
-                            result_1 = tbapi.send_telemetry(camera_1_1_token,telemetry_1)
-                            if not result_1:
-                                printc("OK", "Sent ", telemetry_1, "to device: ", camera_1_1['name'])
-                            #clear the plates list
-                            plates = []
+                        plate_text = fix_plate(plate_text)
+                        
+                        if plate_text is not None and validate_plate(plate_text):
+                            plates.append(plate_text)
+                            print("fixed plate: ", plate_text)
+                        
+                        #if last 3 plates are the same, then we have a valid plate
+                        if len(plates) > 3:
+                            if plates[-1] == plates[-2] == plates[-3]:
+                                print("plate read 3 times, sending: ", plates[-1])
+                                plate = plates[-1]
+                                #send the plate to the server
+                                telemetry_1 = {"plate": plate}
+                                result_1 = tbapi.send_telemetry(camera_1_1_token,telemetry_1)
+                                result_2 = tbapi.send_telemetry(camera_1_2_token,telemetry_1)
+                                if not result_1:
+                                    printc("OK", "Sent ", telemetry_1, "to device: ", camera_1_1['name'])
+                                
+                                if not result_2:
+                                    printc("OK", "Sent ", telemetry_1, "to device: ", camera_1_2['name'])
+                                #clear the plates list
+                                plates = []
 
 
             # Stream results

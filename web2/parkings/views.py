@@ -13,8 +13,8 @@ def park_1(request, context=None):
     #print(request.user.is_authenticated)
     #print(request.user)
     if not request.user.is_authenticated:
-        messages.info(request,'HTTP ERROR: 401 - Unauthorized', status=401)
-        return redirect('')
+        messages.info(request,'HTTP ERROR: 401 - Unauthorized')
+        return redirect('/')
     
     if request.user.is_authenticated:
         free_spaces = generate_map('parkings/static/park_1.json')
@@ -51,5 +51,5 @@ def pay(request):
 
         return redirect('/park_1')
     else:
-        messages.info(request,'HTTP ERROR: 401 - Unauthorized', status=401)
-        return redirect('')
+        messages.info(request,'HTTP ERROR: 401 - Unauthorized')
+        return redirect('/')

@@ -57,8 +57,8 @@ def map_view(request):
     if request.user.is_authenticated:
         return render(request, 'map.html', {})
     else: 
-        messages.info(request,'HTTP ERROR: 401 - Unauthorized', status=401)
-        return redirect('')
+        messages.info(request,'HTTP ERROR: 401 - Unauthorized')
+        return redirect('/')
 
 
 def home(request):
