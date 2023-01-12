@@ -38,7 +38,7 @@ button{
   @apply scale-100;	
 }
 .p{
-  @apply text-white p-[2%] flex text-clip my-[3%] ;
+  @apply text-white px-[2%] flex text-clip my-[3%] ;
 }
 .message_info {
   @apply rounded-[5%] flex flex-col justify-center min-h-[40px] text-[100%] px-[5%] w-[50%] bg-red-800 text-neutral-100 m-[4px] text-center min-w-[220px] font-medium ease-in duration-200;

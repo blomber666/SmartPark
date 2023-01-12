@@ -135,7 +135,7 @@ def generate_map(filename):
                 alpha = 0.5
                 map = cv2.addWeighted(overlay, alpha, map, 1-alpha, 0)
     #save the map as png
-    cv2.imwrite("parkings/static/park_1.png", map)
+    cv2.imwrite("media/park_1.png", map)
             #attributes = rest_client.get_attributes(EntityId("69482ca0-7d65-11ed-b021-03cf31a5a03e","DEVICE" ))
             
             # Creating an Asset
