@@ -30,15 +30,15 @@ def park_1(request, context=None):
         return redirect('/')
 
 def pay(request):
-
-    if request.user.is_authenticated:
+    if request.user.is_authenticated and request.method == 'GET':
         stop = Stop.objects.filter(plate=request.user.plate).last()
         #check if already payed
         payment = Payment.objects.filter(stop_id=stop.stop_id)
 
         if not payment:
             #calculate the amount in euors, every minute is 1 cent
-            amount = (timezone.now() - stop.start_time).seconds / 60 * 0.01
+            end = timezone.now()
+            amount = (end - stop.start_time).seconds / 60 * 0.01
             payment = Payment(stop_id=stop, payment_time=0, amount=amount)
             payment.save()
         else:

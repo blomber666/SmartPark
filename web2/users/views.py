@@ -50,12 +50,14 @@ def user_logout(request):
     return redirect('/')
 
 
-
 def map_view(request):
     #if not os.path.exists("parkings/templates/map.html"): 
     #    create_map()
     if request.user.is_authenticated:
-        return render(request, 'map.html', {})
+        if request.user.is_superuser:
+            return redirect('/administration')
+        else:
+            return render(request, 'map.html', {})
     else: 
         messages.info(request,'HTTP ERROR: 401 - Unauthorized')
         return redirect('/')
@@ -63,8 +65,11 @@ def map_view(request):
 
 def home(request):
     if request.user.is_authenticated:
-        return redirect('/home')
-        
+        if request.user.is_superuser:
+            return redirect('/administration')
+        else:
+            return redirect('/home')
+
     elif request.method == 'POST':
 
         if 'login' in request.POST:
@@ -87,9 +92,6 @@ def home(request):
                         return redirect('/home')
                 
                 else:
-                    messages.error(request,"Invalid username or password.")
-                    return render(request, 'login.html', context)
-            else:
                     messages.error(request,"Invalid username or password.")
                     return render(request, 'login.html', context)
 

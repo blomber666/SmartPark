@@ -1,56 +1,59 @@
-{% extends "base.html" %}
-{% load static %}
-{% block content %}
-<!DOCTYPE html>
-<link rel="stylesheet" href="{% static 'parking.css' %}">
-<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+
+
+{% load static tailwind_tags %}
+
+<!-- <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
 <meta http-equiv="Pragma" content="no-cache" />
-<meta http-equiv="Expires" content="0" />
-<html>
+<meta http-equiv="Expires" content="0" /> -->
+
   <head>
       <!--each second-->
       <!-- <meta http-equiv="refresh" content="10"> -->
-    <title>Benvenuto</title>
+    <title>ADMIN</title>
+    {% tailwind_preload_css %}
+    {% tailwind_css %}
   </head>
+<html>
+  <body class="overflow-hidden">
+    <div class="relative bg-gradient-to-b from-sfA via-sfB to-sfC w-screen h-screen">
 
-  <body>
-    <main>
-      <img class="park" src="{% static '/park_1.png' %}?{% now 'U' %}">
-  
-      <div class='info'>
-        <div class='active_stops'>
-          <h2>Active Stops</h2>
-            <ul>
-              {% for stop in active_stops %}
-                <li>{{stop}}</li>
-              {% endfor %}
-            </ul>
-        </div>
-        <div class='completed_stops'>
-          <h2>Completed Stops</h2>
-            <ul>
-              {% for stop in completed_stops %}
-                <li>{{stop}}</li>
-              {% endfor %}
-            </ul>
-        </div>
+      <img class="absolute left-5" src="/media/park_1.png">
+
+      <div class="absolute right-0 grid gap-4 grid-cols-3 grid-rows-3 xl:ml-64 h-full max-h-screen rounded-xl">
+      <div class='mr-2'>
+        <h2>Active Stops</h2>
+          <ul>
+            {% for stop in active_stops %}
+              <li>{{stop}}</li>
+            {% endfor %}
+          </ul>
       </div>
 
-      <div class='gates_override'>
+      <div class='mr-2'>
+        <h2>Completed Stops</h2>
+          <ul>
+            {% for stop in completed_stops %}
+              <li>{{stop}}</li>
+            {% endfor %}
+          </ul>
+      </div>
+
+      <div class='mr-2'>
         <form action='override/' method='POST'>
           {% csrf_token %}
-          <input type='submit' name='entry_open' value='Open Entry Gate'>
-          <input type='submit' name='entry_close' value='Close Entry Gate'>
-          <input type='submit' name='entry_normal' value='Normal Entry Gate'>
+          <button class="te" type='submit' name='entry_open' value='Open Entry Gate'>
+          <buttom type='submit' name='entry_close' value='Close Entry Gate'>
+          <button type='submit' name='entry_normal' value='Normal Entry Gate'>
           <br>
 
-          <input type='submit' name='exit_open' value='Open Exit Gate'>
-          <input type='submit' name='exit_close' value='Close Exit Gate'>
-          <input type='submit' name='exit_normal' value='Normal Exit Gate'>
+          <button type='submit' name='exit_open' value='Open Exit Gate'>
+          <button type='submit' name='exit_close' value='Close Exit Gate'>
+          <button type='submit' name='exit_normal' value='Normal Exit Gate'>
         </form>
       </div>
 
-    </main>
+      </div>
+    </div>
+
   </body>
 </html>
-{% endblock %}

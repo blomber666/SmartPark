@@ -1,5 +1,4 @@
 {% extends "base.html" %}
-{% load static %}
 {% block content %}
 {% load static tailwind_tags%}
 <!DOCTYPE html>
@@ -19,20 +18,23 @@
 
   <body>
     <div class="body-card bg-[url(/static/background-map.png)]">
-    <div class="absolute bottom-8 right-0 main-card mb-20 w-max max-w-[60%] flex flex-wrap flex-row justify-between" style="transform: scale(.85);">
+    <div class="absolute bottom-8 right-0 main-card mb-20 w-max max-w-[60%] flex flex-wrap flex-row justify-around" style="transform: scale(.85);">
       <img class="flex flex-wrap align-middle object-contain max-w-[42%]" src="/media/park_1.png"> 
       <div class="flex flex-wrap flex-col w-[55%] p-[5%]">
 
-        <h2 class="flex text-[200%] text-white w-fit font-semibold">Last Stop</h2><br>
-            <div class="p font-medium bg-gradient-to-b from-sfB to-sfA via-black rounded-md justify-center flex-wrap items-center">PLATE:   <div class="p"> {{plate}} </div></div>
-            <div class="p font-medium bg-gradient-to-b from-sfB to-sfA via-black rounded-md justify-center flex-wrap items-center">START:  <div class="p"> {{start}} </div></div>
-            <div class="p font-medium bg-gradient-to-b from-sfB to-sfA via-black rounded-md justify-center flex-wrap items-center">END:  <div class="p"> {{end}} </div></div>
-            <div class="p font-medium bg-gradient-to-b from-sfB to-sfA via-black rounded-md justify-center flex-wrap items-center">PRICE:  <div class="p"> {{price}} </div></div>
-            <div class="p font-medium bg-gradient-to-b from-sfB to-sfA via-black rounded-md justify-center items-center flex-wrap flex-col">Free spaces<div class="bg-green-800 rounded-md w-[20%] justify-center p"> {{free_spaces}} </div></div>
-
+        <h2 class="flex text-[200%] text-white w-max font-semibold">Last Stop</h2><br>
+            <div class="key">PLATE:   <div class="value">{{plate}}</div></div>
+            <div class="key">START:  <div class="value">{{start}}</div></div>
+            <div class="key">END:  <div class="value">{{end}}</div></div>
+            <div class="key">PRICE:  <div class="value">{{price}}</div></div>
+            <div class="key">Free spaces<div class="bg-green-800 value">{{free_spaces}}</div></div>
+        {% if not {payed} %}
         <form action='pay' method='GET'>
            <button class="bg-[#573b8a] w-20 mt-[5%]" type='submit'>Pay</button>
         </form>
+        {% else %}
+        <div class="bg-[#bd9bfc] w-20 mt-[5%] text-black">PAYED!</div>
+        {% endif %}
        </div>
       </div>
     </div>

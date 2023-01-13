@@ -4,19 +4,23 @@
 <head>
 	{% tailwind_preload_css %}
 	{% tailwind_css %}
-    <div class="relative p-[8px] px-[15px] w-screen h-[100px] outline-none text-white font-bold overflow-hidden flex flex-row justify-between content-center flex-wrap items-center rounded-b-[8px] shadow-ff bg-gradient-to-b from-sfA via-sfB to-sfC" style="font-family: 'Jost', sans-serif;">
+    <div class="relative px-[4%] p-[3%] w-screen h-[100px] outline-none text-white font-bold overflow-hidden flex flex-row justify-between content-center flex-wrap items-center rounded-b-[8px] shadow-ff bg-gradient-to-b from-sfA via-sfB to-sfC" style="font-family: 'Jost', sans-serif;">
         <div class="absolute inset flex justify-center text-[60px]">SmartPark</div>
-        <div class="absolute right-[100px] flex flex-row justify-between content-center flex-wrap">
-            <div class="flex content-center flex-wrap text-[20px] mx-[10px]">{{user.username}}</div>
-            <div class="flex content-center flex-wrap text-[20px] mx-[10px] mr-[50px]">{{user.plate}}</div>
-            <button onclick="location.href='/logout'" class="text-[20px] w-[100px] h-[40px] rounded-[5px]">Logout</button>
+        <div class="absolute right-[5%] flex flex-row justify-between  items-center content-center">
+            <div class="flex justify-center items-center flex-wrap text-[120%] mx-[5%]">{{user.username}}
+                {% if user.is_superuser %}
+                <div class="flex justify-center items-center flex-wrap text-[70%] mx-[5%] w-[110%] text-white bg-black rounded-md">ADMIN</div>
+                {% endif %}
+            </div>
+            <div class="flex content-center flex-wrap text-[20px] mx-[10px] mr-[50px]">{{plate}}</div>
+            <button onclick="location.href='/logout'" class="text-[20px] w-[110px] h-[40px] rounded-[5px]">Logout</button>
         </div>
     </div>
 
 </div>
-<body class="overflow-hidden">
+
     {% block content %}
     {% endblock %}
-</body>
+
 </html>
 

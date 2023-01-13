@@ -28,6 +28,7 @@ module.exports = {
         '../../parkings/templates/*.html',
         '../../theme/templates/*.html',
         '../../users/templates/*.html',
+        '../../administration/templates/*.html',
 
         /**
          * JS: If you use Tailwind CSS in JavaScript, uncomment the following lines and make sure
