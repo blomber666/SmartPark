@@ -16,10 +16,11 @@ def park_1(request, context=None):
         #get the stop with the plate of the user
         stop = Stop.objects.filter(plate=request.user.plate).last()
         plate = request.user.plate 
-        start = stop.start_time if stop else None
-        end = stop.end_time if stop else None
-        payment = Payment.objects.filter(stop_id=stop.stop_id).last() if stop else None
-        amount = payment.amount if payment else None
+        start = stop.start_time if stop.start_time else None
+        end = stop.end_time if stop.end_time else None
+
+        payment = Payment.objects.filter(stop_id=stop.stop_id).last() if stop.end_time else None
+        amount = payment.amount if payment else calculate_amount(start, timezone.now())
         print('spazi liberi', free_spaces)
         context = {'plate': plate, 'start': start, 'end': end , 'amount': amount , 'free_spaces': free_spaces}
 
@@ -48,3 +49,14 @@ def pay(request):
     else:
         messages.info(request,'HTTP ERROR: 401 - Unauthorized')
         return redirect('/')
+
+def calculate_amount(start, end):
+    '''calculate the amount in euros, every minute is 1 cent.
+    start and end are datetime.datetime objects'''
+    print('\n\n\nsecondi', (end - start).total_seconds())
+    
+    #calculate the amount in euors, every minute is 1 cent
+    amount = ((end - start).total_seconds()) / 60 * 0.1
+    #round to 2 decimal places
+    amount = round(amount, 2)
+    return amount

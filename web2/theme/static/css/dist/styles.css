@@ -1154,7 +1154,8 @@ button{
   margin-bottom: 3%;
   display: flex;
   text-overflow: clip;
-  padding: 2%;
+  padding-left: 2%;
+  padding-right: 2%;
   --tw-text-opacity: 1;
   color: rgb(255 255 255 / var(--tw-text-opacity));
 }
