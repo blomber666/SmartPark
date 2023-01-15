@@ -26,9 +26,9 @@
             <div class="key">PLATE:   <div class="value">{{plate}}</div></div>
             <div class="key">START:  <div class="value">{{start}}</div></div>
             <div class="key">END:  <div class="value">{{end}}</div></div>
-            <div class="key">PRICE:  <div class="value">{{price}}</div></div>
+            <div class="key">PRICE:  <div class="value">{{amount}}</div></div>
             <div class="key">Free spaces<div class="bg-green-800 value">{{free_spaces}}</div></div>
-        {% if not {payed} %}
+        {% if not payed %}
         <form action='pay' method='GET'>
            <button class="bg-[#573b8a] w-20 mt-[5%]" type='submit'>Pay</button>
         </form>

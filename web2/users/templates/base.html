@@ -1,9 +1,11 @@
 {% load static tailwind_tags %}
+
 <!DOCTYPE html>
 <html>
 <head>
 	{% tailwind_preload_css %}
 	{% tailwind_css %}
+    <link rel="stylesheet" href="https://unpkg.com/flowbite@1.6.2/dist/flowbite.min.css" />
     <div class="relative px-[4%] p-[3%] w-screen h-[100px] outline-none text-white font-bold overflow-hidden flex flex-row justify-between content-center flex-wrap items-center rounded-b-[8px] shadow-ff bg-gradient-to-b from-sfA via-sfB to-sfC" style="font-family: 'Jost', sans-serif;">
         <div class="absolute inset flex justify-center text-[60px]">SmartPark</div>
         <div class="absolute right-[5%] flex flex-row justify-between  items-center content-center">
@@ -18,9 +20,13 @@
     </div>
 
 </div>
+    <body>
+        {% block content %}
+        {% endblock %}
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.2/flowbite.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.2/datepicker.min.js"></script>
+    </body>
 
-    {% block content %}
-    {% endblock %}
 
 </html>
 

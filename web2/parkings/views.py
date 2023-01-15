@@ -21,8 +21,9 @@ def park_1(request, context=None):
 
         payment = Payment.objects.filter(stop_id=stop.stop_id).last() if stop.end_time else None
         amount = payment.amount if payment else calculate_amount(start, timezone.now())
+        payed = True if payment else False
         print('spazi liberi', free_spaces)
-        context = {'plate': plate, 'start': start, 'end': end , 'amount': amount , 'free_spaces': free_spaces}
+        context = {'plate': plate, 'start': start, 'end': end , 'amount': amount , 'free_spaces': free_spaces, 'payed': payed}
 
         return render(request, 'park_1.html', context)
     else:
