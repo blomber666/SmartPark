@@ -1,12 +1,15 @@
 
-
+{% extends 'base.html' %}
 {% load static tailwind_tags %}
+{% block content %}
+
 
 <!-- <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
 <meta http-equiv="Pragma" content="no-cache" />
 <meta http-equiv="Expires" content="0" /> -->
 
   <head>
+    <link rel="stylesheet" href="https://unpkg.com/flowbite@1.4.5/dist/flowbite.min.css" />
       <!--each second-->
       <!-- <meta http-equiv="refresh" content="10"> -->
     <title>ADMIN</title>
@@ -14,46 +17,19 @@
     {% tailwind_css %}
   </head>
 <html>
-  <body class="overflow-hidden">
-    <div class="relative bg-gradient-to-b from-sfA via-sfB to-sfC w-screen h-screen">
+  
+<body class="bg-green-50">
 
-      <img class="absolute left-5" src="/media/park_1.png">
-
-      <div class="absolute right-0 grid gap-4 grid-cols-3 grid-rows-3 xl:ml-64 h-full max-h-screen rounded-xl">
-      <div class='mr-2'>
-        <h2>Active Stops</h2>
-          <ul>
-            {% for stop in active_stops %}
-              <li>{{stop}}</li>
-            {% endfor %}
-          </ul>
-      </div>
-
-      <div class='mr-2'>
-        <h2>Completed Stops</h2>
-          <ul>
-            {% for stop in completed_stops %}
-              <li>{{stop}}</li>
-            {% endfor %}
-          </ul>
-      </div>
-
-      <div class='mr-2'>
-        <form action='override/' method='POST'>
-          {% csrf_token %}
-          <button class="te" type='submit' name='entry_open' value='Open Entry Gate'>
-          <buttom type='submit' name='entry_close' value='Close Entry Gate'>
-          <button type='submit' name='entry_normal' value='Normal Entry Gate'>
-          <br>
-
-          <button type='submit' name='exit_open' value='Open Exit Gate'>
-          <button type='submit' name='exit_close' value='Close Exit Gate'>
-          <button type='submit' name='exit_normal' value='Normal Exit Gate'>
-        </form>
-      </div>
-
-      </div>
+  <div class="relative">
+    <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+      <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path></svg>
     </div>
+    <input datepicker type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date">
+  </div>
 
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.2/flowbite.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.2/datepicker.min.js"></script>
   </body>
 </html>
+
+{% endblock %}
