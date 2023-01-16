@@ -12,7 +12,7 @@ from django.contrib import messages
 def park_1(request, context=None):
     
     if request.user.is_authenticated:
-        free_spaces = generate_map('parkings/static/park_1.json')
+        free_spaces, total_spaces = generate_map('parkings/static/park_1.json')
         #get the stop with the plate of the user
         stop = Stop.objects.filter(plate=request.user.plate).last()
         plate = request.user.plate 

@@ -1,6 +1,8 @@
 {% extends "base.html" %}
 {% load static%}
 {% block content %}
+{{total_spaces | json_script:"total_spaces"}}
+{{free_spaces | json_script:"free_spaces"}}
 <!DOCTYPE html>
 <html>
 <head>
@@ -18,6 +20,7 @@
     <script src="https://code.jquery.com/jquery-1.12.4.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/js/bootstrap.bundle.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/Leaflet.awesome-markers/2.0.2/leaflet.awesome-markers.js"></script>
+    
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/leaflet@1.9.3/dist/leaflet.css"/>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.2/dist/css/bootstrap.min.css"/>
     <link rel="stylesheet" href="https://netdna.bootstrapcdn.com/bootstrap/3.0.0/css/bootstrap.min.css"/>
@@ -35,6 +38,9 @@
                     top: 0.0%;
                 }
                 .leaflet-container { font-size: 1rem; }
+                .leaflet-popup-content { width: 250px ;
+                                         font-size: 1rem; }
+                
             </style>
         
 </head>
@@ -79,11 +85,31 @@
             marker_4e266410895f72c20ac7bb27fd09c58b.setIcon(icon_c9b6446e3953ec92324af34017e05571);
         
     
-        var popup_56b4992601964609c824f2ce757ddd79 = L.popup({"maxWidth": "100%"});
+        var popup_56b4992601964609c824f2ce757ddd79 = L.popup(minWidth=300);
 
         
             
-                var html_49ed3bd17765f8a8be13d0a1e92ba6f6 = $(`<div id="html_49ed3bd17765f8a8be13d0a1e92ba6f6" style="width: 100.0%; height: 100.0%;"><a href=/park_1>Park 1</a></div>`)[0];
+                var html_49ed3bd17765f8a8be13d0a1e92ba6f6 = $(`
+
+                    
+                    <div class=" bg-white border border-gray-200 rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700">
+                        <a href="/park_1">
+                            <img class="object-cover w-full rounded md:h-auto md:rounded-none md:rounded-l-lg" src="/media/park_1.png" alt="" />
+                        </a>
+                        <div class="p-3 space-y-4">
+                            
+                            <div class="flex justify-between mb-1">
+                                <span class="text-3xl font-bold text-purple-700 dark:text-white">Occupied</span>
+                                <span id="park_status" class="text-3xl font-bold text-purple-700 dark:text-white">{{park_status}}</span>
+                                </div>
+                                <div class="w-full bg-gray-200 rounded-full h-10 dark:bg-gray-700">
+                                <div class="bg-[#573b8a] h-10 rounded-full" style="width: {{park_percent}}%"></div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                `)[0];
                 popup_56b4992601964609c824f2ce757ddd79.setContent(html_49ed3bd17765f8a8be13d0a1e92ba6f6);
             
         
@@ -92,7 +118,8 @@
         ;
 
         
-    
 </script>
+
+
 </html>
 {% endblock %}

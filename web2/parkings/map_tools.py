@@ -155,7 +155,7 @@ def generate_map(filename):
             # relation = rest_client.save_relation(relation)
 
             #logging.info(" Relation was created:\n%r\n", relation)
-    return sensor_counter - free_counter
+    return sensor_counter - free_counter, sensor_counter
 
 if __name__ == "__main__":
     generate_map('web2/parkings/static/park_1.json')

@@ -7,6 +7,8 @@ import folium
 #from django.http import HttpResponse
 from django.shortcuts import redirect
 
+from parkings.map_tools import generate_map
+
 
 def create_map():    
     map = folium.Map(location=[44.83895673644131, 11.614725304456822], zoom_start=15)
@@ -57,7 +59,11 @@ def map_view(request):
         if request.user.is_superuser:
             return redirect('/administration')
         else:
-            return render(request, 'map.html', {})
+            free_spaces, total_spaces = generate_map('parkings/static/park_1.json')
+            park_status = str((total_spaces-free_spaces)) + '/' + str(total_spaces)
+            park_percent = int(((total_spaces-free_spaces)/total_spaces)*100)
+            context = {'park_status': park_status, 'park_percent': park_percent}
+            return render(request, 'map.html', context)
     else: 
         messages.info(request,'HTTP ERROR: 401 - Unauthorized')
         return redirect('/')
