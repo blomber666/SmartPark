@@ -1077,8 +1077,8 @@ input {
 }
 
 button {
-  margin-top: 10%;
-  margin-bottom: 10%;
+  /* margin-top: 10%;
+  margin-bottom: 10%; */
   min-height: 35px;
   cursor: pointer;
   justify-content: center;
