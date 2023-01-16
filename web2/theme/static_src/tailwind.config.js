@@ -62,7 +62,8 @@ module.exports = {
             colors: {
                   "sfA": '#0f0c29',
                   "sfB": '#302b63', 
-                  "sfC": '#23233e'
+                  "sfC": '#23233e',
+                  "colButt": '#573b8a'
                 },
         },
     },

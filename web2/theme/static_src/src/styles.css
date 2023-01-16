@@ -12,13 +12,13 @@
 label {
   @apply cursor-pointer flex justify-center text-[300%] m-[5%] my-[15%] text-white font-bold ease-in-out duration-500 scale-75;
 }
-input {
+/* input {
   @apply min-h-[40px] min-w-[150%] m-[5%] text-left text-[20px] text-black;
-}
-button{
+} */
+/* button{
   @apply cursor-pointer justify-center my-[10%] outline-none ease-in duration-200 font-bold hover:bg-purple-700 bg-[#573b8a] min-h-[35px] text-white;
   border-radius: 5px;
-} 
+}  */
 .signup{
 	@apply absolute top-[85%] bg-[#fafafa4d] flex flex-col flex-wrap items-center justify-start ease-in-out duration-1000 shadow-ff h-screen min-w-[150%];
 	border-radius: 50% / 10%;

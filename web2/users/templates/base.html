@@ -6,21 +6,41 @@
 	{% tailwind_preload_css %}
 	{% tailwind_css %}
     <link rel="stylesheet" href="https://unpkg.com/flowbite@1.6.2/dist/flowbite.min.css" />
-    <div class="relative px-[4%] p-[3%] w-screen h-[100px] outline-none text-white font-bold overflow-hidden flex flex-row justify-between content-center flex-wrap items-center rounded-b-[8px] shadow-ff bg-gradient-to-b from-sfA via-sfB to-sfC" style="font-family: 'Jost', sans-serif;">
-        <div class="absolute inset flex justify-center text-[60px]">SmartPark</div>
-        <div class="absolute right-[5%] flex flex-row justify-between  items-center content-center">
-            <div class="flex justify-center items-center flex-wrap text-[120%] mx-[5%]">{{user.username}}
-                {% if user.is_superuser %}
-                <div class="flex justify-center items-center flex-wrap text-[70%] mx-[5%] w-[110%] text-white bg-black rounded-md">ADMIN</div>
-                {% endif %}
-            </div>
-            <div class="flex content-center flex-wrap text-[20px] mx-[10px] mr-[50px]">{{plate}}</div>
-            <button onclick="location.href='/logout'" class="text-[20px] w-[110px] h-[40px] rounded-[5px]">Logout</button>
+    
+    <nav class="sticky top-0 p-3 border-gray-200 rounded bg-gradient-to-b from-sfA via-sfB to-sfC ">
+        <div class="container flex flex-wrap items-center justify-between mx-auto">
+          <a href="#" class="flex items-center">
+              <img src="/static/smart-parking-icon.svg" class="h-6 mr-3 sm:h-10"/>
+              <span class="self-center text-xl font-semibold whitespace-nowrap text-white">SmartPark</span>
+          </a>
+          <button data-collapse-toggle="navbar-solid-bg" type="button" class="inline-flex items-center p-2 ml-3 text-sm text-white rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200" aria-controls="navbar-solid-bg" aria-expanded="false">
+            <span class="sr-only">Open main menu</span>
+            <svg class="w-6 h-6" aria-hidden="true" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M3 5a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 10a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1zM3 15a1 1 0 011-1h12a1 1 0 110 2H4a1 1 0 01-1-1z" clip-rule="evenodd"></path></svg>
+          </button>
+          <div class="hidden w-full md:block md:w-auto" id="navbar-solid-bg">
+            <ul class="flex flex-col mt-4 rounded-lg md:flex-row md:space-x-8 md:mt-0 md:text-base md:font-medium md:border-0 ">
+              <li>
+                <a class="block py-2 pl-3 pr-4 text-white rounded md:bg-transparent md:hover:text-purple-700 md:py-1 " aria-current="page">{{user.username}}</a>
+              </li>
+              {% if user.is_superuser %}
+              <li>
+                <a class="block py-2 pl-3 pr-4 text-white rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-purple-700 md:py-1">ADMIN</a>
+              </li>
+              {% else %}
+              <li>
+                <a class="block py-2 pl-3 pr-4 text-white rounded hover:bg-gray-100 md:hover:bg-transparent md:border-0 md:hover:text-purple-700 md:py-1">{{plate}}</a>
+              </li>
+              {% endif %}
+              <a type="button" href="/logout" class="block bg-purple-900 py-2 pl-3 pr-4 text-white rounded  hover:bg-purple-700 md:py-1 md:px-2">Logout</a>
+            </ul>
+
         </div>
-    </div>
+        </div>
+    </nav>
+  
 
 </div>
-    <body>
+    <body class="overflow-hidden">
         {% block content %}
         {% endblock %}
         <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.2/flowbite.min.js"></script>

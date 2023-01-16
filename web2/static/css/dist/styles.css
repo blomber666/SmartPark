@@ -1066,16 +1066,6 @@ label {
   transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
 }
 
-input {
-  margin: 5%;
-  min-height: 40px;
-  min-width: 150%;
-  text-align: left;
-  font-size: 20px;
-  --tw-text-opacity: 1;
-  color: rgb(0 0 0 / var(--tw-text-opacity));
-}
-
 button {
   /* margin-top: 10%;
   margin-bottom: 10%; */
