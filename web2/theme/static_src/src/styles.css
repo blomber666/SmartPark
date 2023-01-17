@@ -9,9 +9,7 @@
 .main-card {
   @apply relative rounded-[5px] shadow-ff bg-gradient-to-b from-sfA via-sfB to-sfC;
 }
-label {
-  @apply cursor-pointer flex justify-center text-[300%] m-[5%] my-[15%] text-white font-bold ease-in-out duration-500 scale-75;
-}
+
 /* input {
   @apply min-h-[40px] min-w-[150%] m-[5%] text-left text-[20px] text-black;
 } */
