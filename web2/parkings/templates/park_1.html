@@ -38,12 +38,21 @@
         color: #6c2bd9;
         background-color: #cdcdcd;
         }
+
+    .submit {
+        margin: 0 auto;
+        }
+
+    #pay_form {
+        margin-right: auto;
+        margin-left: auto;
+        }
     </style>
     
   </head>
 
 <div class="p-8">
-    <div class="w-full space-y-4 bg-stone-500/50 !important rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700">
+    <div class="w-full space-y-2 bg-stone-500/50 !important rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700">
         <div class="sm:hidden">
             <label for="tabs" class="sr-only">Select tab</label>
             <select id="tabs" class="bg-gray-50 !important border-0 border-b border-gray-200 text-gray-900 text-base rounded-t-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
@@ -67,7 +76,7 @@
             <div class="flex items-center justify-center hidden p-4 bg-white75 !important rounded-lg md:p-8 dark:bg-gray-800" id="stats" role="tabpanel" aria-labelledby="stats-tab">
                 <a href="#" class="flex items-center bg-gray-200 border rounded-lg shadow-md md:flex-row  dark:border-gray-700 dark:bg-gray-800">
                     <img class="object-cover rounded-t-lg h-96 md:h-auto w-72 md:rounded-none md:rounded-l-lg" src="/media/park_1.png" alt="">
-                    <div class="flex flex-col space-y-4 justify-between p-4 leading-normal">
+                    <div class="flex flex-col space-y-2 justify-center p-4 leading-normal">
                         <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Last Stop</h5>
                         <div id="toast-simple" class="flex items-center w-full max-w-xs p-4 space-x-4 text-gray-500 bg-white divide-x divide-gray-200 rounded-lg shadow dark:text-gray-400 dark:divide-gray-700 space-x dark:bg-gray-800" role="alert">
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrow-bar-to-right" width="30" height="30" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
@@ -101,18 +110,31 @@
                             </svg>
                             <div class="pl-4 text-base font-normal">{{amount}} € </div>
                         </div>
-
-                        
+                        {% if start is not None %}
+                            {% if payed is None %} 
+                            
+                                <form id="pay_form"  action='pay' method='GET'>
+                                    <button type="submit" class="text-white tex-bold bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-purple-300 dark:focus:ring-purple-800 shadow-lg shadow-purple-500/50 dark:shadow-lg dark:shadow-purple-800/80 font-medium rounded-lg text-base px-5 py-2.5 text-center ">Pay</button>
+                                </form>
+                                    {% else %}
+                                    <!-- <button type="button" class="text-gray-900 bg-white hover:bg-gray-100 border border-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-gray-600 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:bg-gray-700 mr-2 mb-2"> -->
+                                    <button type="button" id="pay_form" class="w-1/3 text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 shadow-lg shadow-green-500/50 dark:shadow-lg dark:shadow-green-800/80 font-medium rounded-lg text-sm px-5 py-2.5  text-center inline-flex items-center mr-2 mb-2 w-1/3">
+                                        <svg class= "mr-3" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="20px" height="20px" viewBox="0 0 96 96" enable-background="new 0 0 96 96" xml:space="preserve"><g><path fill-rule="evenodd" clip-rule="evenodd" fill="#3d3d3d" d="M48,0c26.51,0,48,21.49,48,48S74.51,96,48,96S0,74.51,0,48 S21.49,0,48,0L48,0z M26.764,49.277c0.644-3.734,4.906-5.813,8.269-3.79c0.305,0.182,0.596,0.398,0.867,0.646l0.026,0.025 c1.509,1.446,3.2,2.951,4.876,4.443l1.438,1.291l17.063-17.898c1.019-1.067,1.764-1.757,3.293-2.101 c5.235-1.155,8.916,5.244,5.206,9.155L46.536,63.366c-2.003,2.137-5.583,2.332-7.736,0.291c-1.234-1.146-2.576-2.312-3.933-3.489 c-2.35-2.042-4.747-4.125-6.701-6.187C26.993,52.809,26.487,50.89,26.764,49.277L26.764,49.277z"/></g></svg>
+                                                
+                                        Payed
+                                    </button>
+                            {% endif %}
+                        {% endif %}
                     </div>
                 </a>
             </div>
             <div class="hidden p-4 bg-white rounded-lg md:p-8 dark:bg-gray-800" id="about" role="tabpanel" aria-labelledby="about-tab">
                 <h2 class="mb-5 text-2xl font-extrabold tracking-tight text-gray-900 dark:text-white">We invest in the world’s potential</h2>
                 <!-- List -->
-                <ul role="list" class="space-y-4 text-gray-500 dark:text-gray-400">
+                <ul role="list" class="space-y-2 text-gray-500 dark:text-gray-400">
                     <li class="flex space-x-2">
                         <!-- Icon -->
-                        <svg class="flex-shrink-0 w-4 h-4 text-purple-700 dark:text-blue-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
+                        <svg class="flex-shrink-0 w-4 h-4 text-purple-700 dark:text-blue-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" margin><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
                         <span class="font-light leading-tight">Dynamic reports and dashboards</span>
                     </li>
                     <li class="flex space-x-2">

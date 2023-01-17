@@ -16,12 +16,18 @@ def park_1(request, context=None):
         #get the stop with the plate of the user
         stop = Stop.objects.filter(plate=request.user.plate).last()
         plate = request.user.plate 
-        start = stop.start_time if stop.start_time else None
-        end = stop.end_time if stop.end_time else None
+        start = stop.start_time if stop and stop.start_time else None
+        end = stop.end_time if stop and stop.end_time else None
 
-        payment = Payment.objects.filter(stop_id=stop.stop_id).last() if stop.end_time else None
-        amount = payment.amount if payment else calculate_amount(start, timezone.now())
-        payed = True if payment else False
+        payment = Payment.objects.filter(stop_id=stop.stop_id).last() if stop else None
+        if payment:
+            amount = payment.amount
+        elif stop:
+            amount = calculate_amount(start, timezone.now())
+        else:
+            amount = 0
+        payed = payment
+        print('pagamento', payment)
         print('spazi liberi', free_spaces)
         context = {'plate': plate, 'start': start, 'end': end , 'amount': amount , 'free_spaces': free_spaces, 'payed': payed}
 
@@ -32,16 +38,19 @@ def park_1(request, context=None):
 
 def pay(request):
     if request.user.is_authenticated and request.method == 'GET':
+        print("\n\n\n user is authenticated")
         stop = Stop.objects.filter(plate=request.user.plate).last()
+        print('\n\n\n\nstop', stop)
         #check if already payed
         payment = Payment.objects.filter(stop_id=stop.stop_id)
-
+        print('\n\n\n\npayment', payment)
         if not payment:
             #calculate the amount in euors, every minute is 1 cent
             end = timezone.now()
             amount = (end - stop.start_time).seconds / 60 * 0.01
             payment = Payment(stop_id=stop, payment_time=0, amount=amount)
             payment.save()
+            print('\n\n\n\npagamento effettuato')
         else:
             #already payed
             pass

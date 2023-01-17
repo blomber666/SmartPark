@@ -116,6 +116,9 @@ def generate_map(filename):
     for d in related_devices:
         #get the device
         device = tbapi.get_device_by_id(d['id'])
+        print("dev",d)
+        print("dedevice",device)
+        print('telemtry', tbapi.get_telemetry(d['id'], telemetry_keys=["free"]))
         device_type = device['type']
         
         if device_type == "park_sensor":
