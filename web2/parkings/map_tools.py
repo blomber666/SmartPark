@@ -107,24 +107,17 @@ def generate_map(filename):
     park_name = filename.split("/")[-1].split(".")[0]
     park = tbapi.get_tenant_asset(name=park_name)
 
-    relations = tbapi.get_relations_by_from(park['id'], "Contains")
-    #get the park_1 devices attributes
-    related_devices = [r['to'] for r in relations]
+    related_devices = tbapi.get_tenant_device('sensor_1')
 
     sensor_counter = 0
     free_counter = 0
-    for d in related_devices:
-        #get the device
-        device = tbapi.get_device_by_id(d['id'])
-        print("dev",d)
-        print("dedevice",device)
-        print('telemtry', tbapi.get_telemetry(d['id'], telemetry_keys=["free"]))
+    for device in related_devices:
         device_type = device['type']
         
         if device_type == "park_sensor":
             name = device['name']
             sensor_counter += 1
-            telemetry = tbapi.get_telemetry(d['id'], telemetry_keys=["free"])
+            telemetry = tbapi.get_telemetry(device['id'], telemetry_keys=["free"])
             #get the latest free attribute
             free = telemetry['free'][0]['value']
 

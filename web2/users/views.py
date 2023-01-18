@@ -45,12 +45,9 @@ def create_map():
     #wb.open(fun_name+"\\#"+str(iteration)+".html")
     del(map)
 
-
-
 def user_logout(request):
     logout(request)
     return redirect('/')
-
 
 def map_view(request):
     #if not os.path.exists("parkings/templates/map.html"): 
@@ -68,7 +65,6 @@ def map_view(request):
         messages.info(request,'HTTP ERROR: 401 - Unauthorized')
         return redirect('/')
 
-
 def home(request):
     if request.user.is_authenticated:
         if request.user.is_superuser:
@@ -77,8 +73,9 @@ def home(request):
             return redirect('/home')
 
     elif request.method == 'POST':
-
+        
         if 'login' in request.POST:
+            
             signup_form = SignupForm()
             login_form = LoginForm(request.POST, data=request.POST)
             context = {'login_form': login_form, 'signup_form':signup_form}
@@ -100,6 +97,9 @@ def home(request):
                 else:
                     messages.error(request,"Invalid username or password.")
                     return render(request, 'login.html', context)
+            else:
+                messages.error(request,"Invalid username or password.")
+                return render(request, 'login.html', context)
 
         elif 'signup' in request.POST:
             login_form = LoginForm()
@@ -118,3 +118,5 @@ def home(request):
         context = {'login_form': login_form, 'signup_form': signup_form}
         return render(request, 'login.html', context)
 
+def test(request):
+    return render(request, 'index.html')

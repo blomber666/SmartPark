@@ -1,33 +1,34 @@
-{% load static tailwind_tags %}
-
+{% load compress %}
+{% load static %}
 <!DOCTYPE html>
 <html>
 <head>
-	{% tailwind_preload_css %}
-	{% tailwind_css %}
-    <link rel="stylesheet" href="https://unpkg.com/flowbite@1.6.2/dist/flowbite.min.css" />
+
+    {% compress css %}
+    <link rel="stylesheet" href="{% static 'src/output.css' %}">
+    {% endcompress %}
     
-    <nav class="top-0 p-3 z-50 border-gray-200 rounded bg-gradient-to-b from-sfA via-sfB to-sfC" style="position: sticky;">
+    <nav class="top-0 p-1 z-50 border-gray-200 rounded bg-white/25" style="position: sticky;">
         <div class="container flex flex-wrap items-center justify-between mx-auto">
           <a href="/" class="flex items-center">
               <img src="/static/smart-parking-icon.svg" class="h-6 mr-3 sm:h-10"/>
-              <span class="self-center text-xl font-semibold whitespace-nowrap text-white">SmartPark</span>
+              <span class="self-center text-xl font-semibold whitespace-nowrap text-white text-lg font-bold ">SmartPark</span>
           </a>
           <div class="md:block md:float-right" id="navbar-solid-bg">
             <ul class="flex flex-row mt-4 rounded-lg md:flex-row md:space-x-8 md:mt-0 md:text-base md:font-medium md:border-0 ">
               <li>
-                <a class="block py-2 pl-3 pr-4 text-white rounded md:py-1 " aria-current="page">{{user.username}}</a>
+                <a class="block py-4 pl-3 pr-4 text-white text-lg font-bold rounded md:py-4" aria-current="page">{{user.username}}</a>
               </li>
               {% if user.is_superuser %}
               <li>
-                <a class="block py-2 pl-3 pr-4 text-white rounded md:py-1">ADMIN</a>
+                <a class="block py-4 pl-3 pr-4 text-white text-lg font-bold rounded md:py-4">ADMIN</a>
               </li>
               {% else %}
               <li>
-                <a class="block py-2 pl-3 pr-4 text-white rounded md:py-1">{{ user.plate }}</a>
+                <a class="block py-4 pl-3 pr-4 text-white text-lg font-bold rounded md:py-4">{{ user.plate }}</a>
               </li>
               {% endif %}
-              <a type="button" href="/logout" class="block py-2 pl-3 pr-4 self-center text-white rounded md:py-1 md:px-2" style="background-color: #573b8a;">Logout</a>
+              <a type="button" href="/logout" class="block py-2 pl-3 pr-4 self-center text-white text-lg font-bold rounded md:py-2 md:px-4" style="background-color: #573b8a;">Logout</a>
             </ul>
           </div>
         </div>
@@ -35,7 +36,7 @@
   
 </head>
 </div>
-    <body class="overflow-hidden w-screen h-screen">
+    <body class="overflow-hidden ">
         {% block content %}
         {% endblock %}
         <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.2/flowbite.min.js"></script>

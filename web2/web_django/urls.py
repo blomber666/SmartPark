@@ -19,7 +19,7 @@ from django.urls import path, include
 from users import views as users_views
 from parkings import views as parkings_views
 from administration import views as admin_views
-from theme import views as theme_views
+# from theme import views as theme_views
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -33,5 +33,5 @@ urlpatterns = [
     path('park_1/pay/', parkings_views.pay, name='pay'),
     path('administration/', admin_views.administration, name='administration'),
     path('administration/override/', admin_views.override, name='override'),
-    path('tw/', theme_views.test, name='tw'),
+    path('tw/', users_views.test, name='tw'),
 ]+ static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)

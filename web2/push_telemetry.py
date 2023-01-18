@@ -40,6 +40,7 @@ def parse_opt():
     parser.add_argument("key", help="the key of the value", type=str, default="free")
     parser.add_argument("value", help="the value to send", type=str, default=1)
 
+    # opt = parser.parse_args(args=['sensor_1_1', 'free', '1'])
     opt = parser.parse_args()
     return opt
 

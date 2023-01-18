@@ -23,36 +23,16 @@
     ::after {
         border-style: hidden;
         }
+    
 
-    .bg-white25
-        {
-        background-color: rgba(255, 255, 255, 0.25);
-        }
+    
 
-    .bg-white75
-        {
-        background-color: rgba(255, 255, 255, 0.75);
-        }
-
-    #stats-tab {
-        color: #6c2bd9;
-        background-color: #cdcdcd;
-        }
-
-    .submit {
-        margin: 0 auto;
-        }
-
-    #pay_form {
-        margin-right: auto;
-        margin-left: auto;
-        }
     </style>
     
   </head>
 
 <div class="p-8">
-    <div class="w-full space-y-2 bg-stone-500/50 !important rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700">
+    <div class="w-full space-y-2  rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700">
         <div class="sm:hidden">
             <label for="tabs" class="sr-only">Select tab</label>
             <select id="tabs" class="bg-gray-50 !important border-0 border-b border-gray-200 text-gray-900 text-base rounded-t-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
@@ -61,23 +41,35 @@
                 <option>FAQ</option>
             </select>
         </div>
-        <ul class=" bg-gray-50 !important text-base font-medium text-center text-white !important divide-x divide-gray-200 rounded-lg sm:flex dark:divide-gray-600 dark:text-gray-400" id="fullWidthTab" data-tabs-toggle="#fullWidthTabContent" role="tablist">
+        <ul class="text-xl font-medium text-center text-white !important divide-x divide-gray-200 rounded-lg sm:flex dark:divide-gray-600 dark:text-gray-400" id="fullWidthTab" data-tabs-toggle="#fullWidthTabContent" role="tablist">
             <li class="w-full">
-                <button id="stats-tab" data-tabs-target="#stats" role="tab" type="button" aria-controls="stats" aria-selected="true" class="text-white inline-block w-full p-4 rounded-tl-lg bg-gray-50 !important hover:bg-gray-100 focus:outline-none dark:bg-gray-700 dark:hover:bg-gray-600">Home</button>
+                <button id="home-tab" data-tabs-target="#home" role="tab" type="button" aria-controls="home" aria-selected="true" class="text-white inline-block w-full p-4 rounded-l-lg bg-gray-50 !important hover:bg-gray-100 focus:outline-none dark:bg-gray-700 dark:hover:bg-gray-600">Home</button>
             </li>
             <li class="w-full">
                 <button id="about-tab" data-tabs-target="#about"  role="tab" aria-controls="about" aria-selected="false" class=" text-white inline-block w-full p-4 bg-gray-50 !important hover:bg-gray-100 focus:outline-none dark:bg-gray-700 dark:hover:bg-gray-600">Services</button>
             </li>
             <li class="w-full">
-                <button id="faq-tab" data-tabs-target="#faq" type="button" role="tab" aria-controls="faq" aria-selected="false" class="inline-block w-full p-4 rounded-tr-lg bg-gray-50 !important hover:bg-gray-100 focus:outline-none dark:bg-gray-700 dark:hover:bg-gray-600">FAQ</button>
+                <button id="faq-tab" data-tabs-target="#faq" type="button" role="tab" aria-controls="faq" aria-selected="false" class="inline-block w-full p-4 rounded-r-lg bg-gray-50 !important hover:bg-gray-100 focus:outline-none dark:bg-gray-700 dark:hover:bg-gray-600">FAQ</button>
             </li>
         </ul>
         <div id="fullWidthTabContent" class="border-t border-gray-200 dark:border-gray-600">
-            <div class="flex items-center justify-center hidden p-4 bg-white75 !important rounded-lg md:p-8 dark:bg-gray-800" id="stats" role="tabpanel" aria-labelledby="stats-tab">
-                <a href="#" class="flex items-center bg-gray-200 border rounded-lg shadow-md md:flex-row  dark:border-gray-700 dark:bg-gray-800">
-                    <img class="object-cover rounded-t-lg h-96 md:h-auto w-72 md:rounded-none md:rounded-l-lg" src="/media/park_1.png" alt="">
-                    <div class="flex flex-col space-y-2 justify-center p-4 leading-normal">
-                        <h5 class="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">Last Stop</h5>
+            <div class="flex items-center justify-center hidden p-4 bg-white/75 rounded-lg md:p-8 dark:bg-gray-800" id="home" role="tabpanel" aria-labelledby="home-tab">
+                <a class="flex items-center bg-gray-200 border rounded-lg shadow-md md:flex-row  dark:border-gray-700 dark:bg-gray-800">
+                    <div>
+                        <img class="object-cover rounded-t-lg h-96 md:h-auto w-96 md:rounded-none md:rounded-tl-lg" src="/media/park_1.png" alt="">
+
+                        <div class="p-3 space-y-4 bg-white rounded-bl-lg">                               
+                            <div class="flex justify-between mb-1">
+                                <span class="text-lg font-bold text-purple-700 dark:text-white">Occupied</span>
+                                <span id="park_status" class="text-xl font-bold text-purple-700 dark:text-white">{{park_status}}</span>
+                            </div>
+                            <div class="w-full bg-gray-200 rounded-full h-5 dark:bg-gray-700">
+                                <div class="bg-[#573b8a] h-5 rounded-full" style="width: {{park_percent}}%"></div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex flex-col  min-w-[20rem] space-y-2 justify-center p-4 leading-normal">
+                        <h2 class=" text-2xl font-extrabold tracking-tight text-gray-900 dark:text-white">Last stop</h2>
                         <div id="toast-simple" class="flex items-center w-full max-w-xs p-4 space-x-4 text-gray-500 bg-white divide-x divide-gray-200 rounded-lg shadow dark:text-gray-400 dark:divide-gray-700 space-x dark:bg-gray-800" role="alert">
                             <svg xmlns="http://www.w3.org/2000/svg" class="icon icon-tabler icon-tabler-arrow-bar-to-right" width="30" height="30" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" fill="none" stroke-linecap="round" stroke-linejoin="round">
                                 <path stroke="none" d="M0 0h24v24H0z" fill="none"></path>
@@ -108,51 +100,84 @@
                             <svg fill="#6b7280" width="25" height="25" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" stroke="#6b7280" stroke-width="0.36">            
                                 <path d="M4,13.5H6.111A11.218,11.218,0,0,1,6,12a11.218,11.218,0,0,1,.111-1.5H4a1,1,0,0,1,0-2H6.571A8.983,8.983,0,0,1,14.857,2a7.962,7.962,0,0,1,3.59.854,1,1,0,0,1-.894,1.79A5.98,5.98,0,0,0,14.857,4,6.857,6.857,0,0,0,8.7,8.5H14a1,1,0,0,1,0,2H8.125a9.062,9.062,0,0,0,0,3H13a1,1,0,0,1,0,2H8.7A6.857,6.857,0,0,0,14.857,20a5.98,5.98,0,0,0,2.7-.644,1,1,0,0,1,.894,1.79,7.962,7.962,0,0,1-3.59.854,8.983,8.983,0,0,1-8.286-6.5H4a1,1,0,0,1,0-2Z"/>
                             </svg>
-                            <div class="pl-4 text-base font-normal">{{amount}} € </div>
+                            <div class="pl-4 text-base font-normal">{{amount}} </div>
                         </div>
                         {% if start is not None %}
                             {% if payed is None %} 
-                            
-                                <form id="pay_form"  action='pay' method='GET'>
-                                    <button type="submit" class="text-white tex-bold bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-purple-300 dark:focus:ring-purple-800 shadow-lg shadow-purple-500/50 dark:shadow-lg dark:shadow-purple-800/80 font-medium rounded-lg text-base px-5 py-2.5 text-center ">Pay</button>
-                                </form>
+
+                                    <button onclick="location.href='pay'" type="submit" class=" w-1/2 mx-auto text-white font-bold bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-purple-300 dark:focus:ring-purple-800 shadow-lg shadow-purple-500/50 dark:shadow-lg dark:shadow-purple-800/80 rounded-lg px-5 py-2.5 text-center ">Pay</button>
+
                                     {% else %}
                                     <!-- <button type="button" class="text-gray-900 bg-white hover:bg-gray-100 border border-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-gray-600 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:bg-gray-700 mr-2 mb-2"> -->
-                                    <button type="button" id="pay_form" class="w-1/3 text-white bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 shadow-lg shadow-green-500/50 dark:shadow-lg dark:shadow-green-800/80 font-medium rounded-lg text-sm px-5 py-2.5  text-center inline-flex items-center mr-2 mb-2 w-1/3">
-                                        <svg class= "mr-3" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="20px" height="20px" viewBox="0 0 96 96" enable-background="new 0 0 96 96" xml:space="preserve"><g><path fill-rule="evenodd" clip-rule="evenodd" fill="#3d3d3d" d="M48,0c26.51,0,48,21.49,48,48S74.51,96,48,96S0,74.51,0,48 S21.49,0,48,0L48,0z M26.764,49.277c0.644-3.734,4.906-5.813,8.269-3.79c0.305,0.182,0.596,0.398,0.867,0.646l0.026,0.025 c1.509,1.446,3.2,2.951,4.876,4.443l1.438,1.291l17.063-17.898c1.019-1.067,1.764-1.757,3.293-2.101 c5.235-1.155,8.916,5.244,5.206,9.155L46.536,63.366c-2.003,2.137-5.583,2.332-7.736,0.291c-1.234-1.146-2.576-2.312-3.933-3.489 c-2.35-2.042-4.747-4.125-6.701-6.187C26.993,52.809,26.487,50.89,26.764,49.277L26.764,49.277z"/></g></svg>
-                                                
-                                        Payed
+                                    <button type="button" id="pay_form" class="mx-auto w-1/2 text-white font-semibold text-lg bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 shadow-lg shadow-green-500/50 dark:shadow-lg dark:shadow-green-800/80 rounded-lg text-sm px-5 py-2.5 inline-flex items-center justify-center mb-2 ">
+                                        <svg class="pr-2" version="1.1"  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="30" height="30" viewBox="0 0 96 96"  xml:space="preserve"><g><path fill-rule="evenodd" clip-rule="evenodd" fill="#3d3d3d" d="M48,0c26.51,0,48,21.49,48,48S74.51,96,48,96S0,74.51,0,48 S21.49,0,48,0L48,0z M26.764,49.277c0.644-3.734,4.906-5.813,8.269-3.79c0.305,0.182,0.596,0.398,0.867,0.646l0.026,0.025 c1.509,1.446,3.2,2.951,4.876,4.443l1.438,1.291l17.063-17.898c1.019-1.067,1.764-1.757,3.293-2.101 c5.235-1.155,8.916,5.244,5.206,9.155L46.536,63.366c-2.003,2.137-5.583,2.332-7.736,0.291c-1.234-1.146-2.576-2.312-3.933-3.489 c-2.35-2.042-4.747-4.125-6.701-6.187C26.993,52.809,26.487,50.89,26.764,49.277L26.764,49.277z"/></g></svg>                                               
+                                         Payed
                                     </button>
                             {% endif %}
                         {% endif %}
                     </div>
                 </a>
             </div>
-            <div class="hidden p-4 bg-white rounded-lg md:p-8 dark:bg-gray-800" id="about" role="tabpanel" aria-labelledby="about-tab">
-                <h2 class="mb-5 text-2xl font-extrabold tracking-tight text-gray-900 dark:text-white">We invest in the world’s potential</h2>
-                <!-- List -->
-                <ul role="list" class="space-y-2 text-gray-500 dark:text-gray-400">
-                    <li class="flex space-x-2">
-                        <!-- Icon -->
-                        <svg class="flex-shrink-0 w-4 h-4 text-purple-700 dark:text-blue-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg" margin><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
-                        <span class="font-light leading-tight">Dynamic reports and dashboards</span>
-                    </li>
-                    <li class="flex space-x-2">
-                        <!-- Icon -->
-                        <svg class="flex-shrink-0 w-4 h-4 text-purple-700 dark:text-blue-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
-                        <span class="font-light leading-tight">Templates for everyone</span>
-                    </li>
-                    <li class="flex space-x-2">
-                        <!-- Icon -->
-                        <svg class="flex-shrink-0 w-4 h-4 text-purple-700 dark:text-blue-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
-                        <span class="font-light leading-tight">Development workflow</span>
-                    </li>
-                    <li class="flex space-x-2">
-                        <!-- Icon -->
-                        <svg class="flex-shrink-0 w-4 h-4 text-purple-700 dark:text-blue-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"></path></svg>
-                        <span class="font-light leading-tight">Limitless business automation</span>
-                    </li>
-                </ul>
+            
+            <div class="hidden flex items-center justify-center p-4 flex bg-white/75 rounded-lg md:p-8 dark:bg-gray-800" id="about" role="tabpanel" aria-labelledby="about-tab">
+                <div class=" items-center bg-white border rounded-lg shadow-md md:flex-row  dark:border-gray-700 dark:bg-gray-800">
+                    <h2 class="p-4 text-2xl font-extrabold tracking-tight text-gray-900 dark:text-white">Park details</h2>
+                    <!-- List -->
+                    
+                    <div class="relative mx-4 mb-4 overflow-x-auto shadow-md sm:rounded-lg">
+                        <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                            <tbody>
+                                <tr class="bg-gray-200 border-b dark:bg-gray-800 dark:border-gray-700">
+                                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                        Address
+                                    </th>
+                                    <td class="px-6 py-4">
+                                        Via Porta Reno, 80, 44122 Ferrara FE
+                                    </td>
+                                </tr>
+                                <tr class="bg-gray-200 border-b dark:bg-gray-800 dark:border-gray-700">
+                                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                        Status
+                                    </th>
+                                    <td class="px-6 py-4">
+                                        <div class="flex justify-between mb-1">
+                                            <span>{{park_status}}</span>
+                                            <div class="my-[5px] mx-[9px] w-full bg-gray-300 rounded-full h-3 dark:bg-gray-700">
+                                                <div class="bg-[#573b8a] h-3 rounded-full" style="width: {{park_percent}}%"></div>
+                                            </div>
+                                        </div>
+                                        
+                                    </td>
+                                </tr>
+                                <tr class="bg-gray-200 border-b dark:bg-gray-800 dark:border-gray-700">
+                                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                        Capacity
+                                    </th>
+                                    <td class="px-6 py-4">
+                                        {{total_spaces}} slots
+                                    </td>
+                                </tr>
+                                <tr class="bg-gray-200 border-b dark:bg-gray-800 dark:border-gray-700">
+                                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                        Price
+                                    </th>
+                                    <td class="px-6 py-4">
+                                        {{price}} €/minute
+                                    </td>
+                                </tr>
+                                <tr class="bg-gray-200 border-b dark:bg-gray-800 dark:border-gray-700">
+                                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                        Last stop
+                                    </th>
+                                    <td class="px-6 py-4">
+                                        {{last_time}}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
             </div>
             <div class="hidden p-4 bg-white rounded-lg md:p-8 dark:bg-gray-800" id="faq" role="tabpanel" aria-labelledby="faq-tab">
                 <div id="accordion-flush" data-accordion="collapse" data-active-classes="bg-white dark:bg-gray-800 text-gray-900 dark:text-white" data-inactive-classes="text-gray-500 dark:text-gray-400">

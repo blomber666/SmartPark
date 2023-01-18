@@ -29,6 +29,10 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
+COMPRESS_ROOT = BASE_DIR / 'static'
+COMPRESS_ENABLED = True
+STATICFILES_FINDERS = ('compressor.finders.CompressorFinder',)
+
 AUTH_USER_MODEL = 'users.User'
 # Application definition
 
@@ -39,6 +43,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'compressor',
     #'prova',
     #'users.apps.UsersConfig',
     'users',
@@ -46,7 +51,7 @@ INSTALLED_APPS = [
     'stops',
     'administration',
     'tailwind',
-    'theme',
+    # 'theme',
     #'django_browser_reload',
     'sslserver'
 ]
@@ -73,7 +78,7 @@ ROOT_URLCONF = 'web_django.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [BASE_DIR / 'administration'/ 'templates'],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
