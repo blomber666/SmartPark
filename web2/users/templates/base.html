@@ -8,27 +8,27 @@
     <link rel="stylesheet" href="{% static 'src/output.css' %}">
     {% endcompress %}
     
-    <nav class="top-0 p-1 z-50 border-gray-200 rounded bg-white/25" style="position: sticky;">
+    <nav class="top-0 p-1 z-50 border-gray-300 border-b-2 rounded bg-white/25" style="position: sticky;">
         <div class="container flex flex-wrap items-center justify-between mx-auto">
           <a href="/" class="flex items-center">
               <img src="/static/smart-parking-icon.svg" class="h-6 mr-3 sm:h-10"/>
-              <span class="self-center text-xl font-semibold whitespace-nowrap text-white text-lg font-bold ">SmartPark</span>
+              <span class="self-center whitespace-nowrap text-gray-900 text-2xl font-bold ">SmartPark</span>
           </a>
           <div class="md:block md:float-right" id="navbar-solid-bg">
             <ul class="flex flex-row mt-4 rounded-lg md:flex-row md:space-x-8 md:mt-0 md:text-base md:font-medium md:border-0 ">
               <li>
-                <a class="block py-4 pl-3 pr-4 text-white text-lg font-bold rounded md:py-4" aria-current="page">{{user.username}}</a>
+                <a class="block py-4 pl-3 pr-4 text-gray-900 text-lg font-bold rounded md:py-4" aria-current="page">{{user.username}}</a>
               </li>
               {% if user.is_superuser %}
               <li>
-                <a class="block py-4 pl-3 pr-4 text-white text-lg font-bold rounded md:py-4">ADMIN</a>
+                <a class="block py-4 pl-3 pr-4 text-gray-900 text-lg font-bold rounded md:py-4">ADMIN</a>
               </li>
               {% else %}
               <li>
-                <a class="block py-4 pl-3 pr-4 text-white text-lg font-bold rounded md:py-4">{{ user.plate }}</a>
+                <a class="block py-4 pl-3 pr-4 text-gray-900 text-lg font-bold rounded md:py-4">{{ user.plate }}</a>
               </li>
               {% endif %}
-              <a type="button" href="/logout" class="block py-2 pl-3 pr-4 self-center text-white text-lg font-bold rounded md:py-2 md:px-4" style="background-color: #573b8a;">Logout</a>
+              <a type="button" href="/logout" class="block py-2 pl-3 pr-4 self-center text-gray-100 text-lg font-bold rounded md:py-2 md:px-4" style="background-color: #573b8a;">Logout</a>
             </ul>
           </div>
         </div>

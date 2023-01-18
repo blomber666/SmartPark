@@ -14,53 +14,61 @@
 
     </head>
     
-    <aside class="fixed left-0 h-full" aria-label="Sidenav">
-        <div class="py-5 px-3 h-full border-r border-gray-200 ">
-            <ul class="space-y-3">
+    <aside class="fixed left-0 h-full" aria-label="Sidenav" style="overflow-y: scroll; width: 22rem; padding-right: 0.75rem;">
+        <div class="py-5 pl-3 h-full border-r border-gray-200">
+            <ul class="flex  flex-col space-y-2">
                 <!-- div with 2 columns -->
-                <div id="flex park_panel" class="flex flex-col space-y-2">
-                    <li>
-                        <select id="countries" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500  w-3/4 p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
-                        <option selected>Choose a SmartPark</option>
-                        <option value="Park 1">Park 1</option>
-                        </select>
-                    </li>
-                    <button type="button" class="w-1/3 bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:outline-none focus:ring-blue-300 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center mr-2 dark:bg-blue-600 dark:hover:bg-blue-700 dark:focus:ring-blue-800 ">
-                        <svg aria-hidden="true" class="w-5 h-5" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg>
-                        Add
-                      </button>
-                </div>
+                <!-- <div id="flex park_panel" class="flex flex-col space-y-2"> -->
+                <li>
+                    <select id="countries" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500  w-3/4 p-2.5">
+                    <option selected>Choose a SmartPark</option>
+                    <option value="Park 1">Park 1</option>
+                    </select>
+                </li>
+                <li>
+                    <button type="button" class="w-1/3 text-gray-100 hover:bg-purple-800 focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium rounded-lg text-sm p-2.5 text-center inline-flex items-center mr-2 mb-2" style="background-color: #573b8a;">
+                        <!-- <svg aria-hidden="true" class="w-5 h-5" style="color: #F3F4F6;" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg> -->
+                        Add a SmartPark
+                    </button>
+                </li>
+                <!-- </div> -->
                 <li>
                     <!-- datepicker -->
                     <div date-rangepicker class="flex flex-col space-y-2">
                     <div class="relative">
-                        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                        <div class="absolute inset-y-0 left-0 flex flex-wrap items-center pl-3 pointer-events-none" style="padding: 0.625rem;"> 
                             <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path></svg>
                         </div>
-                        <input name="start" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date start" >
+                        <input name="start" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full px-2.5" placeholder="Select date start"  style="padding-left: 2.75rem;">
                     </div>
                     <div class="relative">
-                        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none">
+                        <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none" style="padding: 0.625rem;">
                             <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path></svg>
                         </div>
-                        <input name="end" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full pl-10 p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Select date end">
+                        <input name="end" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5 " placeholder="Select date end" style="padding-left: 2.75rem;">
                     </div>
                     </div>
                     <!-- /dp -->
                 </li>
                 <li>
-                    <a class="flex items-center text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-                        <input type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="User">
+                    <a class="flex items-center text-base font-normal text-gray-900 rounded-lg  group">
+                        <input type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5 " placeholder="User">
                     </a>
                 </li>
                 <li>
-                    <a class="flex items-center text-base font-normal text-gray-900 rounded-lg dark:text-white hover:bg-gray-100 dark:hover:bg-gray-700 group">
-                        <input type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5  dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500" placeholder="Plate">
+                    <a class="flex items-center text-base font-normal text-gray-900 rounded-lg  group">
+                        <input type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5 " placeholder="Plate">
                     </a>
                 </li>
                 <li>
-                    <hr noshade>
-                    <div class="mt-3 font-bold">ENTRY GATE CONTROL</div>
+                    <button type="button" class="w-1/3 text-gray-100 hover:bg-purple-800 focus:ring-4 focus:outline-none focus:ring-purple-300 font-medium rounded-lg text-sm p-2.5 px-6 text-center inline-flex items-center mr-2 mb-2" style="background-color: #573b8a;">
+                        <!-- <svg aria-hidden="true" class="w-5 h-5" style="color: #F3F4F6;" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path d="M10.293 3.293a1 1 0 011.414 0l6 6a1 1 0 010 1.414l-6 6a1 1 0 01-1.414-1.414L14.586 11H3a1 1 0 110-2h11.586l-4.293-4.293a1 1 0 010-1.414z" clip-rule="evenodd"></path></svg> -->
+                        Filter
+                    </button>
+                </li>
+                <li>
+                    <hr noshade class="mt-2 mb-1">
+                    <div class="font-bold">ENTRY GATE CONTROL</div>
                 </li>
                 <li>
                     <span class="inline-flex items-center bg-green-100 text-green-800 text-xs font-medium mr-2 px-2.5 py-0.5 rounded-full">
@@ -81,8 +89,8 @@
                     <button type="button" class="text-red-700 hover:text-white border border-red-700 hover:bg-red-800 focus:ring-4 focus:outline-none focus:ring-red-300 font-medium rounded-lg text-sm px-5 py-2.5 text-center mr-2 mb-2" value="Close Entry Gate">Close Entry</button>
                 </li>
                 <li>
-                    <hr noshade>
-                    <div class="mt-3 font-bold">EXIT GATE CONTROL</div>
+                    <hr noshade class="mt-2 mb-1">
+                    <div class="font-bold">EXIT GATE CONTROL</div>
                 </li>
                 <li>
 
@@ -109,7 +117,7 @@
 
     <!--
  <div class="relative overflow-x-auto"> -->
-<div class="h-full w-full" style="display: block; float: left; padding-left: 380px; overflow-y: scroll;">
+<div class="h-full w-full" style="display: block; float: left; padding-left: 23rem; overflow-y: scroll;">
 
     <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
         <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
