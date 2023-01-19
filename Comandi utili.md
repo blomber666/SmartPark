@@ -1,3 +1,9 @@
+## Tailwind start
+- INVECE DEL VECCHIO COMANDO TAILWIND START USARE QUESTO PER COMILARE I CSS
+```
+npx tailwindcss -i ./static/src/input.css -o ./static/src/output.css --watch
+```
+
 ## Postgresql
 
 - Accesso a psql 
