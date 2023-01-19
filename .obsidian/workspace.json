@@ -45,9 +45,11 @@
             "id": "868df96184c97815",
             "type": "leaf",
             "state": {
-              "type": "release-notes",
+              "type": "markdown",
               "state": {
-                "currentVersion": "1.1.9"
+                "file": "Comandi utili.md",
+                "mode": "source",
+                "source": false
               }
             }
           }
@@ -118,7 +120,7 @@
             "state": {
               "type": "backlink",
               "state": {
-                "file": "other/queue-service-tb.png",
+                "file": "Comandi utili.md",
                 "collapseAll": false,
                 "extraContext": false,
                 "sortOrder": "alphabetical",
@@ -135,7 +137,7 @@
             "state": {
               "type": "outgoing-link",
               "state": {
-                "file": "other/queue-service-tb.png",
+                "file": "Comandi utili.md",
                 "linksCollapsed": false,
                 "unlinkedCollapsed": true
               }
@@ -158,7 +160,7 @@
             "state": {
               "type": "outline",
               "state": {
-                "file": "other/queue-service-tb.png"
+                "file": "Comandi utili.md"
               }
             }
           }
