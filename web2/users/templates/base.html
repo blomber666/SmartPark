@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="{% static 'src/output.css' %}">
     {% endcompress %}
     
-    <nav class="top-0 p-1 z-50 border-gray-300 border-b-2 rounded bg-white/25" style="position: sticky;">
+    <nav class="top-0 p-1 rounded bg-white/25" style="position: sticky; border-color: #d1d5db; border-bottom-width: 2px;">
         <div class="container flex flex-wrap items-center justify-between mx-auto">
           <a href="/" class="flex items-center">
               <img src="/static/smart-parking-icon.svg" class="h-6 mr-3 sm:h-10"/>
@@ -28,7 +28,7 @@
                 <a class="block py-4 pl-3 pr-4 text-gray-900 text-lg font-bold rounded md:py-4">{{ user.plate }}</a>
               </li>
               {% endif %}
-              <a type="button" href="/logout" class="block py-2 pl-3 pr-4 self-center text-gray-100 text-lg font-bold rounded md:py-2 md:px-4" style="background-color: #573b8a;">Logout</a>
+              <a type="button" href="/logout" class="block py-2 pl-3 pr-4 self-center text-lg font-bold rounded md:py-2 md:px-4" style="background-color: #573b8a; color: #f9fafb;">Logout</a>
             </ul>
           </div>
         </div>
@@ -36,7 +36,7 @@
   
 </head>
 </div>
-    <body class="overflow-hidden ">
+    <body class="overflow-hidden">
         {% block content %}
         {% endblock %}
         <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.2/flowbite.min.js"></script>
