@@ -91,11 +91,13 @@ class TbApi:
             return self.get(f"/api/tenant/assets?pageSize={pageSize}&page={page}", "Error retrieving deivece profiles")["data"]
        
         
-    def get_tenant_device(self, name=None, type=None, pageSize=10000, page=0):
+    def get_tenant_devices(self, name=None, type=None, pageSize=10000, page=0):
         """
-        Returns a device/device_list if name is specified,
+        Returns a device/list of tenant devices
         """
-        return self.get(f"/api/tenant/devices?pageSize={pageSize}&page={page}&textSearch={name}", "Error retrieving devices for tenant")["data"]
+        type_query = "" if type is None else f"&type={type}"
+        name_query = "" if name is None else f"&textSearch={name}"
+        return self.get(f"/api/tenant/devices?pageSize={pageSize}&page={page}{type_query}{name_query}", "Error retrieving deivece profiles")["data"]
 
 
 
@@ -322,37 +324,22 @@ class TbApi:
                 raise ex
 
 
-    def get_device_by_name(self, device_name):
+    def get_device_by_name(self, name=None):
         """
         Returns device object representing the first device found with the given name, or None if one can't be found
         """
-        devices = self.get_devices_by_name(device_name)
+        devices = self.get_tenant_devices(name=name)
 
         if isinstance(devices, list):
             for device in devices:
-                if device["name"] == device_name:
+                if device["name"] == name:
                     return device
         else:
             return devices
 
         return None
 
-    def get_devices_by_name(self, name=None, type=None, pageSize=10000, page=0):
-        """
-        Returns a device if name is specified,
-        otherwise returns a list of all devices
-        """
-        type_query = "" if type is None else f"&type={type}"
-        name_query = "" if name is None else f"&textSearch={name}"
-        resp = self.get(f"/api/tenant/devices?pageSize={pageSize}&page={page}{type_query}{name_query}", "Error retrieving deivece profiles")["data"]
         
-        if name is not None:
-            assert len(resp) == 1,  "0 or more than 1 device profile found with this name"
-            return resp[0]
-        else:
-            return resp
-
-
     def get_all_devices(self):
         return self.get("/api/tenant/devices?limit=99999", "Error fetching list of all devices")["data"]
 

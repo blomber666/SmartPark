@@ -61,7 +61,7 @@ def parse_opt():
     return opt
 
 def get_car_presence(tbapi, gate_name):
-    gate = tbapi.get_tenant_device(name=gate_name)
+    gate = tbapi.get_device_by_name(name=gate_name)
     telemetry = tbapi.get_telemetry(gate['id'], telemetry_keys=["distance"])
     #get the latest telemetry (the first one)
     distances = telemetry['distance']
@@ -86,7 +86,7 @@ def control_entry_gate(tbapi, park_number, old_presence, plate):
     door_name = "door_"+park_number+"_1"
 
     #get the override telemetry
-    override_gate = tbapi.get_tenant_device(name=override_entry_name)
+    override_gate = tbapi.get_device_by_name(name=override_entry_name)
     override = tbapi.get_telemetry(override_gate['id'], telemetry_keys=["value"])
     override_value = override['value'][0]['value']
 
@@ -153,7 +153,7 @@ def control_exit_gate(tbapi, park_number, old_presence, plate):
     door_name = "door_"+park_number+"_2"
 
     #get the override telemetry
-    override_gate = tbapi.get_tenant_device(name=override_exit_name)
+    override_gate = tbapi.get_device_by_name(name=override_exit_name)
     override = tbapi.get_telemetry(override_gate['id'], telemetry_keys=["value"])
     override_value = override['value'][0]['value']
 
@@ -224,7 +224,7 @@ def get_plate(tbapi, camera_name):
     i = 0
     #try to get the plate for 10 seconds
     while i < 10:
-        camera = tbapi.get_tenant_device(name=camera_name)
+        camera = tbapi.get_device_by_name(name=camera_name)
         telemetry = tbapi.get_telemetry(camera['id'], telemetry_keys=["plate"])
         #get the latest telemetry (the first one)
         plates = telemetry['plate']

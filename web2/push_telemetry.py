@@ -52,14 +52,7 @@ def main(name, key, value):
     username = "tenant@thingsboard.org"
     password = "tenant"
     tbapi = TbApi(url, username, password)
-    devices = tbapi.get_tenant_device()
-
-    #find the device using the name
-    for d in devices:
-        if d['name'] == name:
-            device = d
-            break
-
+    device = tbapi.get_device_by_name(name)
     token = tbapi.get_device_token(device)
 
     telemetry = { str(key): value} 

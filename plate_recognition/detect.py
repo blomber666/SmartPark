@@ -53,7 +53,7 @@ username = "tenant@thingsboard.org"
 password = "tenant"
 
 tbapi = TbApi(url, username, password)
-devices = tbapi.get_tenant_device()
+devices = tbapi.get_tenant_devices()
 
 #find the device using the name
 for d in devices:

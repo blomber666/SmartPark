@@ -25,16 +25,12 @@ def administration(request):
             completed_stops = Stop.objects.filter(end_time__isnull=False)
 
             #get the latest telemetry of device named 'door_1_1'
-            entry_door = tbapi.get_tenant_device(name='door_1_1')
-            assert(len(entry_door) == 1), "More than one device with the name: door_1_1"
-            entry_door = entry_door[0]
+            entry_door = tbapi.get_device_by_name(name='door_1_1')
             entry_door_telemetry = tbapi.get_latest_telemetry(entry_door['id'], telemetry_keys=["open"])
             print(entry_door_telemetry)
 
             #get the latest telemetry of device named 'door_1_2'
-            exit_door = tbapi.get_tenant_device(name='door_1_2')
-            assert(len(exit_door) == 1), "More than one device with the name: door_1_2"
-            exit_door = exit_door[0]
+            exit_door = tbapi.get_device_by_name(name='door_1_2')
             exit_door_telemetry = tbapi.get_latest_telemetry(exit_door['id'], telemetry_keys=["open"])
             print(exit_door_telemetry)
             

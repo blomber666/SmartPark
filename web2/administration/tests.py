@@ -51,7 +51,7 @@ class UrlTest(TestCase):
         #simulate the form with the button entry_open
         response = self.client.post('/administration/override/', {'entry_open': 'entry_open'}, follow=True)
         #get the telemetry of the device named 'override_1_1'
-        entry_door = self.tbapi.get_tenant_device(name='override_1_1')
+        entry_door = self.tbapi.get_device_by_name(name='override_1_1')
         entry_door_telemetry = self.tbapi.get_latest_telemetry(entry_door['id'], telemetry_keys=["value"])
         last_tel = entry_door_telemetry['value'][0]
         self.assertEqual(last_tel['value'], 'open')
@@ -61,7 +61,7 @@ class UrlTest(TestCase):
         #simulate the form with the button entry_close
         response = self.client.post('/administration/override/', {'entry_close': 'entry_close'}, follow=True)
         #get the telemetry of the device named 'override_1_1'
-        entry_door = self.tbapi.get_tenant_device(name='override_1_1')
+        entry_door = self.tbapi.get_device_by_name(name='override_1_1')
         entry_door_telemetry = self.tbapi.get_latest_telemetry(entry_door['id'], telemetry_keys=["value"])
         last_tel = entry_door_telemetry['value'][0]
         self.assertEqual(last_tel['value'], 'close')
@@ -71,7 +71,7 @@ class UrlTest(TestCase):
         #simulate the form with the button entry_normal
         response = self.client.post('/administration/override/', {'entry_normal': 'entry_normal'}, follow=True)
         #get the telemetry of the device named 'override_1_1'
-        entry_door = self.tbapi.get_tenant_device(name='override_1_1')
+        entry_door = self.tbapi.get_device_by_name(name='override_1_1')
         entry_door_telemetry = self.tbapi.get_latest_telemetry(entry_door['id'], telemetry_keys=["value"])
         last_tel = entry_door_telemetry['value'][0]
         self.assertEqual(last_tel['value'], 'null')
@@ -81,7 +81,7 @@ class UrlTest(TestCase):
         #simulate the form with the button exit_open
         response = self.client.post('/administration/override/', {'exit_open': 'exit_open'}, follow=True)
         #get the telemetry of the device named 'override_1_2'
-        exit_door = self.tbapi.get_tenant_device(name='override_1_2')
+        exit_door = self.tbapi.get_device_by_name(name='override_1_2')
         exit_door_telemetry = self.tbapi.get_latest_telemetry(exit_door['id'], telemetry_keys=["value"])
         last_tel = exit_door_telemetry['value'][0]
         self.assertEqual(last_tel['value'], 'open')
@@ -91,7 +91,7 @@ class UrlTest(TestCase):
         #simulate the form with the button exit_close
         response = self.client.post('/administration/override/', {'exit_close': 'exit_close'}, follow=True)
         #get the telemetry of the device named 'override_1_2'
-        exit_door = self.tbapi.get_tenant_device(name='override_1_2')
+        exit_door = self.tbapi.get_device_by_name(name='override_1_2')
         exit_door_telemetry = self.tbapi.get_latest_telemetry(exit_door['id'], telemetry_keys=["value"])
         last_tel = exit_door_telemetry['value'][0]
         self.assertEqual(last_tel['value'], 'close')
@@ -101,7 +101,7 @@ class UrlTest(TestCase):
         #simulate the form with the button exit_normal
         response = self.client.post('/administration/override/', {'exit_normal': 'exit_normal'}, follow=True)
         #get the telemetry of the device named 'override_1_2'
-        exit_door = self.tbapi.get_tenant_device(name='override_1_2')
+        exit_door = self.tbapi.get_device_by_name(name='override_1_2')
         exit_door_telemetry = self.tbapi.get_latest_telemetry(exit_door['id'], telemetry_keys=["value"])
         last_tel = exit_door_telemetry['value'][0]
         self.assertEqual(last_tel['value'], 'null')

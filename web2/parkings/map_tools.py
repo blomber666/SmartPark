@@ -107,7 +107,7 @@ def generate_map(filename):
     park_name = filename.split("/")[-1].split(".")[0]
     park = tbapi.get_tenant_asset(name=park_name)
 
-    related_devices = tbapi.get_tenant_device('sensor_1')
+    related_devices = tbapi.get_tenant_devices('sensor_1')
 
     sensor_counter = 0
     free_counter = 0
