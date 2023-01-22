@@ -15,11 +15,9 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-#from web_django import views
 from users import views as users_views
 from parkings import views as parkings_views
 from administration import views as admin_views
-# from theme import views as theme_views
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -33,5 +31,5 @@ urlpatterns = [
     path('park_1/pay/', parkings_views.pay, name='pay'),
     path('administration/', admin_views.administration, name='administration'),
     path('administration/override/', admin_views.override, name='override'),
-    path('tw/', users_views.test, name='tw'),
+    path('administration/state/<str:door>/', admin_views.get_door_state, name='get_door_state'),
 ]+ static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)

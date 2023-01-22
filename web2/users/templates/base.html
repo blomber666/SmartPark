@@ -15,17 +15,17 @@
               <span class="self-center whitespace-nowrap text-gray-900 text-2xl font-bold ">SmartPark</span>
           </a>
           <div class="md:block md:float-right" id="navbar-solid-bg">
-            <ul class="flex flex-row mt-4 rounded-lg md:flex-row md:space-x-8 md:mt-0 md:text-base md:font-medium md:border-0 ">
+            <ul class="flex flex-row mt-4 rounded-lg  ">
               <li>
-                <a class="block py-4 pl-3 pr-4 text-gray-900 text-lg font-bold rounded md:py-4" aria-current="page">{{user.username}}</a>
+                <a class="block py-4 pl-3 pr-4 text-gray-900 text-lg font-bold rounded" aria-current="page">{{user.username}}</a>
               </li>
               {% if user.is_superuser %}
               <li>
-                <a class="block py-4 pl-3 pr-4 text-gray-900 text-lg font-bold rounded md:py-4">ADMIN</a>
+                <a class="block py-4 pl-3 pr-4 text-gray-900 text-lg font-bold rounded">ADMIN</a>
               </li>
               {% else %}
               <li>
-                <a class="block py-4 pl-3 pr-4 text-gray-900 text-lg font-bold rounded md:py-4">{{ user.plate }}</a>
+                <a class="block py-4 pl-3 pr-4 text-gray-900 text-lg font-bold rounded md">{{ user.plate }}</a>
               </li>
               {% endif %}
               <a type="button" href="/logout" class="block py-2 pl-3 pr-4 self-center text-lg font-bold rounded md:py-2 md:px-4" style="background-color: #573b8a; color: #f9fafb;">Logout</a>

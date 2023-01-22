@@ -93,10 +93,10 @@ def home(request):
                     else:
                         login(request, user)        
                         return redirect('/home')
-                
                 else:
                     messages.error(request,"Invalid username or password.")
                     return render(request, 'login.html', context)
+
             else:
                 messages.error(request,"Invalid username or password.")
                 return render(request, 'login.html', context)
@@ -106,8 +106,7 @@ def home(request):
             signup_form = SignupForm(request.POST)
             context = {'login_form': login_form, 'signup_form':signup_form}
             if signup_form.is_valid():
-                signup_form.save()
-                messages.success(request, f'Your account has been created. You can log in now!')    
+                signup_form.save()    
             else:
                 messages.warning(request, f'Invalid input. Please try again.')
                 
@@ -118,5 +117,5 @@ def home(request):
         context = {'login_form': login_form, 'signup_form': signup_form}
         return render(request, 'login.html', context)
 
-def test(request):
-    return render(request, 'index.html')
+# def test(request):
+#     return render(request, 'index.html')
