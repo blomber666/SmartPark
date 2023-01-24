@@ -1,12 +1,11 @@
 from django.shortcuts import render
 from parkings.map_tools import generate_map
-from users import views as users_views
-from stops.models import Stop, Payment
+#from users import views as users_views
+from stops.models import Stop, Payment, TbApi
 from django.shortcuts import redirect
 from django.utils import timezone
 from django.contrib import messages
-from thingsboard_api_tools import TbApi
-
+from django.http import JsonResponse
 
 
 # Create your views here.
@@ -51,8 +50,7 @@ def park_1(request, context=None):
         park_percent = int(((total_spaces-free_spaces)/total_spaces)*100)
 
         context = {'plate': plate, 'start': start, 'end': end , 'last_time':last_time, 'amount': amount, 'payed': payed, \
-            'free_spaces': free_spaces, 'park_status': park_status, 'park_percent': park_percent, 'total_spaces': total_spaces,\
-            'price': price}
+            'free_spaces': free_spaces, 'park_status': park_status, 'park_percent': park_percent, 'total_spaces': total_spaces,}
 
         return render(request, 'park_1.html', context)
     else:
@@ -66,8 +64,7 @@ def pay(request):
         payment = Payment.objects.filter(stop_id=stop.stop_id)
         if not payment:
             #calculate the amount in euors, every minute is 1 cent
-            end = timezone.now()
-            amount = (end - stop.start_time).seconds / 60 * 0.01
+            amount = calculate_amount(stop.start_time)['amount']
             payment = Payment(stop_id=stop, payment_time=0, amount=amount)
             payment.save()
         else:
@@ -79,12 +76,25 @@ def pay(request):
         messages.info(request,'HTTP ERROR: 401 - Unauthorized')
         return redirect('/')
 
-def calculate_amount(start, end, price=0.1):
+
+#API
+def calculate_amount(start, end=timezone.now(), price=0.1):
     '''calculate the amount in euros, every minute is 'price' cents
     start and end are datetime.datetime objects'''
-    
     #calculate the amount in euors, every minute is 1 cent
     amount = ((end - start).total_seconds()) / 60 * price
     #round to 2 decimal places
-    amount = round(amount, 2)
-    return amount
+    amount = round(amount, 2)    
+    print("\n\n", amount, "\n\n\n")
+    context = {'amount': amount}
+    return JsonResponse(context)
+
+def get_parkings(request):
+    if(request.user.is_authenticated):
+        free_spaces, total_spaces = generate_map('parkings/static/park_1.json')
+        park_status = str((total_spaces-free_spaces)) + '/' + str(total_spaces)
+        park_percent = int(((total_spaces-free_spaces)/total_spaces)*100)
+        context = {'park_status': park_status, 'park_percent': park_percent}
+        return JsonResponse(context)
+    else:
+        messages.info(request,'HTTP ERROR: 401 - Unauthorized')

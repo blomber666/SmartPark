@@ -2,30 +2,19 @@ import logging
 # Importing models and REST client class from Community Edition version
 from tb_rest_client.rest_client_ce import *
 # Importing the API exception
-from tb_rest_client.rest import ApiException
+from thingsboard_api_tools import TbApi
 import cv2 #pip install opencv-python
-import matplotlib.pyplot as plt #pip install matplotlib
-from matplotlib import patches #pip install matplotlib
+# import matplotlib.pyplot as plt #pip install matplotlib
+# from matplotlib import patches #pip install matplotlib
 import numpy as np #pip install numpy
 import math #pip install math
 
-
-
-logging.basicConfig(level=logging.DEBUG,
-                    format='%(asctime)s - %(levelname)s - %(module)s - %(lineno)d - %(message)s',
-                    datefmt='%Y-%m-%d %H:%M:%S')
 
 # ThingsBoard REST API URL
 url = "http://192.168.1.197:8080"
 # Default Tenant Administrator credentials
 username = "tenant@thingsboard.org"
 password = "tenant"
-import logging
-# Importing models and REST client class from Community Edition version
-from tb_rest_client.rest_client_ce import *
-# Importing the API exception
-from tb_rest_client.rest import ApiException
-from thingsboard_api_tools import TbApi
 
 
 logging.basicConfig(level=logging.DEBUG,
@@ -155,3 +144,5 @@ def generate_map(filename):
 
 if __name__ == "__main__":
     generate_map('web2/parkings/static/park_1.json')
+
+

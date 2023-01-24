@@ -3,11 +3,10 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from .forms import LoginForm, SignupForm
 #from administration.views import administration
-import folium
+import folium, json
 #from django.http import HttpResponse
 from django.shortcuts import redirect
-
-from parkings.map_tools import generate_map
+from parkings.views import generate_map, get_parkings
 
 
 def create_map():    
@@ -61,9 +60,12 @@ def map_view(request):
             park_percent = int(((total_spaces-free_spaces)/total_spaces)*100)
             context = {'park_status': park_status, 'park_percent': park_percent}
             return render(request, 'map.html', context)
+            
     else: 
         messages.info(request,'HTTP ERROR: 401 - Unauthorized')
         return redirect('/')
+
+
 
 def home(request):
     if request.user.is_authenticated:

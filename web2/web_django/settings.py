@@ -44,14 +44,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'compressor',
-    #'prova',
     #'users.apps.UsersConfig',
     'users',
     'parkings',
     'stops',
     'administration',
     'tailwind',
-    # 'theme',
     #'django_browser_reload',
     'sslserver'
 ]
@@ -78,7 +76,12 @@ ROOT_URLCONF = 'web_django.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'administration'/ 'templates'],
+        'DIRS': [
+            BASE_DIR / 'users'/ 'templates',
+            BASE_DIR / 'parkings'/ 'templates',
+            BASE_DIR / 'stops'/ 'templates',
+            BASE_DIR / 'web_django'/ 'templates',
+            BASE_DIR / 'administration'/ 'templates',],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -91,7 +94,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'web_django.wsgi.application'
+#WSGI_APPLICATION = 'web_django.wsgi.application'
 
 
 # Database

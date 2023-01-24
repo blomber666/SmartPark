@@ -1,5 +1,5 @@
 from django.db import models
-
+from thingsboard_api_tools import TbApi
 # Create your models here.
 
 #create a class for the stops, with stop_id as primary key(auto increment), plate, start and optional end time
