@@ -17,23 +17,23 @@ from django.contrib import admin
 from django.urls import path, include
 from users import views as users_views
 from parkings import views as parkings_views
-from administration import views as admin_views
+#from administration import views as admin_views
 from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
     path("__reload__/", include("django_browser_reload.urls")),
     path('admin/', admin.site.urls),
-    path('', users_views.home, name='login'),
-    path('logout/', users_views.user_logout, name='logout'),
-    path('home/', users_views.map_view, name='home'),
-    path('park_1/', parkings_views.park_1, name='park_1'),
-    path('park_1/pay/', parkings_views.pay, name='pay'),
-    path('administration/', admin_views.administration, name='administration'),
-    path('administration/override/', admin_views.override, name='override'),
-    #API
-    path('administration/state/<str:door>/', admin_views.get_door_state, name='get_door_state'),
-    path('update_map/', parkings_views.get_parkings, name='get_parkings'),
-    path('update_price/?P<str:start>', parkings_views.calculate_amount, name='get_price'),
+    # path('', users_views.home, name='login'),
+    # path('logout/', users_views.user_logout, name='logout'),
+    # path('home/', users_views.map_view, name='home'),
+    # path('park_1/', parkings_views.park_1, name='park_1'),
+    # path('park_1/pay/', parkings_views.pay, name='pay'),
+    # path('administration/', admin_views.administration, name='administration'),
+    # path('administration/override/', admin_views.override, name='override'),
+    # #API
+    # path('administration/state/<str:door>/', admin_views.get_door_state, name='get_door_state'),
+    # path('update_map/', parkings_views.get_parkings, name='get_parkings'),
+    # path('update_price/?P<str:start>', parkings_views.calculate_amount, name='get_price'),
 
 ]+ static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)

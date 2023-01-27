@@ -1,0 +1,48 @@
+{% load compress %}
+{% load static %}
+<!DOCTYPE html>
+<html>
+<head>
+
+    {% compress css %}
+    <link rel="stylesheet" href="{% static 'src/output.css' %}">
+    {% endcompress %}
+    
+    <nav class="top-0 p-1 rounded bg-white/25" style="position: sticky; border-color: #d1d5db; border-bottom-width: 2px;">
+        <div class="container flex flex-wrap items-center justify-between mx-auto">
+          <a href="/" class="flex items-center">
+              <img src="/static/smart-parking-icon.svg" class="h-6 mr-3 sm:h-10"/>
+              <span class="self-center whitespace-nowrap text-gray-900 text-2xl font-bold ">SmartPark</span>
+          </a>
+          <div class="md:block md:float-right" id="navbar-solid-bg">
+            <ul class="flex flex-row mt-4 rounded-lg  ">
+              <li>
+                <a class="block py-4 pl-3 pr-4 text-gray-900 text-lg font-bold rounded" aria-current="page">{{user.username}}</a>
+              </li>
+              {% if user.is_superuser %}
+              <li>
+                <a class="block py-4 pl-3 pr-4 text-gray-900 text-lg font-bold rounded">ADMIN</a>
+              </li>
+              {% else %}
+              <li>
+                <a class="block py-4 pl-3 pr-4 text-gray-900 text-lg font-bold rounded md">{{ user.plate }}</a>
+              </li>
+              {% endif %}
+              <a type="button" href="/logout" class="block py-2 pl-3 pr-4 self-center text-lg font-bold rounded md:py-2 md:px-4" style="background-color: #573b8a; color: #f9fafb;">Logout</a>
+            </ul>
+          </div>
+        </div>
+    </nav>
+  
+</head>
+</div>
+    <body class="overflow-hidden">
+        {% block content %}
+        {% endblock %}
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.2/flowbite.min.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/flowbite/1.6.2/datepicker.min.js"></script>
+    </body>
+
+
+</html>
+

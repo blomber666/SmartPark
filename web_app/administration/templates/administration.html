@@ -1,0 +1,299 @@
+
+{% extends 'base.html' %}
+{% block content %}
+
+
+<!-- <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+<meta http-equiv="Pragma" content="no-cache" />
+<meta http-equiv="Expires" content="0" /> -->
+<html>
+    <style>
+        .indicator {
+            width: 0.5rem;
+            height: 0.5rem;
+            margin-right: 0.25rem;
+            border-radius: 9999px;
+        }
+        .indicator.red{
+            background-color:  #f05252;
+        }
+        .indicator.green{
+            background-color:  #0e9f6e;
+        }
+        .indicator.gray{
+            background-color:  #87909b;
+        } 
+        .lil-span
+        { 
+            padding-left: 0.625rem; 
+            padding-right: 0.625rem;
+            font-size: 0.75rem; 
+            line-height: 1rem;
+            font-weight: 500;
+            margin-right: 0.5rem; 
+            padding-left: 0.625rem;
+            padding-right: 0.625rem;
+            padding-top: 0.125rem;
+            padding-bottom: 0.125rem;
+        }
+        .green-span{
+            color: #03543f; 
+            background-color: #def7ec;
+        }
+        .red-span{
+            color: #9b1c1c;
+            background-color: #f7dede;
+        }
+        .gray-span{
+            color: #494848;
+            background-color: #e2e1e1;
+        }
+        .gate{
+            font-size: 0.875rem;
+            line-height: 1.25rem;
+            color: #f9fafb;
+            border-width: 1px;
+            font-weight: 500;
+            border-radius: 0.5rem;
+            padding-left: 1.25rem;
+            padding-right: 1.25rem;
+            padding-top: 0.625rem;
+            padding-bottom: 0.625rem;
+            text-align: center;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .open{background-color: #046c4f89;}
+        .open.focus{background-color:#046c4e;}
+        .close{background-color: #c81e1e89;}
+        .close.focus{background-color: #c81e1e;}
+        .default{background-color: #3d414989;}
+        .default.focus{background-color: #3d4149;}
+    </style>
+    <head>
+      <!--each second-->
+      <!-- <meta http-equiv="refresh" content="10"> -->
+      <title>ADMIN</title>
+      <script>
+        window.addEventListener('load', function() {
+
+            updateLiveGate = 
+                function(smartpark, door){
+                    var url = 'state/door_'+ smartpark +'_'+ door +'/';
+                    var div = null
+
+                    fetch(url)
+                    .then((response) => {
+                        return response.text()
+                    })
+                    .then((html) => {
+                        if (door == 1){
+                            document.getElementById("entry_state").innerHTML = html;
+                            // alert("ok entry" + html);
+                        }
+                        else{
+                            document.getElementById("exit_state").innerHTML=html;
+                            // alert("ok exit"+html); 
+                        }
+                    })
+
+                };
+
+            setInterval(updateLiveGate, 3000, 1, 1); //entry door state
+
+            setInterval(updateLiveGate, 3000, 1, 2); //exit door state
+
+
+        });
+      </script>
+
+    </head>
+    
+    <aside class="fixed left-0 h-screen" aria-label="Sidenav" style="width: 22rem; padding-right: 0.75rem; padding-bottom: 3%; border-color: #d1d5db; border-right-width: 2px;">
+        <div class="py-5 pl-3 h-full border-r border-gray-200">
+            <form method="post" action="/administration/"><!--correggi form -->
+                {% csrf_token %}
+                <ul class="flex  flex-col space-y-2">
+                    <li>
+                        <select name="smartparks" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-3/4 p-2.5">
+                        <option selected>Choose a SmartPark</option>
+                        <option value="Park 1">Park 1</option>
+                        </select>
+                    </li>
+                    <li>
+                        <!-- datepicker -->
+                        <div date-rangepicker class="flex flex-col space-y-2">
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 flex flex-wrap items-center pl-3 pointer-events-none" style="padding: 0.625rem;"> 
+                                <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path></svg>
+                            </div>
+                            <input name="start_time" datepicker datepicker-format="yyyy-mm-dd" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full px-2.5" placeholder="Select date start"  style="padding-left: 2.75rem;">
+                        </div>
+                        <div class="relative">
+                            <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none" style="padding: 0.625rem;">
+                                <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path></svg>
+                            </div>
+                            <input name="end_time" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 " placeholder="Select date end" style="padding-left: 2.75rem;">
+                        </div>
+                        </div>
+                        <!-- /dp -->
+                    </li>
+                    <li>
+                        <a class="flex items-center text-base font-normal text-gray-900 rounded-lg  group">
+                            <input name="username" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5 " placeholder="User">
+                        </a>
+                    </li>
+                    <li>
+                        <a class="flex items-center text-base font-normal text-gray-900 rounded-lg  group">
+                            <input name="plate" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5 " placeholder="Plate">
+                        </a>
+                    </li>
+                    <li>
+                        <button class="text-gray-100 font-medium rounded-lg text-sm py-2.5 px-6 text-center inline-flex items-center mr-2 mb-2" style="background-color: #573b8a; color: #f9fafb;">
+                            Filter
+                        </button>
+                    </li>
+                </ul>
+            </form>
+
+            <ul class="flex  flex-col space-y-2">
+                <li>
+                    <hr noshade class="mt-2 mb-1">
+                    <div class="font-bold">ENTRY GATE CONTROL</div>
+                </li>
+                <li>
+                    <div id="entry_state"> 
+                        <span class="gray-span lil-span inline-flex items-center rounded-full">
+                            <span class="indicator gray"></span>
+                            Loading...
+                        </span>
+                    </div>
+                </li>
+                <li>
+                    <form method="post" action="override/">
+                        {% csrf_token %}
+                        {% if override_entry == 'open' %}
+                        <input type="submit" class="cursor-pointer gate open focus" name="entry_open" value="Open">
+                        <input type="submit" class="cursor-pointer gate default c" name="entry_default" value="Default">
+                        <input type="submit" class="cursor-pointer gate close" name="entry_close" value="Close">
+                        {% elif override_entry == 'close' %}
+                        <input type="submit" class="cursor-pointer gate open" name="entry_open" value="Open">
+                        <input type="submit" class="cursor-pointer gate default" name="entry_default" value="Default">
+                        <input type="submit" class="cursor-pointer gate close focus" name="entry_close" value="Close">
+                        {% else %}
+                        <!-- override_entry =='null' -->
+                        <input type="submit" class="cursor-pointer gate open" name="entry_open" value="Open">
+                        <input type="submit" class="cursor-pointer gate default focus" name="entry_default" value="Default">
+                        <input type="submit" class="cursor-pointer gate close" name="entry_close" value="Close">
+                        {% endif %}
+                    </form>
+                </li>
+                <li>
+                    <hr noshade class="mt-2 mb-1">
+                    <div class="font-bold">EXIT GATE CONTROL</div>
+                </li>
+                <li> 
+                    <div id="exit_state"> 
+                        <span class="gray-span lil-span inline-flex items-center rounded-full">
+                            <span class="indicator gray"></span>
+                            Loading...
+                        </span>
+                    </div>
+                </li>
+                <li>
+                    <form action="override/" method="POST">
+                        {% csrf_token %}
+                        {% if override_exit == 'open' %}
+                        <input type='submit' class="cursor-pointer gate open focus" name="exit_open" value="Open">
+                        <input type='submit' class="cursor-pointer gate default" name="exit_default" value="Default">
+                        <input type='submit' class="cursor-pointer gate close" name="exit_close" value="Close">
+                        {% elif override_exit == 'close' %}
+                        <input type='submit' class="cursor-pointer gate open" name="exit_open" value="Open">
+                        <input type='submit' class="cursor-pointer gate default" name="exit_default" value="Default">
+                        <input type='submit' class="cursor-pointer gate close focus" name="exit_close" value="Close">
+                        {% else %} 
+                        <!-- override_exit == 'null' -->
+                        <input type='submit' class="cursor-pointer gate open" name="exit_open" value="Open">
+                        <input type='submit' class="cursor-pointer gate default focus" name="exit_default" value="Default">
+                        <input type='submit' class="cursor-pointer gate close" name="exit_close" value="Close">
+                        {% endif %}
+                    </form>
+                </li>
+            </ul>
+        </div>
+    </aside>
+
+
+    <main style="height: 40rem; width: 100%; display: block; float: left; padding-left: 23rem; overflow-y: scroll;">
+        <table class="w-full h-full ext-sm text-left text-gray-500 dark:text-gray-400">
+            <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-400">
+                <tr>
+                    <th scope="col" class="px-6 py-3">
+                        User
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Plate
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Start Time
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Finish Time
+                    </th>
+                    <th scope="col" class="px-6 py-3">
+                        Active
+                    </th>
+                </tr>
+            </thead> 
+            <tbody>
+                {% for stop in active_stops %}
+                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                    <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                        {{ stop.user }}
+                    </td>
+                    <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                        {{ stop.plate }}
+                    </td>
+                    <td class="px-6 py-4">
+                        {{ stop.start_time }}
+                    </td>
+                    <td class="px-6 py-4">
+                        {{ stop.end_time }}
+                    </td>
+                    <td class="px-6 py-4">
+                        <span class="red-span lil-span inline-flex items-center rounded-full">
+                            <span class="indicator red"></span>
+                            Not Completed
+                        </span>
+                    </td>
+                    {% endfor %}
+                </tr>
+                {% for stop in completed_stops %}
+                <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700">
+                    <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                        {{ stop.user }}
+                    </td>
+                    <td scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                        {{ stop.plate }}
+                    </td>
+                    <td class="px-6 py-4">
+                        {{ stop.start_time }}
+                    </td>
+                    <td class="px-6 py-4">
+                        {{ stop.end_time }}
+                    </td>
+                    <td class="px-6 py-4">
+                        <span class="green-span lil-span inline-flex items-center rounded-full">
+                            <span class="indicator green"></span>
+                            Completed
+                        </span>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </main>
+
+</html>
+
+{% endblock %}

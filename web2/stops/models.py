@@ -1,11 +1,12 @@
 from django.db import models
 from thingsboard_api_tools import TbApi
+from users.models import User
 # Create your models here.
 
-#create a class for the stops, with stop_id as primary key(auto increment), plate, start and optional end time
+#create a class for the stops, with stop_id as primary key(auto increment), user as foreign key, start and optional end time
 class Stop(models.Model):
     stop_id = models.AutoField(primary_key=True)
-    plate = models.CharField(max_length=8)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
     start_time = models.DateTimeField(auto_now_add=True)
     end_time = models.DateTimeField(null=True)
 

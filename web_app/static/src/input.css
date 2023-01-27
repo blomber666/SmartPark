@@ -1,0 +1,10 @@
+/* static/src/input.css */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+[role=tab] {
+    @apply bg-white/75;
+    }
+
