@@ -9,11 +9,12 @@ from push_telemetry import main as push_telemetry
 import time
 
 import os
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'web_django.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'smart_park.settings')
 import django
 django.setup()
 
-from stops.models import Stop, Payment
+from parkings.models import Stop, Payment
+from users.models import User
 from django.utils import timezone
 
 
@@ -119,7 +120,8 @@ def control_entry_gate(tbapi, park_number, old_presence, plate):
 
                 printc("CYAN",f"plate: {plate}")
                 #save to db withou end time
-                stop = Stop(plate=plate, start_time=0, end_time=None)
+                user = User.objects.get(username=plate)
+                stop = Stop(user=user, start_time=0, end_time=None)
                 stop.save()
 
             if not presence and plate is not None:
@@ -187,7 +189,8 @@ def control_exit_gate(tbapi, park_number, old_presence, plate):
                 printc("CYAN",f"plate: {plate}")
 
                 #check if payed
-                last_stop = Stop.objects.filter(plate=plate).order_by('-start_time')
+                user = User.objects.get(username=plate)
+                last_stop = Stop.objects.filter(user=user).order_by('-start_time')
                 assert len(last_stop) > 0 , 'someone is trying to exit without entering'
                 last_stop = last_stop[0]
 

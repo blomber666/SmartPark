@@ -35,7 +35,7 @@ class SignupForm(UserCreationForm):
 
     class Meta:
         model = User
-        fields = ("username")
+        fields = ("username",)
 
     # def save(self, commit: bool = True):
     #     user = super(self).save(commit=False)

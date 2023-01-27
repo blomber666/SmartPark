@@ -13,9 +13,9 @@ def park_1(request, context=None):
     
     if request.user.is_authenticated:
         free_spaces, total_spaces = generate_map('parkings/static/park_1.json')
-        #get the stop with the plate of the user
-        stop = Stop.objects.filter(plate=request.user.plate).last()
-        plate = request.user.plate  if stop else None
+        #get the stop with the plate as foreign key
+        stop = Stop.objects.filter(user=request.user).last()
+        plate = request.user.username  if stop else None
         start = stop.start_time if stop and stop.start_time else None
         end = stop.end_time if stop and stop.end_time else None
 
