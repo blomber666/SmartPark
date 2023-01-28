@@ -96,11 +96,11 @@ def home(request):
                         login(request, user)        
                         return redirect('/home')
                 else:
-                    messages.error(request,"Invalid username or password.")
+                    print("Invalid username or password.")
+                    messages.error(request,"Invalid username/password.")
                     return render(request, 'login.html', context)
-
             else:
-                messages.error(request,"Invalid username or password.")
+                messages.error(request,"Invalid username/password.")
                 return render(request, 'login.html', context)
 
         elif 'signup' in request.POST:
@@ -110,7 +110,7 @@ def home(request):
             if signup_form.is_valid():
                 signup_form.save()    
             else:
-                messages.warning(request, f'Invalid input. Please try again.')
+                messages.warning(request, 'Invalid input. Please try again.')
                 
             return render(request, 'login.html', context)
     else:

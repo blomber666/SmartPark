@@ -1,16 +1,6 @@
 {% load compress %}
 {% load static %}
 
-	<!--if signup_forms.errors set autofocus on the password1 of the signup form-->
-	{% if signup_form.errors %}
-		<script>
-			window.onload = function() {
-				document.getElementById("id_password1").focus();
-			}
-
-		</script>
-	{% endif %}
-
 
 <!DOCTYPE html>   
 <html>
@@ -34,20 +24,22 @@
 				margin-bottom: 1% !important;
 				color: black;
 			}
-			.signup{
-				background: #fafafa4d;
-				position:relative;
-				top: 19rem;
+			.signup {
+				position: relative;
+				top: 30rem;
 				width: 100%;
 				height: 100%;
 				border-radius: 50% / 10%;
 				padding-bottom: 15rem;
+				background: #fafafa4d;
 			}
 			.login {
-    			width: fit-content;
-    			padding-top: 15rem;
-    			height: max-content;
-				margin-top: 5rem;
+				position: absolute;
+				/* top: 10rem; */
+				width: fit-content;
+				/* padding-top: 15rem; */
+				height: max-content;
+				margin-bottom: 15rem;
 			}
 			button{
   				cursor: pointer; 
@@ -87,23 +79,12 @@
 				filter: blur(30px);
 			}
 
-
-/*
-.p{
-  @apply text-white p-[5px] flex text-[16px] m-[10px];
-}
-
-
-
-
-} */
-
 		</style>
 
 	</head>
 
  
-	<body class="scale-90 flex items-center justify-center min-w-full min-h-screen overflow-hidden bg-gradient-to-b from-sfA via-sfB to-sfC text-white">
+	<body class="flex items-center justify-center min-w-full min-h-screen overflow-hidden bg-gradient-to-b from-sfA via-sfB to-sfC text-white">
 		<div class="w-[36rem] max-h-[48rem] overflow-hidden rounded-md shadow-ff bg-gradient-to-b from-sfA via-sfB to-sfC justify-center flex flex-col items-center">
 			<input type="checkbox" id="chk" class="hidden">
 
@@ -115,11 +96,13 @@
 	                {{ login_form.password }}
 	                <button name="login" class="text-[100%] w-fit px-6 py-1 hover:bg-[#6d44b8]" style="margin-top: 2% !important;">Login</button>
 	                {% if messages %}
-	                {% for message in messages %}
-	                <div class="rounded-[5px] flex flex-col justify-center h-[40px] bg-red-700 text-white text-[15px] m-4 px-5 text-center min-w-[200px] w-fit font-bold ease-in duration-200">
-						{{ message }} {% endfor %}
-					</div>
-	                
+					{% for message in messages %}
+					<ul class="mt-2 flex flex-col justify-center space-y-2">
+						<li class="rounded-[5px] h-[40px] p-2 bg-red-700 text-white text-[15px] text-center font-bold">
+							{{ message }} 
+						</li>	          
+					</ul>
+					{% endfor %}
 	                {% endif %}
 	            </form>
 	        </div>
@@ -127,14 +110,33 @@
 			<div class="signup shadow-ff ease-in-out duration-1000">
 				<form method="post" class="flex flex-col items-center" data-np-autofill-type="register" data-np-checked="1" data-np-watching="1">
 					<label for="chk" aria-hidden="true">Sign up</label>
-						{% csrf_token %}
-						{{ signup_form.username }}
-						{{ signup_form.plate }}
-						{{ signup_form.password1 }}
-						{{ signup_form.password2 }}
-						{{ signup_form.errors }}
+					{% csrf_token %}
+					{{ signup_form.username }}
+					{{ signup_form.plate }}
+					{{ signup_form.password1 }}
+					{{ signup_form.password2 }}
 					<button name="signup" class="text-[100%] w-fit px-6 py-1 hover:bg-[#6d44b8]" style="margin: 1rem;">Sign up</button>
+					{% if signup_form.errors %}
+					<script>
+						window.onload = function() {
+							document.getElementById("chk").checked = true;
+						}
+					</script>
+					<ul class="flex flex-col justify-center space-y-2 ">
+						{% if signup_form.errors.username %}
+						<li class="rounded-[5px] h-[40px] py-1 px-4 bg-red-700 text-white text-[15px] text-center font-bold">
+							{{ signup_form.errors.username }} 
+						</li>
+						{% endif %}
+						{% if signup_form.errors.password2 %}
+						<li class="rounded-[5px] h-[40px] py-1 px-4 bg-red-700 text-white text-[15px] text-center font-bold">
+							{{ signup_form.errors.password2 }} 
+						</li>	        	                
+						{% endif %}
+					</ul>
+					{% endif %}
 				</form>
+
 			</div>
       	</div>
 	</body> 
