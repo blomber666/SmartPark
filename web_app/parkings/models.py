@@ -48,7 +48,8 @@ class Statistic(models.Model):
     total_stops = models.IntegerField()
     completed_stops = models.IntegerField()
     active_stops = models.IntegerField()
-    average_time = models.TimeField()
+    #average time is a duration field, so it is stored as a time in hh:mm:ss format
+    average_time = models.DurationField()
     average_price = models.DecimalField(max_digits=5, decimal_places=2)
     average_income_per_hour = models.DecimalField(max_digits=5, decimal_places=2)
     average_stops_per_hour = models.DecimalField(max_digits=5, decimal_places=2)

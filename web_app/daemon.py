@@ -295,9 +295,8 @@ def send_stats(stats, park_number):
             timedelta_zero = datetime.now().replace(hour=0, minute=0, second=0) - datetime.now().replace(hour=0, minute=0, second=0)
             completed_total_time = sum(completed_time_list, timedelta_zero)
 
-            #calculate the average time of the completed stops and convert from timedelta to datetime
-            average_time = (completed_total_time / completed_stops.count()).total_seconds()
-            average_time = datetime.now().replace(hour=0, minute=0, second=0) + timedelta(seconds=average_time)
+            #calculate the average time of the completed stops 
+            average_time = (completed_total_time / completed_stops.count())
 
             #calculate the average price of the completed stops
             average_price = total_income / completed_stops.count()
@@ -305,7 +304,8 @@ def send_stats(stats, park_number):
             average_income_per_hour = total_income / (datetime.now() - datetime.today().replace(hour=0, minute=0, second=0, microsecond=0)).seconds * 3600
         else:
             total_income = 0
-            average_time = datetime.now().replace(hour=0, minute=0, second=0)
+            #average time mjust be a timedelta object
+            average_time = datetime.now() - datetime.now()
             average_price = 0
             average_income_per_hour = 0
 
@@ -317,7 +317,7 @@ def send_stats(stats, park_number):
         assert isinstance(total_income, (int, float, Decimal)), f"total_income is not a number, it is {type(total_income)}"
         assert isinstance(len(all_stops), int), f"total_stops is not an integer, it is {type(len(all_stops))}"
         assert isinstance(len(completed_stops), int), f"completed_stops is not an integer, it is {type(len(completed_stops))}"
-        assert isinstance(average_time, datetime), f"average_time is not a datetime, it is {type(average_time)}"
+        assert isinstance(average_time, timedelta), f"average_time is not a timedelta, it is {type(average_time)}"
         assert isinstance(average_price, (int, float, Decimal)), f"average_price is not a number, it is {type(average_price)}"
         assert isinstance(average_income_per_hour, (int, float, Decimal)), f"average_income_per_hour is not a number, it is {type(average_income_per_hour)}"
         assert isinstance(average_stops_per_hour, (int, float, Decimal)), f"average_stops_per_hour is not a number, it is {type(average_stops_per_hour)}"
@@ -368,8 +368,8 @@ def main(park_name, stats_freq):
     assert len(stats) <= 1, "there are more than one stats for today, NO BUONO"
     if len(stats) == 0:
         #create a new statistic
-        #set average_time to 0 but as datetime
-        average_time = datetime.now().replace(hour=0, minute=0, second=0)
+        #set average_time to 0 but as timedelta
+        average_time = datetime.now() - datetime.now()
         stats = Statistic(park=park_number, date=datetime.today().date(), total_income=0,\
                 total_stops=0, completed_stops=0, active_stops=0, average_time=average_time,\
                 average_price=0, average_income_per_hour=0, average_stops_per_hour=0)
@@ -387,13 +387,14 @@ def main(park_name, stats_freq):
         #remove the time from the stats_date
         # stats_date = stats.date.date()
         if datetime.today().date() != stats.date:
-            print('\n\n\n\nstart')
-            print(datetime.today().date(), type(datetime.today().date()))
-            print(stats.date, type(stats.date))
-            print(stats.date.date(), type(stats.date.date()))
-            print('\n\n\n\nend')
+            #send last stats for the previous day
+            send_stats(stats, park_number)
+            printc('GREEN',"sent last stats for the previous day")
+            #create a new statistic for today
+            #set average_time to 0 but as timedelta
+            average_time = datetime.now() - datetime.now()
             stats = Statistic(park=park_number, date=datetime.today().date(), total_income=0,\
-                total_stops=0, completed_stops=0, active_stops=0, average_time=0,\
+                total_stops=0, completed_stops=0, active_stops=0, average_time=average_time,\
                 average_price=0, average_income_per_hour=0, average_stops_per_hour=0)
             stats.save()
             printc('GREEN',"created new stats for today")
