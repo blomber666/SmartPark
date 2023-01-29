@@ -229,13 +229,13 @@
                                             <div class="absolute inset-y-0 left-0 flex flex-wrap items-center pl-3 pointer-events-none" style="padding: 0.625rem;"> 
                                                 <svg aria-hidden="true" class="w-5 h-5 text-gray-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path></svg>
                                             </div>
-                                            <input name="start_time" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5" placeholder="Select date start"  style="padding-left: 2.75rem;">
+                                            <input name="start_filter" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5" placeholder="Select date start"  style="padding-left: 2.75rem;">
                                         </div>
                                         <div class="relative">
                                             <div class="absolute inset-y-0 left-0 flex items-center pointer-events-none" style="padding: 0.625rem;">
                                                 <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path></svg>
                                             </div>
-                                            <input name="end_time" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 " placeholder="Select date end" style="padding-left: 2.75rem;">
+                                            <input name="end_filter" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 " placeholder="Select date end" style="padding-left: 2.75rem;">
                                         </div>
                                         </div>
                                         <!-- end datapicker -->
@@ -243,11 +243,6 @@
                                     <li>
                                         <a class="flex items-center text-base font-normal text-gray-900 rounded-lg  group">
                                             <input name="username" type="text" class="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 " placeholder="User">
-                                        </a>
-                                    </li>
-                                    <li>
-                                        <a class="flex items-center text-base font-normal text-gray-900 rounded-lg  group">
-                                            <input name="plate" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-purple-500 focus:border-purple-500 block w-full p-2.5 " placeholder="Plate">
                                         </a>
                                     </li>
                                     <li>
@@ -260,15 +255,12 @@
                         </div>
                     </aside>
                 
-                    <main style="height: 28rem; width: 54rem; display: block; float: left; margin-left: 1.5rem; overflow-y: scroll; background: rgb(229 231 235); border-radius: 0.25rem;">
+                    <main style="height: 28rem; width: 54rem; display: block; float: left; margin-left: 1.5rem; overflow-y: scroll; background: #e5e7eb; border-radius: 0.25rem;">
                         <table class="w-full h-max text-left text-gray-500">
                             <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                                 <tr>
                                     <th scope="col" class="col-chart">
                                         User
-                                    </th>
-                                    <th scope="col" class="col-chart">
-                                        Plate
                                     </th>
                                     <th scope="col" class="col-chart">
                                         Start Time
@@ -284,11 +276,8 @@
                             <tbody>
                                 {% for stop in active_stops %}
                                 <tr class="bg-gray-200 border-b border-gray-900">
-                                    <td scope="row" class="vla-chart">
-                                        {{ stop.user }}
-                                    </td>
                                     <td scope="row" class="val-chart">
-                                        {{ stop.plate }}
+                                        {{ stop.user }}
                                     </td>
                                     <td scope="row" class="val-chart">
                                         {{ stop.start_time }}
@@ -308,9 +297,6 @@
                                 <tr class="bg-gray-200 border-b border-gray-900">
                                     <td scope="row" class="val-chart">
                                         {{ stop.user }}
-                                    </td>
-                                    <td scope="row" class="val-chart">
-                                        {{ stop.plate }}
                                     </td>
                                     <td scope="row" class="val-chart">
                                         {{ stop.start_time }}
@@ -334,7 +320,7 @@
                 <div class="flex items-start py-4 px-2 bg-white/75 rounded-lg" id="stats" role="tabpanel" aria-labelledby="stats-tab">
                     <aside aria-label="Sidenav" style="padding-right: 0.5rem;">
                         <div class="py-5 pl-3 h-full border-r border-gray-200">
-                            <form method="post" action="/administration">
+                            <form method="post" action="/administration/">
                                 {% csrf_token %}
                                 <ul class="flex  flex-col space-y-2">
                                     <li>
@@ -344,13 +330,13 @@
                                             <div class="absolute inset-y-0 left-0 flex flex-wrap items-center pl-3 pointer-events-none" style="padding: 0.625rem;"> 
                                                 <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path></svg>
                                             </div>
-                                            <input name="start_time" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5" placeholder="Select date start"  style="padding-left: 2.75rem;">
+                                            <input name="start_filter" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5" placeholder="Select date start"  style="padding-left: 2.75rem;">
                                         </div>
                                         <div class="relative">
                                             <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none" style="padding: 0.625rem;">
                                                 <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path></svg>
                                             </div>
-                                            <input name="end_time" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 " placeholder="Select date end" style="padding-left: 2.75rem;">
+                                            <input name="end_filter" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 " placeholder="Select date end" style="padding-left: 2.75rem;">
                                         </div>
                                         </div>
                                         <!-- end datapicker -->
