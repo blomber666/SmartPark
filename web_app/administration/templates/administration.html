@@ -98,6 +98,30 @@
         <meta name="viewport" content="width=device-width, height=device-height,  initial-scale=1.0">
         <title>ADMIN</title>
         <script>
+                updateLiveGate = 
+                    function(smartpark, door){
+                        var url = 'state/door_'+ smartpark +'_'+ door +'/';
+                        var div = null
+
+                        fetch(url)
+                        .then((response) => {
+                            return response.text()
+                        })
+                        .then((html) => {
+                            if (door == 1){
+                                document.getElementById("entry_state").innerHTML = html;
+                                // alert("ok entry" + html);
+                            }
+                            else{
+                                document.getElementById("exit_state").innerHTML=html;
+                                // alert("ok exit"+html); 
+                            }
+                        })
+
+                    };
+                setInterval(updateLiveGate, 3000, 1, 1); //
+        </script>
+        <script>
             window.addEventListener('load', function() {
 
                 updateLiveGate = 
@@ -132,7 +156,6 @@
 
       
     </head>
-
     <div>
         <aside class="px-8 py-4 rounded-md bg-white/75 h-auto w-auto" aria-label="Sidenav" style="float: left; scale: 90%;">
             <form method="post" action="/administration/">
@@ -434,12 +457,20 @@
                 </div>
 
                 <div class="flex items-center justify-center p-4 bg-white/75 rounded-lg" id="price" role="tabpanel" aria-labelledby="price-tab">
-                    <!-- <div class=" items-center bg-white border rounded-lg shadow-md md:flex-row  dark:border-gray-700 dark:bg-gray-800">
-                        <h2 class="p-4 text-2xl font-extrabold tracking-tight text-gray-900 dark:text-white">Park details</h2>
+                    <div class=" items-center bg-white border rounded-lg shadow-md md:flex-row  dark:border-gray-700 dark:bg-gray-800">
+                        <h2 class="p-4 text-2xl font-extrabold tracking-tight text-gray-900 dark:text-white">Edit SmartPark Fee</h2>
                         
                         <div class="relative mx-4 mb-4 overflow-x-auto shadow-md sm:rounded-lg">
                             <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                                 <tbody>
+                                    <tr class="bg-gray-200 border-b dark:bg-gray-800 dark:border-gray-700">
+                                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                            Name:
+                                        </th>
+                                        <td class="px-6 py-4">
+                                            Park 1
+                                        </td>
+                                    </tr>
                                     <tr class="bg-gray-200 border-b dark:bg-gray-800 dark:border-gray-700">
                                         <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                             Address
@@ -482,14 +513,16 @@
                                         <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                             Last stop
                                         </th>
-                                        <td class="px-6 py-4">
-                                            {{last_time}}
+                                        <td class="relative px-6 py-4">
+                                        
+                                        <div class="absolute float-left">{{last_time}}</div>
+                                        <input type="button" class="absolute float-right" href="#">dai</div>
                                         </td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
-                    </div> -->
+                    </div> 
     
                 </div>
             </div>

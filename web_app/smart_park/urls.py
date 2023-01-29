@@ -33,7 +33,7 @@ urlpatterns = [
     path('administration/override/', admin_views.override, name='override'),
     #API
     path('administration/state/<str:door>/', admin_views.get_door_state, name='get_door_state'),
-    path('update_map/', parkings_views.get_parkings, name='get_parkings'),
+    path('update_parkings/', parkings_views.get_parkings, name='get_parkings'),
     path('update_price/?P<str:start>', parkings_views.calculate_amount, name='get_price'),
 
 ]+ static(settings.MEDIA_URL, document_root = settings.MEDIA_ROOT)
