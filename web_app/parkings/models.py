@@ -46,11 +46,16 @@ class Statistic(models.Model):
     park = models.CharField(max_length=50)
     total_income = models.DecimalField(max_digits=5, decimal_places=2)
     total_stops = models.IntegerField()
-    total_active_stops = models.IntegerField()
+    completed_stops = models.IntegerField()
+    active_stops = models.IntegerField()
+    average_time = models.TimeField()
+    average_price = models.DecimalField(max_digits=5, decimal_places=2)
+    average_income_per_hour = models.DecimalField(max_digits=5, decimal_places=2)
+    average_stops_per_hour = models.DecimalField(max_digits=5, decimal_places=2)
     date = models.DateField(auto_now_add=True)
 
     def __str__(self):
-        return f"{self.park} {self.total_income} {self.total_stops} {self.total_active_stops} {self.date}"
+        return f"{self.park} {self.total_income} {self.total_stops} {self.active_stops} {self.date}"
 
 class Price(models.Model):
     price_id = models.AutoField(primary_key=True)

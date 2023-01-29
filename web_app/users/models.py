@@ -7,7 +7,8 @@ from django.contrib.auth.models import AbstractUser
 
 #change the primary key to have length 7
 class User(AbstractUser):
-    username = models.CharField(max_length=7, primary_key=True)
+    id = models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')
+    username = models.CharField(max_length=7, unique=True)
 
     def __str__(self):
         return self.username

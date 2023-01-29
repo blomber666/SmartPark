@@ -1,4 +1,7 @@
+from datetime import date, datetime, timedelta
+from decimal import Decimal
 import logging
+import re
 from tb_device_mqtt import TBDeviceMqttClient, TBPublishInfo
 from tb_rest_client.rest_client_ce import *
 from tb_rest_client.rest import ApiException
@@ -13,7 +16,7 @@ os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'smart_park.settings')
 import django
 django.setup()
 
-from parkings.models import Stop, Payment
+from parkings.models import Stop, Payment, Statistic
 from users.models import User
 from django.utils import timezone
 
@@ -55,6 +58,7 @@ def printc(*args):
 def parse_opt():
     parser = argparse.ArgumentParser()
     parser.add_argument("--park_name", help="the park name like: park_1", type=str, default="park_1")
+    parser.add_argument("--stats_freq", help="the frequency of the stats in hh:mm", type=str, default="00:01")
     # parser.add_argument("key", help="the key of the value", type=str, default="free")
     # parser.add_argument("value", help="the value to send", type=str, default=1)
 
@@ -91,24 +95,25 @@ def control_entry_gate(tbapi, park_number, old_presence, plate):
     override = tbapi.get_telemetry(override_gate['id'], telemetry_keys=["value"])
     override_value = override['value'][0]['value']
 
-    if  override_value != 'null':
+    if override_value != 'null':
         if override_value == 'open':
-            printc('GREEN',"entry(override)")
             push_telemetry(door_name, "open", 1)
-            return True, None
+            printc('GREEN',"entry(override)")
+            return None, None
 
         elif override_value == 'close':
-            printc('MAGENTA',"entry(override)")
             push_telemetry(door_name, "open", 0)
-            return False, None
+            printc('MAGENTA',"entry(override)")
+            return None, None
         
         else:
             printc('RED',"unknown override value, entry gate not active")
-            return False, None
+            return None, None
 
     else:
         #get the gate telemetry
         presence = get_car_presence(tbapi, gate_name)
+        door = tbapi.get_device_by_name(name=door_name)
 
         if presence != old_presence:
             if presence and plate is None:
@@ -116,13 +121,24 @@ def control_entry_gate(tbapi, park_number, old_presence, plate):
                 plate = get_plate(tbapi, camera_name)
                 if plate is None:
                     printc("RED","plate not found")
-                    return False, None
+                    presence = False
 
-                printc("CYAN",f"plate: {plate}")
-                #save to db withou end time
-                user = User.objects.get(username=plate)
-                stop = Stop(user=user, start_time=0, end_time=None)
-                stop.save()
+                else:
+                    printc("CYAN",f"plate: {plate}")
+                    #save to db withou end time
+                    user = User.objects.get(username=plate)
+                    #check if the user has already a stop
+                    stop = Stop.objects.filter(user=user, end_time=None)
+                    if stop:
+                        printc('RED',"user already in the park")
+                        presence = False
+                        plate = None
+                    else:
+                        stop = Stop(user=user, start_time=0, end_time=None, park=park_number)
+                        stop.save()
+
+            door_telemetry = tbapi.get_telemetry(door['id'], telemetry_keys=["open"])
+            door_open = True if door_telemetry['open'][0]['value'] == '1' else False
 
             if not presence and plate is not None:
                 #delete plate
@@ -131,16 +147,19 @@ def control_entry_gate(tbapi, park_number, old_presence, plate):
             if plate:
                 printc('YELLOW',"entry opened")
                 push_telemetry(door_name, "open", 1)
-            else:
+
+            elif door_open:
                 printc('YELLOW',"entry closed")
                 push_telemetry(door_name, "open", 0)
             #control the gate
 
-        if plate:
-            printc("GREEN", "entry")
-
+        #get door telemetry
+        
+        door_telemetry = tbapi.get_telemetry(door['id'], telemetry_keys=["open"])
+        if door_telemetry['open'][0]['value'] == '1':
+            printc('GREEN',"entry")
         else:
-            printc("MAGENTA","entry")
+            printc('MAGENTA',"entry")
 
         return presence, plate
 
@@ -161,13 +180,13 @@ def control_exit_gate(tbapi, park_number, old_presence, plate):
 
     if  override_value != 'null':
         if override_value == 'open':
-            printc('GREEN',"exit(override)")
             push_telemetry(door_name, "open", 1)
+            printc('GREEN',"exit(override)")
             return True, None
 
         elif override_value == 'close':
-            printc('MAGENTA',"exit(override)")
             push_telemetry(door_name, "open", 0)
+            printc('MAGENTA',"exit(override)")
             return False, None
 
         else:
@@ -177,49 +196,60 @@ def control_exit_gate(tbapi, park_number, old_presence, plate):
     else:
         #get the gate telemetry
         presence = get_car_presence(tbapi, gate_name)
+        door = tbapi.get_device_by_name(name=door_name)
 
         #if presence changed or there is someone waiting to exit
-        if presence != old_presence or presence:
+        if presence != old_presence:
             if presence and plate is None:
                 #get plate from camera 2
                 plate = get_plate(tbapi, camera_name)
                 if plate is None:
                     printc("RED","plate not found")
-                    return False, None
-                printc("CYAN",f"plate: {plate}")
-
-                #check if payed
-                user = User.objects.get(username=plate)
-                last_stop = Stop.objects.filter(user=user).order_by('-start_time')
-                assert len(last_stop) > 0 , 'someone is trying to exit without entering'
-                last_stop = last_stop[0]
-
-                #find the payment with the same stop id
-                payment = Payment.objects.filter(stop_id=last_stop.stop_id)
-                #TODO check if the payment_time is less than 15 minutes ago
-                if payment:
-                    printc("GREEN",f"payed{payment}")
-                    #update the stop
-                    last_stop.end_time = timezone.now()
-                    last_stop.save()
+                    presence = False
                 else:
-                    printc("RED","not payed")
-                    plate = None
+                    printc("CYAN",f"plate: {plate}")
+
+                    #check if payed
+                    user = User.objects.get(username=plate)
+                    last_stop = Stop.objects.filter(user=user, end_time=None)
+                    if len(last_stop) != 1:
+                        printc("RED","user entered zero or more than one time")
+                        presence = False
+                        plate = None
+                    else:
+                        last_stop = last_stop[0]
+                        #find the payment with the same stop id
+                        payment = Payment.objects.filter(stop_id=last_stop.stop_id)
+                        #TODO check if the payment_time is less than 15 minutes ago
+                        if payment and payment[0].payment_time > timezone.now() - timedelta(minutes=15):
+                            printc("GREEN",f"payed{payment}")
+                            #update the stop
+                            last_stop.end_time = timezone.now()
+                            last_stop.save()
+                        else:
+                            printc("RED","not payed")
+                            plate = None
+                            presence = False
                     
+            door_telemetry = tbapi.get_telemetry(door['id'], telemetry_keys=["open"])
+            door_open = True if door_telemetry['open'][0]['value'] == '1' else False
+
             if not presence and plate is not None:
                 #delete plate
                 plate = None
             if plate:
                 printc('YELLOW',"exit opened")
                 push_telemetry(door_name, "open", 1)
-            else:
+            elif door_open:
                 printc('YELLOW',"exit closed")
                 push_telemetry(door_name, "open", 0)
 
-        if plate:
-            printc("GREEN","exit")
+        #get door telemetry
+        door_telemetry = tbapi.get_telemetry(door['id'], telemetry_keys=["open"])
+        if door_telemetry['open'][0]['value'] == '1':
+            printc('GREEN',"exit")
         else:
-            printc("MAGENTA","exit")
+            printc('MAGENTA',"exit")
 
         return presence, plate
 
@@ -243,21 +273,141 @@ def get_plate(tbapi, camera_name):
         i+=1
     return None
 
-def main(park_name):
+def send_stats(stats, park_number):
+    '''
+    send stats to the server.
+    Create a new statistic model and save it to the database
+    '''
+    #get all stops for the park that has the start_time today
+    all_stops = Stop.objects.filter(park=park_number, start_time__date=datetime.today().date())
+    #get the completed stops for the park that has the start_time today
+    completed_stops = Stop.objects.filter(park=park_number, start_time__date=datetime.today().date(), end_time__isnull=False)
+    if len(all_stops) > 0:
+
+        if len(completed_stops) > 0:
+            #calculate the total income by summing the amount of all completed stops,
+            #payment has a foreign key to the stop
+            total_income = sum([payment.amount for payment in Payment.objects.filter(stop__in=completed_stops)])
+
+            #calculate the average time of the completed stops
+            completed_time_list = [stop.end_time - stop.start_time for stop in completed_stops] #type: [timedelta]
+            #create a timedelta object with the value of 0
+            timedelta_zero = datetime.now().replace(hour=0, minute=0, second=0) - datetime.now().replace(hour=0, minute=0, second=0)
+            completed_total_time = sum(completed_time_list, timedelta_zero)
+
+            #calculate the average time of the completed stops and convert from timedelta to datetime
+            average_time = (completed_total_time / completed_stops.count()).total_seconds()
+            average_time = datetime.now().replace(hour=0, minute=0, second=0) + timedelta(seconds=average_time)
+
+            #calculate the average price of the completed stops
+            average_price = total_income / completed_stops.count()
+            #calculate the average income per hour
+            average_income_per_hour = total_income / (datetime.now() - datetime.today().replace(hour=0, minute=0, second=0, microsecond=0)).seconds * 3600
+        else:
+            total_income = 0
+            average_time = datetime.now().replace(hour=0, minute=0, second=0)
+            average_price = 0
+            average_income_per_hour = 0
+
+        #calculate the average stops per hour
+        average_stops_per_hour = len(all_stops) / (datetime.now() - datetime.today().replace(hour=0, minute=0, second=0, microsecond=0)).seconds * 3600
+        
+        #check the types of the values
+        #assert total_income is a int, float or decimal.Decimal
+        assert isinstance(total_income, (int, float, Decimal)), f"total_income is not a number, it is {type(total_income)}"
+        assert isinstance(len(all_stops), int), f"total_stops is not an integer, it is {type(len(all_stops))}"
+        assert isinstance(len(completed_stops), int), f"completed_stops is not an integer, it is {type(len(completed_stops))}"
+        assert isinstance(average_time, datetime), f"average_time is not a datetime, it is {type(average_time)}"
+        assert isinstance(average_price, (int, float, Decimal)), f"average_price is not a number, it is {type(average_price)}"
+        assert isinstance(average_income_per_hour, (int, float, Decimal)), f"average_income_per_hour is not a number, it is {type(average_income_per_hour)}"
+        assert isinstance(average_stops_per_hour, (int, float, Decimal)), f"average_stops_per_hour is not a number, it is {type(average_stops_per_hour)}"
+
+        
+        #update the stats model
+        stats.total_income = total_income
+        stats.total_stops = len(all_stops)
+        stats.completed_stops = len(completed_stops)
+        stats.active_stops = len(all_stops) - len(completed_stops)
+        stats.average_time = average_time
+        stats.average_price = average_price
+        stats.average_income_per_hour = average_income_per_hour
+        stats.average_stops_per_hour = average_stops_per_hour
+        #change the date to now
+        stats.date = datetime.now().date()
+        #save the stats
+        stats.save()
+        printc("GREEN","stats sent")
+
+    
+
+    
+
+
+
+def main(park_name, stats_freq):
     printc("GREEN","starting daemon for park:",park_name)
     #get park assets
     park = tbapi.get_tenant_asset(name=park_name)
     #get park number
     park_number = park['name'].split("_")[1]
 
+    #check that stats_freq is in the correct format
+    assert re.match(r"^\d{2}:\d{2}$", stats_freq), "stats_freq must be in the format hh:mm"
+    #convert to datetime
+    stats_freq = datetime.strptime(stats_freq, "%H:%M").time()
+    printc('CYAN',f"stats_freq: {stats_freq}")
+    #get the time of the last stats sent
+    stats_time = datetime.now().time()
+
     entry_presence = False
     exit_presence = False
     entry_plate = None
     exit_plate = None
+    #get the statistics for the park for today
+    stats = Statistic.objects.filter(park=park_number, date=datetime.today().date())
+    assert len(stats) <= 1, "there are more than one stats for today, NO BUONO"
+    if len(stats) == 0:
+        #create a new statistic
+        #set average_time to 0 but as datetime
+        average_time = datetime.now().replace(hour=0, minute=0, second=0)
+        stats = Statistic(park=park_number, date=datetime.today().date(), total_income=0,\
+                total_stops=0, completed_stops=0, active_stops=0, average_time=average_time,\
+                average_price=0, average_income_per_hour=0, average_stops_per_hour=0)
+        stats.save()
+        printc('GREEN',"created new stats for today")
+    else:
+        stats = stats[0]
+        printc('GREEN',"found stats for today") 
 
     while 1:
 
         time.sleep(1)
+
+        #create new stats if it is a new day
+        #remove the time from the stats_date
+        # stats_date = stats.date.date()
+        if datetime.today().date() != stats.date:
+            print('\n\n\n\nstart')
+            print(datetime.today().date(), type(datetime.today().date()))
+            print(stats.date, type(stats.date))
+            print(stats.date.date(), type(stats.date.date()))
+            print('\n\n\n\nend')
+            stats = Statistic(park=park_number, date=datetime.today().date(), total_income=0,\
+                total_stops=0, completed_stops=0, active_stops=0, average_time=0,\
+                average_price=0, average_income_per_hour=0, average_stops_per_hour=0)
+            stats.save()
+            printc('GREEN',"created new stats for today")
+
+        #every stats_freq send stats to the server
+        if datetime.now().time() >= stats_time:
+            send_stats(stats, park_number)
+            #update the stats_time by adding stats_freq to it
+            stats_time = (datetime.combine(date.today(), stats_time) + timedelta(hours=stats_freq.hour, minutes=stats_freq.minute)).time()
+            printc('CYAN',f"next_stats_update: {stats_time}")
+
+
+            
+
 
         entry_presence, entry_plate = control_entry_gate(tbapi, park_number, entry_presence, entry_plate)
 

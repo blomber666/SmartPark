@@ -1,10 +1,13 @@
 from django.shortcuts import render
 from django.shortcuts import redirect
 from .models import Stop, TbApi
+from users.models import User
 #, FilterModel
 from django.contrib import messages
 
 from push_telemetry import main as push_telemetry
+from datetime import datetime
+from datetime import timedelta
 
 
 # ThingsBoard REST API URL
@@ -35,28 +38,51 @@ def administration(request,context={'override_entry': 'null', 'override_exit':'n
             elif request.method == 'POST':
                 print("\n\n", request.body , "\n\n" )
                 print("\n\n")
-                smartparks = request.POST.get("smartparks")
-                print(smartparks)
-                start_time = request.POST.get("start_time")
-                print(start_time)
-                end_time = request.POST.get("end_time")
-                print(end_time)
-                username = request.POST.get("username")
-                print(username)
-                plate = request.POST.get("plate")
-                print(plate)
-                print("\n\n")
 
-                if smartparks is None:
-                    active_stops = []
-                    completed_stops = [] 
-                    messages.error(request,"You must choose at least one SmartPark.")
-                    pass
+                smartpark = None
+                park_num = None
+                start_filter = None
+                start_date_converted = None
+                end_filter = None
+                end_date_converted = None
+                username = None
+
+                if 'smartpark' in request.POST and request.POST.get("smartpark")!='':
+                    smartpark = request.POST.get("smartpark")
+                    if 'hoose' in smartpark:
+                        smartpark = None
+                    else: 
+                        park_num = smartpark[-1]
+                    print(park_num)
+
+                if 'start_filter' in request.POST and request.POST.get("start_filter")!='':
+                    start_filter = request.POST.get("start_filter")
+                    print('\n\n\n', request.POST, '\n\n\n')
+                    #convert to yyyy-mm-dd
+                    start_date_converted = datetime.strptime(start_filter, '%m/%d/%Y')
+                    start_date_converted = start_date_converted.date()
+                    print(start_date_converted)
+
+                if 'end_filter' in request.POST and request.POST.get("end_filter")!='':
+                    end_filter = request.POST.get("end_filter")
+                    #convert to yyyy-mm-dd
+                    end_date_converted = datetime.strptime(end_filter, '%m/%d/%Y')
+                    end_date_converted = end_date_converted.date()
+                    print(end_date_converted)
                 else:
-                    #get all active stops
-                    active_stops = Stop.objects.filter(plate=plate, end_time=None, start_time=start_time)
-                    #get all completed stops
-                    completed_stops = Stop.objects.filter(plate=plate, end_time__lt=end_time, start_time=start_time)
+                    end_date_converted = datetime.today().date()
+                
+                if 'username' in request.POST and request.POST.get("username")!='':
+                    username = request.POST.get("username")
+                    print(username)
+
+                
+                active_stops = get_filtered_active_stops(username, start_date_converted, end_date_converted, park_num)
+                #get all completed stops with start_time between start_filter and end_filter
+                completed_stops = get_filtered_completed_stops(username, start_date_converted, end_date_converted, park_num)
+
+
+
 
             #get override telemetry
             override_entry = tbapi.get_device_by_name(name='override_1_1')
@@ -76,7 +102,54 @@ def administration(request,context={'override_entry': 'null', 'override_exit':'n
         else:
             return redirect('/home')
 
+def get_filtered_active_stops(user, start_date_converted, end_date_converted, park_num):
+    '''
+    Get all active stops with the given filters, based on which is not None
+    '''
+    #active stops filters by start_time that is between start_date_converted and end_date_converted
+    args = {}
+    if user:
+        args['user__username__icontains'] = user
+    if start_date_converted and end_date_converted:
+        args['start_time__range'] = [start_date_converted, end_date_converted+timedelta(days=1)]
+    args['end_time__isnull'] = True 
+    if park_num:
+        args['park'] = park_num
+    active_stops = Stop.objects.filter(**args)
+
+    return active_stops
     
+def get_filtered_completed_stops(user, start_date_converted, end_date_converted, park_num):
+    '''
+    Get all completed stops with the given filters, based on which is not None
+    '''
+    #completed_stops_1 filters by start_time that is between start_date_converted and end_date_converted
+    #completed_stops_2 filters by end_time that is between start_date_converted and end_date_converted
+    #then we combine the two querysets
+    args = {}
+    if user:
+        args['user__username__icontains'] = user
+
+    if start_date_converted and end_date_converted:
+        args['start_time__range'] = [start_date_converted, end_date_converted+timedelta(days=1)]
+    args['end_time__isnull'] = False
+    if park_num:
+        args['park'] = park_num
+    completed_stops_1 = Stop.objects.filter(**args)
+
+    args = {}
+    if user:
+        args['user__username__icontains'] = user
+    if start_date_converted and end_date_converted:
+        args['end_time__range'] = [start_date_converted, end_date_converted+timedelta(days=1)]
+    args['end_time__isnull'] = False
+    if park_num:
+        args['park'] = park_num
+    completed_stops_2 = Stop.objects.filter(**args)
+
+    completed_stops = completed_stops_1 | completed_stops_2
+    return completed_stops
+
 def get_door_state(request, door):
     if request.method == 'GET' and request.user.is_superuser:
         
