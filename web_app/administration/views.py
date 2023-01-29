@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.shortcuts import redirect
-from .models import Stop, TbApi
+from .models import Stop, TbApi, Statistic
 from users.models import User
 #, FilterModel
 from django.contrib import messages
@@ -23,6 +23,9 @@ def administration(request,context={'override_entry': 'null', 'override_exit':'n
         return redirect('/')
     else:
         if request.user.is_superuser:
+
+            start_filter = None
+            end_filter = None
            
             if request.method == 'GET':
                 print("\n\n", request, "\n\n" )
@@ -31,9 +34,10 @@ def administration(request,context={'override_entry': 'null', 'override_exit':'n
                 #get all completed stops
                 completed_stops = Stop.objects.filter(end_time__isnull=False)
 
-                #get the latest telemetry of device named 'door_1_1'
-                #entry_door_telemetry, exit_door_telemetry = get_entry_exit()
-                # print("exit"+exit_door_telemetry)
+                stats = Statistic.objects.all()
+                #convert stats.average_time to hour:minute:second format
+                for stat in stats:
+                    stat.average_time = str(stat.average_time).split('.')[0]
 
             elif request.method == 'POST':
                 print("\n\n", request.body , "\n\n" )
@@ -46,6 +50,10 @@ def administration(request,context={'override_entry': 'null', 'override_exit':'n
                 end_filter = None
                 end_date_converted = None
                 username = None
+
+                if 'focus' in request.POST and request.POST.get("focus")!='':
+                    focus = request.POST.get("focus")
+                    print(focus)
 
                 if 'smartpark' in request.POST and request.POST.get("smartpark")!='':
                     smartpark = request.POST.get("smartpark")
@@ -81,6 +89,8 @@ def administration(request,context={'override_entry': 'null', 'override_exit':'n
                 #get all completed stops with start_time between start_filter and end_filter
                 completed_stops = get_filtered_completed_stops(username, start_date_converted, end_date_converted, park_num)
 
+                stats = get_filtered_stats(start_date_converted, end_date_converted, park_num)
+
 
 
 
@@ -94,6 +104,9 @@ def administration(request,context={'override_entry': 'null', 'override_exit':'n
             context.update({
                 'active_stops': active_stops,
                 'completed_stops': completed_stops,
+                'stats': stats,
+                'start_filter': start_filter,
+                'end_filter': end_filter,
                 'override_entry': str(override_entry),
                 'override_exit': str(override_exit),
                 }
@@ -149,6 +162,22 @@ def get_filtered_completed_stops(user, start_date_converted, end_date_converted,
 
     completed_stops = completed_stops_1 | completed_stops_2
     return completed_stops
+
+def get_filtered_stats(start_date_converted, end_date_converted, park_num):
+    '''
+    Get all stats with the given filters, based on which is not None
+    '''
+    #stats filters by start_time that is between start_date_converted and end_date_converted
+    args = {}
+    if start_date_converted and end_date_converted:
+        args['date__range'] = [start_date_converted, end_date_converted]
+    if park_num:
+        args['park'] = park_num
+    stats = Statistic.objects.filter(**args)
+    #convert stats.average_time to hour:minute:second format
+    for stat in stats:
+        stat.average_time = str(stat.average_time).split('.')[0]
+    return stats
 
 def get_door_state(request, door):
     if request.method == 'GET' and request.user.is_superuser:

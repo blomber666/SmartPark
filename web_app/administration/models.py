@@ -1,6 +1,6 @@
 from django.db import models
 from thingsboard_api_tools import TbApi
-from parkings.models import Stop, Payment
+from parkings.models import Stop, Payment, Statistic
 
 # # Create your models here.
 

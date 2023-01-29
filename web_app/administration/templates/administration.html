@@ -260,8 +260,46 @@
             </ul>
 
             <div id="fullWidthTabContent">
-                <div class="flex items-start py-4 px-2 bg-white/75 rounded-lg" id="stops" role="tabpanel" aria-labelledby="stops-tab">              
-                    <main>
+                <div class="flex items-start py-4 px-2 bg-white/75 rounded-lg" id="stops" role="tabpanel" aria-labelledby="stops-tab">
+                    <aside aria-label="Sidenav" style="padding-right: 0.5rem;">
+                        <div class="py-5 pl-3 h-full border-r border-gray-200">
+                            <form method="post" action="/administration/">
+                                {% csrf_token %}
+                                <ul class="flex  flex-col space-y-2">
+                                    <li>
+                                        <!-- //datepicker  -->
+                                        <div date-rangepicker class="flex flex-col space-y-2">
+                                        <div class="relative">
+                                            <div class="absolute inset-y-0 left-0 flex flex-wrap items-center pl-3 pointer-events-none" style="padding: 0.625rem;"> 
+                                                <svg aria-hidden="true" class="w-5 h-5 text-gray-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path></svg>
+                                            </div>
+                                            <input name="start_filter" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5" value="01/01/2000" placeholder="Select date start"  style="padding-left: 2.75rem;">
+                                        </div>
+                                        <div class="relative">
+                                            <div class="absolute inset-y-0 left-0 flex items-center pointer-events-none" style="padding: 0.625rem;">
+                                                <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path></svg>
+                                            </div>
+                                            <input name="end_filter" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 " placeholder="Select date end" style="padding-left: 2.75rem;">
+                                        </div>
+                                        </div>
+                                        <!-- end datapicker -->
+                                    </li>
+                                    <li>
+                                        <a class="flex items-center text-base font-normal text-gray-900 rounded-lg  group">
+                                            <input name="username" type="text" class="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 " placeholder="User">
+                                        </a>
+                                    </li>
+                                    <li>
+                                        <button class="text-gray-100 font-medium rounded-lg text-sm py-2.5 px-6 text-center inline-flex items-center mr-2 mb-2" style="background-color: #573b8a; color: #f9fafb;">
+                                            Filter
+                                        </button>
+                                    </li>
+                                </ul>
+                            </form>
+                        </div>
+                    </aside>
+                
+                    <main style="height: 28rem; width: 54rem; display: block; float: left; margin-left: 1.5rem; overflow-y: scroll; background: #e5e7eb; border-radius: 0.25rem;">
                         <table class="w-full h-max text-left text-gray-500">
                             <thead class="text-xs text-gray-700 uppercase bg-gray-50">
                                 <tr>
