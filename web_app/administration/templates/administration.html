@@ -30,6 +30,14 @@
             padding: 0.5rem;
             color: rgb(17 24 39);
         }
+        .price{
+            width: 9.75rem;
+            height: 2.5rem;
+            border-radius: 0.25rem;
+            font-size: 1rem;
+            font-weight: 200;
+            color: rgb(17 24 39);
+        }
         .indicator {
             width: 0.5rem;
             height: 0.5rem;
@@ -96,8 +104,11 @@
       <!-- <meta http-equiv="refresh" content="10"> -->
         <meta name="viewport" content="width=device-width, height=device-height,  initial-scale=1.0">
         <title>ADMIN</title>
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
         <script src="/media/update_parkings.js"></script>
         <script src="/media/update_doors.js"></script>
+        
         <script>
             // if start_filter is in context
             // change the value of the datepicker to the variable in context start_filter and username in context
@@ -124,7 +135,7 @@
 
     <div>
         <aside class="px-8 py-4 rounded-md bg-white/75 h-auto w-auto" aria-label="Sidenav" style="float: left; scale: 90%;">
-            <form method="post" action="/administration/">
+            <form method="post" action="filter/">
                 {% csrf_token %}
                 <ul class="flex flex-col space-y-2">
                     <li>
@@ -391,66 +402,85 @@
                 </div>
 
                 <div class="flex items-center justify-center p-4 bg-white/75 rounded-lg" id="price" role="tabpanel" aria-labelledby="price-tab">
-                    <div class=" items-center bg-white border rounded-lg shadow-md md:flex-row  dark:border-gray-700 dark:bg-gray-800">
-                        <h2 class="p-4 text-2xl font-extrabold tracking-tight text-gray-900 dark:text-white">Park details</h2>
-                        
-                        <div class="relative mx-4 mb-4 overflow-x-auto shadow-md sm:rounded-lg">
-                            <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                                <tbody>
-                                    <tr class="bg-gray-200 border-b dark:bg-gray-800 dark:border-gray-700">
-                                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                            Name
-                                        </th>
-                                        <td class="px-6 py-4">
-                                            Park 1
+                    <main>
+                        <table class="editable w-full h-max text-left text-gray-500 border-spacing-2 border border-slate-500">
+                            <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                                <tr>
+                                    <th scope="col" class="col-chart">
+                                        Date
+                                    </th>
+                                    <th scope="col" class="col-chart">
+                                        Day
+                                    </th>
+                                    <th scope="col" class="col-chart">
+                                        Start Time
+                                    </th>
+                                    <th scope="col" class="col-chart">
+                                        End Time
+                                    </th>
+                                    <th scope="col" class="col-chart">
+                                        Price
+                                    </th>
+                                    <th scope="col" class="col-chart">
+                                    </th>
+                                </tr>
+                            </thead> 
+                            <tbody>
+                                {% for price in prices %}
+                                <tr class="bg-gray-200 border-b border-gray-900">
+                                    <form method="post" action="price/">
+                                        <td scope="row" class="val-chart">
+                                            {{ price.date }}
                                         </td>
-                                    </tr>
-                                    <tr class="bg-gray-200 border-b dark:bg-gray-800 dark:border-gray-700">
-                                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                            Address
-                                        </th>
-                                        <td class="px-6 py-4">
-                                            Via Porta Reno, 80, 44122 Ferrara FE
+                                        <td scope="row" class="val-chart">
+                                            {{ price.day }}
                                         </td>
-                                    </tr>
-                                    <tr class="bg-gray-200 border-b dark:bg-gray-800 dark:border-gray-700">
-                                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                            Occupied
-                                        </th>
-                                        <td class="px-6 py-4">
-                                            <div class="flex justify-between mb-1">
-                                                <div class="my-[5px] mx-[9px] w-full bg-gray-300 rounded-full h-3 dark:bg-gray-700">
-                                                    <div id="park_percent" class="bg-[#573b8a] h-3 rounded-full" style="width: {{park_percent}}%"></div>
-                                                </div>
-                                            </div>
-                                            
+                                        <td scope="row" class="val-chart">
+                                            {{ price.start_time }}
                                         </td>
-                                    </tr>
-                                    <tr class="bg-gray-200 border-b dark:bg-gray-800 dark:border-gray-700">
-                                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                            Capacity
-                                        </th>
-                                        <td id="park_status" class="px-6 py-4">
-                                            {{park_status}} slots
+                                        <td scope="row" class="val-chart">
+                                            {{ price.end_time }}
                                         </td>
-                                    </tr>
-                                    <tr class="bg-gray-200 border-b dark:bg-gray-800 dark:border-gray-700">
-                                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                            Price
-                                        </th>
-                                        <td id="" class="px-6 py-4">
-                                            {{price}} €/minute
+                                        <td scope="row" class="val-chart">
+                                            {{ price.price }}
                                         </td>
-                                    </tr>
-                                </tbody>
-                            </table>
-                        </div>
-                    </div> 
-    
+                                        <td scope="row" class="val-chart">
+                                            <input type="submit" id="{{price.price_id}}" name="edit" class="btn"><i class="fa fa-trash"></i></input><!--update-->
+                                            <input type="submit" id="{{price.price_id}}" name="delete" class="btn"><i class="fa-solid fa-pen-to-square"></i></input><!--delete-->
+                                            <!-- <input type="submit" formmethod="get" formaction="search.php" id="{{price.price_id}}" class="btn"><i class="fa fa-close"></i></button> -->
+                                        </td>
+                                    </form>
+                                </tr>
+                                {% endfor %}
+                                <tr class="bg-gray-200 border-b border-gray-900">
+                                    <form method="post" action="price/">
+                                        <td scope="row" class="val-chart">
+                                            <input class="price" type="text" placeholder="Insert a date"></input>
+                                        </td>
+                                        <td scope="row" class="val-chart">
+                                            <input class="price" type="text" placeholder="Set day of the week"></input>
+                                        </td>
+                                        <td scope="row" class="val-chart">
+                                            <input class="price" type="text" placeholder="Set beginning day"></input>
+                                        </td>
+                                        <td scope="row" class="val-chart">
+                                            <input class="price" type="text" placeholder="Set ending day"></input>
+                                        </td>
+                                        <td scope="row" class="val-chart">
+                                            <input class="price" type="text" placeholder="Insert a price"></input>
+                                        </td>
+                                        <td scope="row" class="val-chart">
+                                            <input class="max-w-fit max-h-fit rounded-lg py-2 px-5 text-center inline-flex items-center" style="background: #573b8a; color: #f9fafb;" type="submit" id="{{price.price_id}}"><!--add-->
+                                            <!-- <input type="submit" formmethod="get" formaction="search.php" id="{{price.price_id}}" class="btn"><i class="fa fa-close"></i></button> -->
+                                        </td>
+                                    </form>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </main>
                 </div>
             </div>
         </div>
     </div>
 </html>
-
 {% endblock %}
