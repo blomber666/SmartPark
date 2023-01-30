@@ -10,10 +10,10 @@
     <style>
         main{
             height: auto; 
-            width: auto; 
-            display: block; 
+            width: 100%;
             margin-left: auto;
             margin-right: auto;
+            display: block; 
             overflow-y: scroll; 
             background: #e5e7eb; 
             border-radius: 0.25rem;
@@ -98,6 +98,27 @@
         <title>ADMIN</title>
         <script src="/media/update_parkings.js"></script>
         <script src="/media/update_doors.js"></script>
+        <script>
+            // if start_filter is in context
+            // change the value of the datepicker to the variable in context start_filter and username in context
+            // else do nothing
+            window.addEventListener('load', function() {
+                var start_filter = "{{ start_filter }}";
+                var end_filter = "{{ end_filter }}";
+                var username = "{{ username }}";
+
+                // if start_filter is not None 
+                if (start_filter != "None"){
+                    document.getElementById("start_filter").value = start_filter;
+                }
+                if (end_filter != "None"){
+                    document.getElementById("end_filter").value = end_filter;
+                }
+                if (username != "None"){
+                    document.getElementById("username").value = username;
+                }
+            });
+        </script>
       
     </head>
 
@@ -237,7 +258,7 @@
                 <div class="flex items-start py-4 px-2 bg-white/75 rounded-lg" id="stops" role="tabpanel" aria-labelledby="stops-tab">              
                     <main>
                         <table class="w-full h-max text-left text-gray-500">
-                            <thead class="text-xs text-gray-700 uppercase bg-gray-50">
+                            <thead class=" text-xs text-gray-700 uppercase bg-gray-50">
                                 <tr>
                                     <th scope="col" class="col-chart">
                                         User
