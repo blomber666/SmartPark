@@ -17,15 +17,16 @@ password = "tenant"
 tbapi = TbApi(url, username, password)
 
 
-def administration(request,context={'override_entry': 'null', 'override_exit':'null'}):
+def administration(request,):
     if not request.user.is_authenticated:
         messages.info(request,'HTTP ERROR: 401 - Unauthorized')
         return redirect('/')
     else:
         if request.user.is_superuser:
-
+            context = {'override_entry': 'null', 'override_exit': 'null'}
             start_filter = None
             end_filter = None
+            username = None
            
             if request.method == 'GET':
                 print("\n\n", request, "\n\n" )
@@ -43,25 +44,7 @@ def administration(request,context={'override_entry': 'null', 'override_exit':'n
                 print("\n\n", request.body , "\n\n" )
                 print("\n\n")
 
-                smartpark = None
-                park_num = None
-                start_filter = None
-                start_date_converted = None
-                end_filter = None
-                end_date_converted = None
-                username = None
-
-                if 'focus' in request.POST and request.POST.get("focus")!='':
-                    focus = request.POST.get("focus")
-                    print(focus)
-
-                if 'smartpark' in request.POST and request.POST.get("smartpark")!='':
-                    smartpark = request.POST.get("smartpark")
-                    if 'hoose' in smartpark:
-                        smartpark = None
-                    else: 
-                        park_num = smartpark[-1]
-                    print(park_num)
+                park_num = 1
 
                 if 'start_filter' in request.POST and request.POST.get("start_filter")!='':
                     start_filter = request.POST.get("start_filter")
@@ -70,6 +53,7 @@ def administration(request,context={'override_entry': 'null', 'override_exit':'n
                     start_date_converted = datetime.strptime(start_filter, '%m/%d/%Y')
                     start_date_converted = start_date_converted.date()
                     print(start_date_converted)
+                    context.update({'start_filter': start_filter})
 
                 if 'end_filter' in request.POST and request.POST.get("end_filter")!='':
                     end_filter = request.POST.get("end_filter")
@@ -77,12 +61,14 @@ def administration(request,context={'override_entry': 'null', 'override_exit':'n
                     end_date_converted = datetime.strptime(end_filter, '%m/%d/%Y')
                     end_date_converted = end_date_converted.date()
                     print(end_date_converted)
+                    context.update({'end_filter': end_filter})
                 else:
                     end_date_converted = datetime.today().date()
                 
                 if 'username' in request.POST and request.POST.get("username")!='':
                     username = request.POST.get("username")
                     print(username)
+                    context.update({'username': username})
 
                 
                 active_stops = get_filtered_active_stops(username, start_date_converted, end_date_converted, park_num)
@@ -105,8 +91,6 @@ def administration(request,context={'override_entry': 'null', 'override_exit':'n
                 'active_stops': active_stops,
                 'completed_stops': completed_stops,
                 'stats': stats,
-                'start_filter': start_filter,
-                'end_filter': end_filter,
                 'override_entry': str(override_entry),
                 'override_exit': str(override_exit),
                 }
