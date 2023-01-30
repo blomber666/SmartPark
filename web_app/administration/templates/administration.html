@@ -11,7 +11,6 @@
         main{
             height: auto; 
             width: auto; 
-            min-height: 10rem;
             display: block; 
             margin-left: auto;
             margin-right: auto;
@@ -97,45 +96,15 @@
       <!-- <meta http-equiv="refresh" content="10"> -->
         <meta name="viewport" content="width=device-width, height=device-height,  initial-scale=1.0">
         <title>ADMIN</title>
-        <script>
-            window.addEventListener('load', function() {
-
-                updateLiveGate = 
-                    function(smartpark, door){
-                        var url = 'state/door_'+ smartpark +'_'+ door +'/';
-                        var div = null
-
-                        fetch(url)
-                        .then((response) => {
-                            return response.text()
-                        })
-                        .then((html) => {
-                            if (door == 1){
-                                document.getElementById("entry_state").innerHTML = html;
-                                // alert("ok entry" + html);
-                            }
-                            else{
-                                document.getElementById("exit_state").innerHTML=html;
-                                // alert("ok exit"+html); 
-                            }
-                        })
-
-                    };
-
-                setInterval(updateLiveGate, 3000, 1, 1); //entry door state
-
-                setInterval(updateLiveGate, 3000, 1, 2); //exit door state
-
-
-            });
-        </script>
-
+        <script src="/media/update_parkings.js"></script>
+        <script src="/media/update_doors.js"></script>
       
     </head>
 
     <div>
         <aside class="px-8 py-4 rounded-md bg-white/75 h-auto w-auto" aria-label="Sidenav" style="float: left; scale: 90%;">
             <form method="post" action="/administration/">
+                {% csrf_token %}
                 <ul class="flex flex-col space-y-2">
                     <li>
                         <select name="smartparks" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg w-3/4 p-2.5" style="margin: 1.5rem; scale: 125%;">
@@ -396,12 +365,20 @@
                 </div>
 
                 <div class="flex items-center justify-center p-4 bg-white/75 rounded-lg" id="price" role="tabpanel" aria-labelledby="price-tab">
-                    <!-- <div class=" items-center bg-white border rounded-lg shadow-md md:flex-row  dark:border-gray-700 dark:bg-gray-800">
+                    <div class=" items-center bg-white border rounded-lg shadow-md md:flex-row  dark:border-gray-700 dark:bg-gray-800">
                         <h2 class="p-4 text-2xl font-extrabold tracking-tight text-gray-900 dark:text-white">Park details</h2>
                         
                         <div class="relative mx-4 mb-4 overflow-x-auto shadow-md sm:rounded-lg">
                             <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
                                 <tbody>
+                                    <tr class="bg-gray-200 border-b dark:bg-gray-800 dark:border-gray-700">
+                                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                            Name
+                                        </th>
+                                        <td class="px-6 py-4">
+                                            Park 1
+                                        </td>
+                                    </tr>
                                     <tr class="bg-gray-200 border-b dark:bg-gray-800 dark:border-gray-700">
                                         <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                             Address
@@ -412,13 +389,12 @@
                                     </tr>
                                     <tr class="bg-gray-200 border-b dark:bg-gray-800 dark:border-gray-700">
                                         <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                            Status
+                                            Occupied
                                         </th>
                                         <td class="px-6 py-4">
                                             <div class="flex justify-between mb-1">
-                                                <span>{{park_status}}</span>
                                                 <div class="my-[5px] mx-[9px] w-full bg-gray-300 rounded-full h-3 dark:bg-gray-700">
-                                                    <div class="bg-[#573b8a] h-3 rounded-full" style="width: {{park_percent}}%"></div>
+                                                    <div id="park_percent" class="bg-[#573b8a] h-3 rounded-full" style="width: {{park_percent}}%"></div>
                                                 </div>
                                             </div>
                                             
@@ -428,30 +404,22 @@
                                         <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                             Capacity
                                         </th>
-                                        <td class="px-6 py-4">
-                                            {{total_spaces}} slots
+                                        <td id="park_status" class="px-6 py-4">
+                                            {{park_status}} slots
                                         </td>
                                     </tr>
                                     <tr class="bg-gray-200 border-b dark:bg-gray-800 dark:border-gray-700">
                                         <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                             Price
                                         </th>
-                                        <td class="px-6 py-4">
+                                        <td id="" class="px-6 py-4">
                                             {{price}} €/minute
-                                        </td>
-                                    </tr>
-                                    <tr class="bg-gray-200 border-b dark:bg-gray-800 dark:border-gray-700">
-                                        <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                            Last stop
-                                        </th>
-                                        <td class="px-6 py-4">
-                                            {{last_time}}
                                         </td>
                                     </tr>
                                 </tbody>
                             </table>
                         </div>
-                    </div> -->
+                    </div> 
     
                 </div>
             </div>
