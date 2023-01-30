@@ -429,6 +429,7 @@
                                 {% for price in prices %}
                                 <tr class="bg-gray-200 border-b border-gray-900">
                                     <form method="post" action="price/">
+                                        {% csrf_token %}
                                         <td scope="row" class="val-chart">
                                             {{ price.date }}
                                         </td>
@@ -446,7 +447,7 @@
                                         </td>
                                         <td scope="row" class="val-chart">
                                             <input type="submit" id="{{price.price_id}}" name="edit" class="btn"><i class="fa fa-trash"></i></input><!--update-->
-                                            <input type="submit" id="{{price.price_id}}" name="delete" class="btn"><i class="fa-solid fa-pen-to-square"></i></input><!--delete-->
+                                            <input type="submit" id="{{price.price_id}}" name="delete" class="btn"><i class="fa fa-pen-to-square"></i></input><!--delete-->
                                             <!-- <input type="submit" formmethod="get" formaction="search.php" id="{{price.price_id}}" class="btn"><i class="fa fa-close"></i></button> -->
                                         </td>
                                     </form>
@@ -454,23 +455,24 @@
                                 {% endfor %}
                                 <tr class="bg-gray-200 border-b border-gray-900">
                                     <form method="post" action="price/">
+                                        {% csrf_token %}
                                         <td scope="row" class="val-chart">
-                                            <input class="price" type="text" placeholder="Insert a date"></input>
+                                            <input name="date" class="price" type="text" placeholder="YYYY-MM-DD"></input>
                                         </td>
                                         <td scope="row" class="val-chart">
-                                            <input class="price" type="text" placeholder="Set day of the week"></input>
+                                            <input name="day" class="price" type="text" placeholder="Set day of the week"></input>
                                         </td>
                                         <td scope="row" class="val-chart">
-                                            <input class="price" type="text" placeholder="Set beginning day"></input>
+                                            <input name="start_time" class="price" type="text" placeholder="Set beginning day"></input>
                                         </td>
                                         <td scope="row" class="val-chart">
-                                            <input class="price" type="text" placeholder="Set ending day"></input>
+                                            <input name="end_time" class="price" type="text" placeholder="Set ending day"></input>
                                         </td>
                                         <td scope="row" class="val-chart">
-                                            <input class="price" type="text" placeholder="Insert a price"></input>
+                                            <input name="price" class="price" type="text" placeholder="Insert a price"></input>
                                         </td>
                                         <td scope="row" class="val-chart">
-                                            <input class="max-w-fit max-h-fit rounded-lg py-2 px-5 text-center inline-flex items-center" style="background: #573b8a; color: #f9fafb;" type="submit" id="{{price.price_id}}"><!--add-->
+                                            <input name="add" class="max-w-fit max-h-fit rounded-lg py-2 px-5 text-center inline-flex items-center" style="background: #573b8a; color: #f9fafb;" type="submit"><!--add-->
                                             <!-- <input type="submit" formmethod="get" formaction="search.php" id="{{price.price_id}}" class="btn"><i class="fa fa-close"></i></button> -->
                                         </td>
                                     </form>

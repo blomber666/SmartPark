@@ -9,6 +9,7 @@ from django.contrib import messages
 from push_telemetry import main as push_telemetry
 from datetime import datetime
 from datetime import timedelta
+from datetime import time
 
 
 # ThingsBoard REST API URL
@@ -17,6 +18,15 @@ username = "tenant@thingsboard.org"
 password = "tenant"
 tbapi = TbApi(url, username, password)
 
+week_days = {
+    '0' : 'Monday',
+    '1' : 'Tuesday',
+    '2' : 'Wednesday',
+    '3' : 'Thursday',
+    '4' : 'Friday',
+    '5' : 'Saturday',
+    '6' : 'Sunday',
+}
 
 def administration(request,):
     if not request.user.is_authenticated:
@@ -44,6 +54,14 @@ def administration(request,):
                     stat.average_time = str(stat.average_time).split('.')[0]
 
                 prices = Price.objects.all()
+                for price in prices:
+                    if price.start_time == time(0,0,0):
+                        price.start_time = '00:00:00'
+
+                    if price.end_time == time(23, 59, 59):
+                        price.end_time = '23:59:59'
+
+                    price.day = week_days[str(price.day)]
 
             elif request.method == 'POST':
                 print("\n\n", request.body , "\n\n" )
@@ -230,24 +248,35 @@ def price(request):
     else:
         if request.user.is_superuser:
             if request.method == 'POST':
+                print("\n\npost request:\n\n")
                 if 'add' in request.POST:
                     print("\n\n price:\n", request.POST, "\n\n")
-                    new_price = Price()
-                    new_price.park = 1
-                    new_price.start_time = request.POST['start_time']
-                    new_price.end_time = request.POST['end_time']
-                    new_price.price = request.POST['price']
-                    new_price.date = request.POST['date']
-                    new_price.day = int(request.POST['day'])
-                    new_price.save()
-                    return redirect('/administration')
-                
-                elif 'edit' in request.POST:
-                    print("\n\n price:\n", request.POST, "\n\n")
-                    pass
+                    args = {}
 
-                elif 'delete' in request.POST:
-                    print("\n\n price:\n", request.POST, "\n\n")
-                    pass
+                    args['park'] = 'park_1'
+                    
+                    args['date'] = request.POST['date'] if  request.POST['date']!="" else None
+                    args['day'] = request.POST['day'] if  request.POST['day']!="" else None
+                    # start_time is of type models.TimeField()
+                    args['start_time'] = request.POST['start_time'] if  request.POST['start_time']!="" else time(0, 0, 0)
+                    args['end_time'] = request.POST['end_time'] if  request.POST['end_time']!="" else time(23, 59, 59)
+                    args['price'] = request.POST['price'] if  request.POST['price']!="" else None
+                    price = Price.objects.create(**args)
+                    price.save()
+                    
+                    return redirect('/administration')
+                else:
+                    return redirect('/administration')
+                # elif 'edit' in request.POST:
+                #     print("\n\n price:\n", request.POST, "\n\n")
+                #     pass
+
+                # elif 'delete' in request.POST:
+                #     print("\n\n price:\n", request.POST, "\n\n")
+                #     pass
             else:
                 return redirect('/administration')
+
+        else:
+            return redirect('/administration')
+
