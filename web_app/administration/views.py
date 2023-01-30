@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.shortcuts import redirect
-from .models import Stop, TbApi, Statistic
+from thingsboard_api_tools import TbApi
+from parkings.models import Stop, Payment, Statistic, Price
 from users.models import User
 #, FilterModel
 from django.contrib import messages
@@ -25,7 +26,9 @@ def administration(request,):
         if request.user.is_superuser:
             context = {'override_entry': 'null', 'override_exit': 'null'}
             start_filter = None
+            start_date_converted = None
             end_filter = None
+            end_date_converted = None
             username = None
            
             if request.method == 'GET':
@@ -39,6 +42,8 @@ def administration(request,):
                 #convert stats.average_time to hour:minute:second format
                 for stat in stats:
                     stat.average_time = str(stat.average_time).split('.')[0]
+
+                prices = Price.objects.all()
 
             elif request.method == 'POST':
                 print("\n\n", request.body , "\n\n" )
@@ -77,6 +82,8 @@ def administration(request,):
 
                 stats = get_filtered_stats(start_date_converted, end_date_converted, park_num)
 
+                prices = Price.objects.all()
+
 
 
 
@@ -91,6 +98,7 @@ def administration(request,):
                 'active_stops': active_stops,
                 'completed_stops': completed_stops,
                 'stats': stats,
+                'prices': prices,
                 'override_entry': str(override_entry),
                 'override_exit': str(override_exit),
                 }
@@ -172,6 +180,8 @@ def get_door_state(request, door):
         return render(request,'override.html', {'door': door_state})
 
 
+def filter(request):
+    return render(request, 'filter.html')
 def override(request):
     '''
     Override the gate:
@@ -213,4 +223,31 @@ def override(request):
         else:
             return redirect('/home')
 
+def price(request):
+    if not request.user.is_authenticated:
+        messages.info(request,'HTTP ERROR: 401 - Unauthorized')
+        return redirect('/')
+    else:
+        if request.user.is_superuser:
+            if request.method == 'POST':
+                if 'add' in request.POST:
+                    print("\n\n price:\n", request.POST, "\n\n")
+                    new_price = Price()
+                    new_price.park = 1
+                    new_price.start_time = request.POST['start_time']
+                    new_price.end_time = request.POST['end_time']
+                    new_price.price = request.POST['price']
+                    new_price.date = request.POST['date']
+                    new_price.day = int(request.POST['day'])
+                    new_price.save()
+                    return redirect('/administration')
+                
+                elif 'edit' in request.POST:
+                    print("\n\n price:\n", request.POST, "\n\n")
+                    pass
 
+                elif 'delete' in request.POST:
+                    print("\n\n price:\n", request.POST, "\n\n")
+                    pass
+            else:
+                return redirect('/administration')

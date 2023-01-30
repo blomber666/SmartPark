@@ -30,7 +30,9 @@ urlpatterns = [
     path('park_1/', parkings_views.park_1, name='park_1'),
     path('park_1/pay/', parkings_views.pay, name='pay'),
     path('administration/', admin_views.administration, name='administration'),
+    path('administration/filter/', admin_views.filter, name='filter'),
     path('administration/override/', admin_views.override, name='override'),
+    path('administration/price', admin_views.price, name='price'),
     #API
     path('administration/state/<str:door>/', admin_views.get_door_state, name='get_door_state'),
     path('update_parkings/', parkings_views.get_parkings, name='get_parkings'),
