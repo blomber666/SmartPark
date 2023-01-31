@@ -2,6 +2,7 @@ from django.shortcuts import render
 from parkings.map_tools import generate_map
 #from users import views as users_views
 from parkings.models import Stop, Payment, TbApi
+from users.models import User
 from django.shortcuts import redirect
 from django.utils import timezone
 from django.contrib import messages
@@ -13,7 +14,7 @@ def park_1(request, context=None):
     
     if request.user.is_authenticated:
         free_spaces, total_spaces = generate_map('parkings/static/park_1.json')
-        #get the stop with the plate as foreign key
+
         stop = Stop.objects.filter(user=request.user).last()
         start = stop.start_time if stop and stop.start_time else None
         end = stop.end_time if stop and stop.end_time else None
@@ -36,7 +37,7 @@ def park_1(request, context=None):
         price_device = tbapi.get_device_by_name('price_1')
         price = tbapi.get_telemetry(price_device['id']['id'], telemetry_keys=["price"])['price'][0]['value']
 
-        payment = Payment.objects.filter(stop_id=stop.stop_id).last() if stop else None
+        payment = Payment.objects.filter(stop=stop).last() if stop else None
         if payment:
             amount = f'{payment.amount}€'
         elif stop:

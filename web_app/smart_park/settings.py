@@ -47,7 +47,7 @@ INSTALLED_APPS = [
     #'users.apps.UsersConfig',
     'users',
     'parkings',
-    # 'administration',
+    'administration',
     'tailwind',
     #'django_browser_reload',
     'sslserver'
