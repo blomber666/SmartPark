@@ -26,6 +26,7 @@ week_days = {
     '4' : 'Friday',
     '5' : 'Saturday',
     '6' : 'Sunday',
+    'None' : '',
 }
 
 def administration(request,):
