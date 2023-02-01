@@ -9,13 +9,14 @@
 <html>
     <style>
         main{
-            height: auto; 
+            max-height: 558px;
+            height: auto;
             width: 100%;
             margin-left: auto;
             margin-right: auto;
-            display: block; 
-            overflow-y: scroll; 
-            background: #e5e7eb; 
+            display: block;
+            overflow-y: scroll;
+            background: #e5e7eb;
             border-radius: 0.25rem;
         }
         hr{
@@ -55,22 +56,22 @@
         }
         .indicator.gray{
             background-color:  #87909b;
-        } 
+        }
         .lil-span
-        { 
-            padding-left: 0.625rem; 
+        {
+            padding-left: 0.625rem;
             padding-right: 0.625rem;
-            font-size: 0.75rem; 
+            font-size: 0.75rem;
             line-height: 1rem;
             font-weight: 500;
-            margin-right: 0.5rem; 
+            margin-right: 0.5rem;
             padding-left: 0.625rem;
             padding-right: 0.625rem;
             padding-top: 0.125rem;
             padding-bottom: 0.125rem;
         }
         .green-span{
-            color: #03543f; 
+            color: #03543f;
             background-color: #def7ec;
         }
         .red-span{
@@ -80,6 +81,7 @@
         .gray-span{
             color: #494848;
             background-color: #e2e1e1;
+
         }
         .gate{
             font-size: 0.875rem;
@@ -107,50 +109,17 @@
       <!-- <meta http-equiv="refresh" content="10"> -->
         <meta name="viewport" content="width=device-width, height=device-height,  initial-scale=1.0">
         <title>ADMIN</title>
-        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-        <script>
-            $(document).ready(function() {
-                alert("hello");
-                var $submit = $('svg[id="confirm"]').style.display="none",
-                    $cancel = $('svg[id="cancel"]').style.display="none",
-                    $ed = $('button[name="edit"]').click(function() {
-                        if ($ed.is(":checked")){
-                            $submit.class("block");
-                            $cancel.class("block");
-                            $('svg[id="edit"]').class("hidden");
-                            $('svg[id="delete"]').class("hidden");
-                            $('svg[id="Layer_1"]').prop("name", "edit");
-                        // $('td["{{price.price_id}}"]').each(function() {
-                        //     $(this).attr("contenteditable", "true");
-                        // });
-                        }
-                    }),
-                    $del = $('button[name="delete"]').click(function() {
-                        $submit.show($del.is(":checked"));
-                        $cancel.show($del.is(":checked"));
-                        $('div[id="edit"]').hide($del.is(":checked"));
-                        $('div[id="delete"]').hide($del.is(":checked"));
-                        $('svg[id="Layer_1"]').prop("name", "delete");
-                    }),
-                    $canc = $('button[name="cancel"]').click(function() {
-                        $ed.attr("checked", false);
-                        $del.attr("checked", false);
-                        $submit.hide($canc.is(":checked"));
-                        $cancel.hide($canc.is(":checked"));
-                        $('div[id="edit"]').show($canc.is(":checked"));
-                        $('div[id="delete"]').show($canc.is(":checked"));
-                        $canc.attr("checked", false);
-                    });
+        <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> -->
 
-            });
-        </script>
-        <script src="/media/update_parkings.js"></script>
-        <script src="/media/update_doors.js"></script>
-        
+        <script src="/static/js/change_buttons.js"></script>
+        <script src="/static/js/update_parkings.js"></script>
+        <script src="/static/js/update_doors.js"></script>
+        <!-- <script src="/static/js/session.js"></script> -->
         <script>
             // if start_filter is in context
             // change the value of the datepicker to the variable in context start_filter and username in context
             // else do nothing
+
             window.addEventListener('load', function() {
                 var start_filter = "{{ start_filter }}";
                 var end_filter = "{{ end_filter }}";
@@ -159,7 +128,7 @@
                 var sensor_field = "{{ sensor_field }}";
                 var sensor_value = "{{ sensor_value }}";
 
-                // if start_filter is not None 
+                // if start_filter is not None
                 if (start_filter != "None"){
                     document.getElementById("start_filter").value = start_filter;
                 }
@@ -180,11 +149,54 @@
                 }
             });
         </script>
-      
+        <script>
+            var store = sessionStorage.get("store") || {'focus':""};
+
+            window.addEventListener('load', function (){
+                alert("eccoci");
+                var stops=document.getElementById("stops-tab");
+                var stats=document.getElementById("stats-tab");
+                var price=document.getElementById("price-tab");
+                alert("variabili settate");
+                switch (store.focus) {
+                    case 'stops-tabs':
+                        alert("stop focused");
+                        stops.setAttribute("aria-selected", "true");
+                        stats.setAttribute("aria-selected", "false");
+                        price.setAttribute("aria-selected", "false");
+                    case 'stats-tabs':
+                        alert("stats focused");
+                        stops.setAttribute("aria-selected", "false");
+                        stats.setAttribute("aria-selected", "true");
+                        price.setAttribute("aria-selected", "false");
+                    case 'price-tabs':
+                        alert("price focused");
+                        stops.setAttribute("aria-selected", "false");
+                        stats.setAttribute("aria-selected", "false");
+                        price.setAttribute("aria-selected", "true");
+                };
+                stops.addEventListener('click', function(){
+                    alert("focus on stops");
+                    store.focus = "stops-tab";                    
+                });
+                stats.addEventListener('click', function(){
+                    alert("focus on stats");
+                    store.focus = "stats-tab";
+                });
+                price.addEventListener('click', function(){
+                    alert("focus on price");
+                    store.focus = "price-tab";
+                });
+
+            });
+            window.addEventListener('beforeunload', function () {
+                sessionStorage.setItem("store", store);
+            });
+        </script>
     </head>
 
-    <div>
-        <aside class="px-8 py-4 rounded-md bg-white/75 h-auto w-auto" aria-label="Sidenav" style="float: left; scale: %; transform-origin: top;">
+    <div style="scale: 93%; transform-origin: top;">
+        <aside class="px-8 py-4 rounded-md bg-white/75 h-auto w-auto" aria-label="Sidenav" style="float: left; scale: 90%; transform-origin: top;">
             <form method="post" action="/administration/">
                 {% csrf_token %}
                 <ul class="flex flex-col space-y-2">
@@ -192,7 +204,7 @@
                         <!-- //datepicker  -->
                         <div date-rangepicker class="flex flex-col space-y-2">
                         <div class="relative">
-                            <div class="absolute inset-y-0 left-0 flex flex-wrap items-center pl-3 pointer-events-none" style="padding: 0.625rem;"> 
+                            <div class="absolute inset-y-0 left-0 flex flex-wrap items-center pl-3 pointer-events-none" style="padding: 0.625rem;">
                                 <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path></svg>
                             </div>
                             <input name="start_filter"  id="start_filter" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5" placeholder="Select date start"  style="padding-left: 2.75rem;">
@@ -219,7 +231,7 @@
                             Reset</button>
                     </li>
 
-                    
+
 
                 </ul>
             </form>
@@ -229,7 +241,7 @@
                     <div class="font-bold">ENTRY GATE CONTROL</div>
                 </li>
                 <li>
-                    <div id="entry_state"> 
+                    <div id="entry_state">
                         <span class="gray-span lil-span inline-flex items-center rounded-full">
                             <span class="indicator gray"></span>
                             Loading...
@@ -259,8 +271,8 @@
                     <hr noshade class="mt-2 mb-1">
                     <div class="font-bold">EXIT GATE CONTROL</div>
                 </li>
-                <li> 
-                    <div id="exit_state"> 
+                <li>
+                    <div id="exit_state">
                         <span class="gray-span lil-span inline-flex items-center rounded-full">
                             <span class="indicator gray"></span>
                             Loading...
@@ -278,7 +290,7 @@
                         <input type='submit' class="cursor-pointer gate open" name="exit_open" value="Open">
                         <input type='submit' class="cursor-pointer gate default" name="exit_default" value="Default">
                         <input type='submit' class="cursor-pointer gate close focus" name="exit_close" value="Close">
-                        {% else %} 
+                        {% else %}
                         <!-- // override_exit == 'null' -->
                         <input type='submit' class="cursor-pointer gate open" name="exit_open" value="Open">
                         <input type='submit' class="cursor-pointer gate default focus" name="exit_default" value="Default">
@@ -316,8 +328,8 @@
                             {% for message in messages %}
                             <ul class="mt-2 flex flex-col justify-center space-y-2">
                                 <li class="rounded-lg p-2 text-white text-[15px] text-center font-bold" style="background-color: #0e9f6e;">
-                                    {{ message }} 
-                                </li>	          
+                                    {{ message }}
+                                </li>
                             </ul>
                             {% endfor %}
                             {% endif %}
@@ -329,11 +341,11 @@
                                 <button name="sensor_send" class="text-gray-100 font-medium rounded-lg text-sm py-2.5 px-6 text-center inline-flex items-center mr-2 mb-2" style="background: #573b8a; color: #f9fafb;">
                                     Send</button>
                             </li>
-           
+
                         </ul>
                     </form>
                 </li>
-                
+
             </ul>
         </aside>
         <div class="px-8 space-y-2  rounded-lg shadow-md ">
@@ -358,7 +370,7 @@
             </ul>
 
             <div id="fullWidthTabContent">
-                <div class="flex items-start py-4 px-2 bg-white/75 rounded-lg" id="stops" role="tabpanel" aria-labelledby="stops-tab">              
+                <div class="flex items-start py-4 px-2 bg-white/75 rounded-lg" id="stops" role="tabpanel" aria-labelledby="stops-tab">
                     <main>
                         <table class="w-full h-max text-left text-gray-500">
                             <thead class=" text-xs text-gray-700 uppercase bg-gray-50">
@@ -376,7 +388,7 @@
                                         Active
                                     </th>
                                 </tr>
-                            </thead> 
+                            </thead>
                             <tbody>
                                 {% for stop in active_stops %}
                                 <tr class="bg-gray-200  border-gray-900">
@@ -420,7 +432,7 @@
                         </table>
                     </main>
                 </div>
-                
+
                 <div class="flex items-start py-4 px-2 bg-white/75 rounded-lg" id="stats" role="tabpanel" aria-labelledby="stats-tab">
 
                     <main>
@@ -455,7 +467,7 @@
                                         Avg Time/Stop
                                     </th>
                                 </tr>
-                            </thead> 
+                            </thead>
                             <tbody>
                                 {% for stat in stats %}
                                 <tr class="bg-gray-200  border-gray-900">
@@ -516,70 +528,67 @@
                                     <th scope="col" class="col-chart">
                                     </th>
                                 </tr>
-                            </thead> 
+                            </thead>
                             <tbody>
                                 {% for price in prices %}
                                 <tr class="bg-gray-200  border-gray-900">
                                     <form method="post" action="price/">
                                         {% csrf_token %}
-                                        <td scope="row" id="{{price.price_id}}" class="val-chart">
+                                        <td scope="row" id="date-{{price.id}}" name="{{price.id}}" class="val-chart">
                                             {{ price.date }}
                                         </td>
-                                        <td scope="row" id="{{price.price_id}}" class="val-chart">
+                                        <td scope="row" id="day-{{price.id}}" name="{{price.id}}" class="val-chart">
                                             {{ price.day }}
                                         </td>
-                                        <td scope="row" id="{{price.price_id}}" class="val-chart">
+                                        <td scope="row" id="s_time-{{price.id}}" name="{{price.id}}" class="val-chart">
                                             {{ price.start_time }}
                                         </td>
-                                        <td scope="row" id="{{price.price_id}}" class="val-chart">
+                                        <td scope="row" id="e_time-{{price.id}}" name="{{price.id}}" class="val-chart">
                                             {{ price.end_time }}
                                         </td>
-                                        <td scope="row" id="{{price.price_id}}" class="val-chart">
+                                        <td scope="row" id="price-{{price.id}}" name="{{price.id}}" class="val-chart">
                                             {{ price.price }}
                                         </td>
                                         <td scope="row" class="val-chart flex flex-row space-x-2">
-                                            <button id="edit">
-                                                <svg id="edit" class="cursor-pointer"  style="background: #f9fafb; border-radius: 0.5rem; padding: 0.5rem" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" height="40" width="40">
+                                            <button id="edit-{{price.id}}" type="button" onclick='edit_click("{{price.id}}")'>
+                                                <svg style="background: #f9fafb; border-radius: 0.5rem; padding: 0.5rem" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" height="40" width="40">
                                                   <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                                                   <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
                                                   <g id="SVGRepo_iconCarrier">
                                                     <path d="M12 4H6C4.89543 4 4 4.89543 4 6V18C4 19.1046 4.89543 20 6 20H18C19.1046 20 20 19.1046 20 18V12M9 15V12.5L17.75 3.75C18.4404 3.05964 19.5596 3.05964 20.25 3.75V3.75C20.9404 4.44036 20.9404 5.55964 20.25 6.25L15.5 11L11.5 15H9Z" stroke="#573b8a" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"></path>
                                                   </g>
-                                                  <g type="checkbox" name="chk-edit" class="hidden"></g>
                                                 </svg>
                                             </button>
-                                            <button id="delete">
-                                                <svg style="background: #c81e1e; border-radius: 0.5rem; padding: 0.3rem" fill="#f9fafb" viewBox="-6 -6 36.00 36.00" xmlns="http://www.w3.org/2000/svg" id="delete" class="cursor-pointer icon glyph" stroke="#f9fafb" height="40" width="40">
+                                            <button id="remove-{{price.id}}" type="button" onclick='delete_click("{{price.id}}");'>
+                                                <svg style="background: #c81e1e; border-radius: 0.5rem; padding: 0.3rem" fill="#f9fafb" viewBox="-6 -6 36.00 36.00" xmlns="http://www.w3.org/2000/svg"  class="icon glyph" stroke="#f9fafb" height="40" width="40">
                                                     <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                                                     <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" stroke="#CCCCCC" stroke-width="0.43200000000000005"></g>
                                                     <g id="SVGRepo_iconCarrier">
-                                                    <path d="M17,4V5H15V4H9V5H7V4A2,2,0,0,1,9,2h6A2,2,0,0,1,17,4Z"></path>
-                                                    <path d="M20,6H4A1,1,0,0,0,4,8H5V20a2,2,0,0,0,2,2H17a2,2,0,0,0,2-2V8h1a1,1,0,0,0,0-2Z"></path>
+                                                        <path d="M17,4V5H15V4H9V5H7V4A2,2,0,0,1,9,2h6A2,2,0,0,1,17,4Z"></path>
+                                                        <path d="M20,6H4A1,1,0,0,0,4,8H5V20a2,2,0,0,0,2,2H17a2,2,0,0,0,2-2V8h1a1,1,0,0,0,0-2Z"></path>
                                                     </g>
-                                                    <g type="checkbox" name="chk-delete" class="hidden"></g>
                                                 </svg>
                                             </button>
-                                            <button id="confirm">
-                                                <svg action="/administration/" name="" class="hidden cursor-pointer" style="background: #046c4e; border-radius: 0.5rem; padding: 0.5rem" fill="#f9fafb" height="40" width="40" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 492 492" xml:space="preserve" transform="rotate(0)">
+                                            <button id="confirm-{{price.id}}" name="" style="display: none;" action="/administration/">
+                                                <svg style="background: #046c4e; border-radius: 0.5rem; padding: 0.5rem" fill="#f9fafb" height="40" width="40" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 492 492" xml:space="preserve" transform="rotate(0)">
                                                     <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                                                     <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
                                                     <g id="SVGRepo_iconCarrier">
-                                                    <g>
                                                         <g>
-                                                        <path d="M484.128,104.478l-16.116-16.116c-5.064-5.068-11.816-7.856-19.024-7.856c-7.208,0-13.964,2.788-19.028,7.856 L203.508,314.81L62.024,173.322c-5.064-5.06-11.82-7.852-19.028-7.852c-7.204,0-13.956,2.792-19.024,7.852l-16.12,16.112 C2.784,194.51,0,201.27,0,208.47c0,7.204,2.784,13.96,7.852,19.028l159.744,159.736c0.212,0.3,0.436,0.58,0.696,0.836 l16.12,15.852c5.064,5.048,11.82,7.572,19.084,7.572h0.084c7.212,0,13.968-2.524,19.024-7.572l16.124-15.992 c0.26-0.256,0.48-0.468,0.612-0.684l244.784-244.76C494.624,132.01,494.624,114.966,484.128,104.478z"></path>
+                                                            <g>
+                                                                <path d="M484.128,104.478l-16.116-16.116c-5.064-5.068-11.816-7.856-19.024-7.856c-7.208,0-13.964,2.788-19.028,7.856 L203.508,314.81L62.024,173.322c-5.064-5.06-11.82-7.852-19.028-7.852c-7.204,0-13.956,2.792-19.024,7.852l-16.12,16.112 C2.784,194.51,0,201.27,0,208.47c0,7.204,2.784,13.96,7.852,19.028l159.744,159.736c0.212,0.3,0.436,0.58,0.696,0.836 l16.12,15.852c5.064,5.048,11.82,7.572,19.084,7.572h0.084c7.212,0,13.968-2.524,19.024-7.572l16.124-15.992 c0.26-0.256,0.48-0.468,0.612-0.684l244.784-244.76C494.624,132.01,494.624,114.966,484.128,104.478z"></path>
+                                                            </g>
                                                         </g>
-                                                    </g>
                                                     </g>
                                                 </svg>
                                             </button>
-                                            <button id="cancel">
-                                                <svg style="background: #f9fafb; border-radius: 0.5rem; padding: 0.5rem" viewBox="0 0 1024 1024" class="hidden cursor-pointer icon" version="1.1" xmlns="http://www.w3.org/2000/svg" fill="#c81e1e" stroke="#c81e1e" height="40" width="40">
-                                                <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
-                                                <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
-                                                <g id="SVGRepo_iconCarrier">
-                                                    <path d="M704 288h-281.6l177.6-202.88a32 32 0 0 0-48.32-42.24l-224 256a30.08 30.08 0 0 0-2.24 3.84 32 32 0 0 0-2.88 4.16v1.92a32 32 0 0 0 0 5.12A32 32 0 0 0 320 320a32 32 0 0 0 0 4.8 32 32 0 0 0 0 5.12v1.92a32 32 0 0 0 2.88 4.16 30.08 30.08 0 0 0 2.24 3.84l224 256a32 32 0 1 0 48.32-42.24L422.4 352H704a224 224 0 0 1 224 224v128a224 224 0 0 1-224 224H320a232 232 0 0 1-28.16-1.6 32 32 0 0 0-35.84 27.84 32 32 0 0 0 27.84 35.52A295.04 295.04 0 0 0 320 992h384a288 288 0 0 0 288-288v-128a288 288 0 0 0-288-288zM103.04 760a32 32 0 0 0-62.08 16A289.92 289.92 0 0 0 140.16 928a32 32 0 0 0 40-49.92 225.6 225.6 0 0 1-77.12-118.08zM64 672a32 32 0 0 0 22.72-9.28 37.12 37.12 0 0 0 6.72-10.56A32 32 0 0 0 96 640a33.6 33.6 0 0 0-9.28-22.72 32 32 0 0 0-10.56-6.72 32 32 0 0 0-34.88 6.72A32 32 0 0 0 32 640a32 32 0 0 0 2.56 12.16 37.12 37.12 0 0 0 6.72 10.56A32 32 0 0 0 64 672z" fill="#c81e1e"></path>
-                                                </g>
-                                                <g type="checkbox" name="chk-cancel" hidden="true"></g>
+                                            <button id="cancel-{{price.id}}" type="button" onclick='cancel_click("{{price.id}}");' style="display: none;">
+                                                <svg style="background: #f9fafb; border-radius: 0.5rem; padding: 0.5rem" viewBox="0 0 1024 1024" class="icon" version="1.1" xmlns="http://www.w3.org/2000/svg" fill="#c81e1e" stroke="#c81e1e" height="40" width="40">
+                                                    <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
+                                                    <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
+                                                    <g id="SVGRepo_iconCarrier">
+                                                        <path d="M704 288h-281.6l177.6-202.88a32 32 0 0 0-48.32-42.24l-224 256a30.08 30.08 0 0 0-2.24 3.84 32 32 0 0 0-2.88 4.16v1.92a32 32 0 0 0 0 5.12A32 32 0 0 0 320 320a32 32 0 0 0 0 4.8 32 32 0 0 0 0 5.12v1.92a32 32 0 0 0 2.88 4.16 30.08 30.08 0 0 0 2.24 3.84l224 256a32 32 0 1 0 48.32-42.24L422.4 352H704a224 224 0 0 1 224 224v128a224 224 0 0 1-224 224H320a232 232 0 0 1-28.16-1.6 32 32 0 0 0-35.84 27.84 32 32 0 0 0 27.84 35.52A295.04 295.04 0 0 0 320 992h384a288 288 0 0 0 288-288v-128a288 288 0 0 0-288-288zM103.04 760a32 32 0 0 0-62.08 16A289.92 289.92 0 0 0 140.16 928a32 32 0 0 0 40-49.92 225.6 225.6 0 0 1-77.12-118.08zM64 672a32 32 0 0 0 22.72-9.28 37.12 37.12 0 0 0 6.72-10.56A32 32 0 0 0 96 640a33.6 33.6 0 0 0-9.28-22.72 32 32 0 0 0-10.56-6.72 32 32 0 0 0-34.88 6.72A32 32 0 0 0 32 640a32 32 0 0 0 2.56 12.16 37.12 37.12 0 0 0 6.72 10.56A32 32 0 0 0 64 672z" fill="#c81e1e"></path>
+                                                    </g>
                                                 </svg>
                                             </button>
                                         </td>
@@ -592,7 +601,7 @@
                                         <td scope="row" class="val-chart">
                                             <div class="relative">
                                                 <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"  style="padding: 0.625rem;">
-                                                  <svg aria-hidden="true" class="w-5 h-5 text-gray-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path></svg>
+                                                    <svg aria-hidden="true" class="w-5 h-5 text-gray-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path></svg>
                                                 </div>
                                                 <input datepicker name="date" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full pl-5" placeholder="Select date" style="padding-left: 2.5rem;">
                                             </div>

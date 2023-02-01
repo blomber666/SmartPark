@@ -74,9 +74,6 @@ def administration(request, context={}):
                     user_filter = request.POST.get("user_filter")
                     context.update({'user_filter': user_filter})
 
-            
-
-
             #get override telemetry
             override_entry = tbapi.get_device_by_name(name='override_1_1')
             override_entry = tbapi.get_latest_telemetry(override_entry['id'], telemetry_keys=["value"])["value"][0]['value']
@@ -289,7 +286,7 @@ def price(request):
                 elif 'delete' in request.POST:
 
                     args = {}
-                    args['price__id'] = request.POST['price_id']
+                    args['price_id'] = request.POST['price_id']
                     price = Price.objects.filter(**args)
                     price.delete()
 
