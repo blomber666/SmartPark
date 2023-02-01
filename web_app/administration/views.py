@@ -40,7 +40,7 @@ def administration(request,):
             start_date_converted = None
             end_filter = None
             end_date_converted = None
-            username = None
+            user_filter = None
            
             if request.method == 'GET':
                 print("\n\n", request, "\n\n" )
@@ -61,7 +61,7 @@ def administration(request,):
 
                     if price.end_time == time(23, 59, 59):
                         price.end_time = '23:59:59'
-
+                    print('\n\n\n', price.day, '\n\n\n')
                     price.day = week_days[str(price.day)]
 
             elif request.method == 'POST':
@@ -89,15 +89,15 @@ def administration(request,):
                 else:
                     end_date_converted = datetime.today().date()
                 
-                if 'username' in request.POST and request.POST.get("username")!='':
-                    username = request.POST.get("username")
-                    print(username)
-                    context.update({'username': username})
+                if 'user_filter' in request.POST and request.POST.get("user_filter")!='':
+                    user_filter = request.POST.get("user_filter")
+                    print(user_filter)
+                    context.update({'user_filter': user_filter})
 
                 
-                active_stops = get_filtered_active_stops(username, start_date_converted, end_date_converted, park_num)
+                active_stops = get_filtered_active_stops(user_filter, start_date_converted, end_date_converted, park_num)
                 #get all completed stops with start_time between start_filter and end_filter
-                completed_stops = get_filtered_completed_stops(username, start_date_converted, end_date_converted, park_num)
+                completed_stops = get_filtered_completed_stops(user_filter, start_date_converted, end_date_converted, park_num)
 
                 stats = get_filtered_stats(start_date_converted, end_date_converted, park_num)
 
@@ -255,29 +255,52 @@ def price(request):
                     args = {}
 
                     args['park'] = 'park_1'
+                    if 'date' in request.POST and request.POST['date']!="":
+                        args['date'] = request.POST['date']
+
+                    if 'day' in request.POST and request.POST['day']!="":
+                        args['day'] = request.POST['day']
+
+                    if 'start_time' in request.POST and request.POST['start_time']!="":
+                        args['start_time'] = request.POST['start_time']
+                    else:
+                        args['start_time'] = time(0, 0, 0)
+
+                    if 'end_time' in request.POST and request.POST['end_time']!="":
+                        args['end_time'] = request.POST['end_time']
+                    else:
+                        args['end_time'] = time(23, 59, 59)
                     
-                    args['date'] = request.POST['date'] if  request.POST['date']!="" else None
-                    args['day'] = request.POST['day'] if  request.POST['day']!="" else None
-                    # start_time is of type models.TimeField()
-                    args['start_time'] = request.POST['start_time'] if  request.POST['start_time']!="" else time(0, 0, 0)
-                    args['end_time'] = request.POST['end_time'] if  request.POST['end_time']!="" else time(23, 59, 59)
-                    args['price'] = request.POST['price'] if  request.POST['price']!="" else None
+                    if 'price' in request.POST and request.POST['price']!="":
+                        args['price'] = request.POST['price']
+                    else:
+                        args['price'] = 0
+                        
                     price = Price.objects.create(**args)
                     price.save()
                     
-                    return redirect('/administration')
-                else:
-                    return redirect('/administration')
-                # elif 'edit' in request.POST:
-                #     print("\n\n price:\n", request.POST, "\n\n")
-                #     pass
 
-                # elif 'delete' in request.POST:
-                #     print("\n\n price:\n", request.POST, "\n\n")
-                #     pass
-            else:
-                return redirect('/administration')
+                elif 'edit' in request.POST:
+                    print("\n\n price:\n", request.POST, "\n\n")
 
-        else:
-            return redirect('/administration')
+                    args['price__id'] = request.POST['price_id']
+                    price = Price.objects.filter(**args)
+                    
+                    args['park'] = 'park_1'
+                    args['date'] = request.POST['date']
+                    args['day'] = request.POST['day']
+                    args['start_time'] = request.POST['start_time']
+                    args['end_time'] = request.POST['end_time']
+                    args['price'] = request.POST['price']
+                    
+                    price.update(**args)
+
+                elif 'delete' in request.POST:
+                    print("\n\n price:\n", request.POST, "\n\n")
+                    args = {}
+                    args['price__id'] = request.POST['price_id']
+                    price = Price.objects.filter(**args)
+                    price.delete()
+
+        return redirect('/administration')        
 
