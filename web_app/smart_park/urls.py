@@ -30,7 +30,6 @@ urlpatterns = [
     path('park_1/', parkings_views.park_1, name='park_1'),
     path('park_1/pay/', parkings_views.pay, name='pay'),
     path('administration/', admin_views.administration, name='administration'),
-    path('administration/filter/', admin_views.filter, name='filter'),
     path('administration/override/', admin_views.override, name='override'),
     path('administration/price/', admin_views.price, name='price'),
     #API

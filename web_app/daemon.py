@@ -125,17 +125,25 @@ def control_entry_gate(tbapi, park_number, old_presence, plate):
 
                 else:
                     printc("CYAN",f"plate: {plate}")
-                    #save to db withou end time
-                    user = User.objects.get(username=plate)
-                    #check if the user has already a stop
-                    stop = Stop.objects.filter(user=user, end_time=None)
-                    if stop:
-                        printc('RED',"user already in the park")
+                    #check if user exists
+                    try:
+                        user = User.objects.get(username=plate)
+                        #save to db without end time
+                        #check if the user has already a stop
+                        stop = Stop.objects.filter(user=user, end_time=None)
+                        if stop:
+                            printc('RED',"user already in the park")
+                            presence = False
+                            plate = None
+                        else:
+                            stop = Stop(user=user, start_time=0, end_time=None, park=park_number)
+                            stop.save()
+                    #print any exception
+                    except User.DoesNotExist:
+                        printc("RED", "user does not exist")
                         presence = False
                         plate = None
-                    else:
-                        stop = Stop(user=user, start_time=0, end_time=None, park=park_number)
-                        stop.save()
+
 
             door_telemetry = tbapi.get_telemetry(door['id'], telemetry_keys=["open"])
             door_open = True if door_telemetry['open'][0]['value'] == '1' else False
@@ -209,27 +217,37 @@ def control_exit_gate(tbapi, park_number, old_presence, plate):
                 else:
                     printc("CYAN",f"plate: {plate}")
 
-                    #check if payed
-                    user = User.objects.get(username=plate)
-                    last_stop = Stop.objects.filter(user=user, end_time=None)
-                    if len(last_stop) != 1:
-                        printc("RED","user entered zero or more than one time")
+                    #check if user exists
+                    try:
+                        user = User.objects.get(username=plate)
+                        #check if payed
+
+                        last_stop = Stop.objects.filter(user=user, end_time=None)
+
+                        if len(last_stop) != 1:
+                            printc("RED","user entered zero or more than one time")
+                            presence = False
+                            plate = None
+                        else:
+                            last_stop = last_stop[0]
+                            #find the payment with the same stop id
+                            payment = Payment.objects.filter(stop=last_stop)
+                            #TODO check if the payment_time is less than 15 minutes ago
+                            if payment and payment[0].payment_time > timezone.now() - timedelta(minutes=15):
+                                printc("GREEN",f"payed{payment}")
+                                #update the stop
+                                last_stop.end_time = timezone.now()
+                                last_stop.save()
+                            else:
+                                printc("RED","not payed")
+                                plate = None
+                                presence = False
+                    #print any exception
+                    except User.DoesNotExist:
+                        printc("RED", "user does not exist")
                         presence = False
                         plate = None
-                    else:
-                        last_stop = last_stop[0]
-                        #find the payment with the same stop id
-                        payment = Payment.objects.filter(stop_id=last_stop.stop_id)
-                        #TODO check if the payment_time is less than 15 minutes ago
-                        if payment and payment[0].payment_time > timezone.now() - timedelta(minutes=15):
-                            printc("GREEN",f"payed{payment}")
-                            #update the stop
-                            last_stop.end_time = timezone.now()
-                            last_stop.save()
-                        else:
-                            printc("RED","not payed")
-                            plate = None
-                            presence = False
+
                     
             door_telemetry = tbapi.get_telemetry(door['id'], telemetry_keys=["open"])
             door_open = True if door_telemetry['open'][0]['value'] == '1' else False

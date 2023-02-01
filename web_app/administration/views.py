@@ -5,11 +5,13 @@ from parkings.models import Stop, Payment, Statistic, Price
 from users.models import User
 #, FilterModel
 from django.contrib import messages
+from django.urls import reverse
 
 from push_telemetry import main as push_telemetry
 from datetime import datetime
 from datetime import timedelta
 from datetime import time
+from push_telemetry import main as push_telemetry
 
 
 # ThingsBoard REST API URL
@@ -29,54 +31,34 @@ week_days = {
     'None' : '',
 }
 
-def administration(request,):
+def administration(request, context={}):
     if not request.user.is_authenticated:
         messages.info(request,'HTTP ERROR: 401 - Unauthorized')
         return redirect('/')
     else:
         if request.user.is_superuser:
-            context = {'override_entry': 'null', 'override_exit': 'null'}
+            context.update({'override_entry': 'null', 'override_exit': 'null'})
+            print('\n\n\n', context, '\n\n\n')
             start_filter = None
             start_date_converted = None
             end_filter = None
             end_date_converted = None
             user_filter = None
+            park_num = 1
            
             if request.method == 'GET':
-                print("\n\n", request, "\n\n" )
-                #get all active stops
-                active_stops = Stop.objects.filter(end_time=None)
-                #get all completed stops
-                completed_stops = Stop.objects.filter(end_time__isnull=False)
-
-                stats = Statistic.objects.all()
-                #convert stats.average_time to hour:minute:second format
-                for stat in stats:
-                    stat.average_time = str(stat.average_time).split('.')[0]
-
-                prices = Price.objects.all()
-                for price in prices:
-                    if price.start_time == time(0,0,0):
-                        price.start_time = '00:00:00'
-
-                    if price.end_time == time(23, 59, 59):
-                        price.end_time = '23:59:59'
-                    print('\n\n\n', price.day, '\n\n\n')
-                    price.day = week_days[str(price.day)]
-
+                pass
+      
             elif request.method == 'POST':
-                print("\n\n", request.body , "\n\n" )
-                print("\n\n")
 
-                park_num = 1
+                if 'sensor_get' in request.POST or 'sensor_send' in request.POST:
+                    new_context = sensor_control(request)
+                    context.update(new_context)
 
                 if 'start_filter' in request.POST and request.POST.get("start_filter")!='':
                     start_filter = request.POST.get("start_filter")
-                    print('\n\n\n', request.POST, '\n\n\n')
                     #convert to yyyy-mm-dd
-                    start_date_converted = datetime.strptime(start_filter, '%m/%d/%Y')
-                    start_date_converted = start_date_converted.date()
-                    print(start_date_converted)
+                    start_date_converted = datetime.strptime(start_filter, '%m/%d/%Y').date()
                     context.update({'start_filter': start_filter})
 
                 if 'end_filter' in request.POST and request.POST.get("end_filter")!='':
@@ -84,26 +66,15 @@ def administration(request,):
                     #convert to yyyy-mm-dd
                     end_date_converted = datetime.strptime(end_filter, '%m/%d/%Y')
                     end_date_converted = end_date_converted.date()
-                    print(end_date_converted)
                     context.update({'end_filter': end_filter})
                 else:
                     end_date_converted = datetime.today().date()
                 
                 if 'user_filter' in request.POST and request.POST.get("user_filter")!='':
                     user_filter = request.POST.get("user_filter")
-                    print(user_filter)
                     context.update({'user_filter': user_filter})
 
-                
-                active_stops = get_filtered_active_stops(user_filter, start_date_converted, end_date_converted, park_num)
-                #get all completed stops with start_time between start_filter and end_filter
-                completed_stops = get_filtered_completed_stops(user_filter, start_date_converted, end_date_converted, park_num)
-
-                stats = get_filtered_stats(start_date_converted, end_date_converted, park_num)
-
-                prices = Price.objects.all()
-
-
+            
 
 
             #get override telemetry
@@ -111,7 +82,12 @@ def administration(request,):
             override_entry = tbapi.get_latest_telemetry(override_entry['id'], telemetry_keys=["value"])["value"][0]['value']
             override_exit = tbapi.get_device_by_name(name='override_1_2')
             override_exit = tbapi.get_latest_telemetry(override_exit['id'], telemetry_keys=["value"])["value"][0]['value']
-                
+
+            active_stops = get_active_stops(user_filter, start_date_converted, end_date_converted, park_num)
+            completed_stops = get_completed_stops(user_filter, start_date_converted, end_date_converted, park_num)
+
+            stats = get_stats(start_date_converted, end_date_converted, park_num)
+            prices = get_prices(park_num='1')
             
             context.update({
                 'active_stops': active_stops,
@@ -126,7 +102,7 @@ def administration(request,):
         else:
             return redirect('/home')
 
-def get_filtered_active_stops(user, start_date_converted, end_date_converted, park_num):
+def get_active_stops(user, start_date_converted, end_date_converted, park_num):
     '''
     Get all active stops with the given filters, based on which is not None
     '''
@@ -143,7 +119,7 @@ def get_filtered_active_stops(user, start_date_converted, end_date_converted, pa
 
     return active_stops
     
-def get_filtered_completed_stops(user, start_date_converted, end_date_converted, park_num):
+def get_completed_stops(user, start_date_converted, end_date_converted, park_num):
     '''
     Get all completed stops with the given filters, based on which is not None
     '''
@@ -174,7 +150,7 @@ def get_filtered_completed_stops(user, start_date_converted, end_date_converted,
     completed_stops = completed_stops_1 | completed_stops_2
     return completed_stops
 
-def get_filtered_stats(start_date_converted, end_date_converted, park_num):
+def get_stats(start_date_converted, end_date_converted, park_num):
     '''
     Get all stats with the given filters, based on which is not None
     '''
@@ -188,7 +164,28 @@ def get_filtered_stats(start_date_converted, end_date_converted, park_num):
     #convert stats.average_time to hour:minute:second format
     for stat in stats:
         stat.average_time = str(stat.average_time).split('.')[0]
+    
     return stats
+
+def get_prices(park_num):
+    '''
+    Get all prices with the given filters, based on which is not None
+    '''
+    #prices filters by park
+    args = {}
+    if park_num:
+        args['park'] = park_num
+    prices = Price.objects.filter(**args)
+
+    # for price in prices:
+    #     if price.start_time == time(0,0,0):
+    #         price.start_time = '00:00:00'
+
+    #     if price.end_time == time(23, 59, 59):
+    #         price.end_time = '23:59:59'
+    #     price.day = week_days[str(price.day)]
+
+    return prices
 
 def get_door_state(request, door):
     if request.method == 'GET' and request.user.is_superuser:
@@ -198,9 +195,6 @@ def get_door_state(request, door):
 
         return render(request,'override.html', {'door': door_state})
 
-
-def filter(request):
-    return render(request, 'filter.html')
 def override(request):
     '''
     Override the gate:
@@ -215,7 +209,6 @@ def override(request):
         if request.user.is_superuser:
             if request.method == 'POST':
 
-                print("\n\n override:\n", request.POST, "\n\n")
                 if 'entry_open' in request.POST:
                     push_telemetry('override_1_1', 'value', 'open')
                     #push_telemetry('door_1_1', 'value', '1')
@@ -249,19 +242,19 @@ def price(request):
     else:
         if request.user.is_superuser:
             if request.method == 'POST':
-                print("\n\npost request:\n\n")
-                if 'add' in request.POST:
-                    print("\n\n price:\n", request.POST, "\n\n")
-                    args = {}
+                args = {}
 
-                    args['park'] = 'park_1'
+                if 'add' in request.POST:
+                    args['park'] = '1'
                     if 'date' in request.POST and request.POST['date']!="":
-                        args['date'] = request.POST['date']
+                        converted = datetime.strptime(request.POST['date'], '%m/%d/%Y').date()
+                        args['date'] = converted
 
                     if 'day' in request.POST and request.POST['day']!="":
                         args['day'] = request.POST['day']
 
                     if 'start_time' in request.POST and request.POST['start_time']!="":
+                        print('\n\n\n\n', request.POST['start_time'], '\n\n\n\n')
                         args['start_time'] = request.POST['start_time']
                     else:
                         args['start_time'] = time(0, 0, 0)
@@ -281,9 +274,7 @@ def price(request):
                     
 
                 elif 'edit' in request.POST:
-                    print("\n\n price:\n", request.POST, "\n\n")
-
-                    args['price__id'] = request.POST['price_id']
+                    args['id'] = request.POST['price_id']
                     price = Price.objects.filter(**args)
                     
                     args['park'] = 'park_1'
@@ -296,7 +287,7 @@ def price(request):
                     price.update(**args)
 
                 elif 'delete' in request.POST:
-                    print("\n\n price:\n", request.POST, "\n\n")
+
                     args = {}
                     args['price__id'] = request.POST['price_id']
                     price = Price.objects.filter(**args)
@@ -304,3 +295,56 @@ def price(request):
 
         return redirect('/administration')        
 
+def sensor_control(request):
+        context = {}
+        if request.method == 'POST':
+            sensor_name = None
+            sensor_field = None
+            sensor_telemetry = None
+            args = {}
+
+            if 'sensor_name' in request.POST and request.POST['sensor_name']!="":
+                sensor_name = request.POST['sensor_name']
+                sensor = tbapi.get_device_by_name(name=str(sensor_name))
+                args['device'] = sensor['id']
+            
+            if 'sensor_field' in request.POST and request.POST['sensor_field']!="":
+                sensor_field = request.POST['sensor_field']
+                args['telemetry_keys'] = str(request.POST['sensor_field'])
+
+            if 'sensor_value' in request.POST and request.POST['sensor_value']!="":
+                sensor_value = request.POST['sensor_value']
+                args['telemetry_value'] = str(request.POST['sensor_value'])
+
+            #get latest telemetry
+            if 'sensor_get' in request.POST:
+                #delete args['telemetry_value'] if it exists
+                if 'telemetry_value' in args:
+                    del args['telemetry_value']
+
+                sensor_telemetry = tbapi.get_latest_telemetry(**args)[f"{args['telemetry_keys']}"]
+                print("\n\n sensor_telemetry:\n", sensor_telemetry, "\n\n")
+
+                if len(sensor_telemetry) == 0:
+                    sensor_value = "No data"
+                elif len(sensor_telemetry) == 1:
+                    sensor_value = sensor_telemetry[0]['value']
+                    if sensor_value == None:
+                        sensor_value = "No data"
+                else:
+                    raise Exception("sensor_telemetry has more than one value")
+                
+            #send telemetry
+            elif 'sensor_send' in request.POST:
+                push_telemetry(sensor_name, sensor_field, sensor_value)
+                #add message sent
+                messages.info(request,f'Telemetry sent to {sensor_name}')
+
+
+            context = {
+                'sensor_name': sensor_name,
+                'sensor_field': sensor_field,
+                'sensor_value': sensor_value
+            }
+        print("\n\n context:\n", context, "\n\n")
+        return context
