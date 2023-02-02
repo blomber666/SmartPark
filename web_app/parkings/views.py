@@ -7,12 +7,19 @@ from django.shortcuts import redirect
 from django.utils import timezone
 from django.contrib import messages
 from django.http import JsonResponse
+from datetime import datetime
+from datetime import timedelta
 
 
 # Create your views here.
-def park_1(request, context=None):
+def park_1(request, context={}):
     
     if request.user.is_authenticated:
+        start_filter = None
+        start_date_converted = None
+        end_filter = None
+        end_date_converted = None
+        park_num = 1
         free_spaces, total_spaces = generate_map('parkings/static/park_1.json')
 
         stop = Stop.objects.filter(user=request.user).last()
@@ -49,13 +56,72 @@ def park_1(request, context=None):
         park_status = str((total_spaces-free_spaces)) + '/' + str(total_spaces)
         park_percent = int(((total_spaces-free_spaces)/total_spaces)*100)
 
-        context = {'username': username, 'start': start, 'end': end , 'last_time':last_time, 'amount': amount, 'payed': payed, \
-            'free_spaces': free_spaces, 'park_status': park_status, 'park_percent': park_percent, 'total_spaces': total_spaces,}
+        if request.method == 'POST':
+            print('\n\n\npost request\n\n\n')
 
+            if 'start_filter' in request.POST and request.POST.get("start_filter")!='':
+                start_filter = request.POST.get("start_filter")
+                #convert to yyyy-mm-dd
+                start_date_converted = datetime.strptime(start_filter, '%m/%d/%Y').date()
+                context.update({'start_filter': start_filter})
+
+            if 'end_filter' in request.POST and request.POST.get("end_filter")!='':
+                end_filter = request.POST.get("end_filter")
+                #convert to yyyy-mm-dd
+                end_date_converted = datetime.strptime(end_filter, '%m/%d/%Y')
+                end_date_converted = end_date_converted.date()
+                context.update({'end_filter': end_filter})
+            else:
+                end_date_converted = datetime.today().date()
+
+        stops = get_stops(request.user, start_date_converted, end_date_converted, park_num)
+
+        context = {'username': username, 'start': start, 'end': end , 'last_time':last_time, 'amount': amount, 'payed': payed, \
+            'free_spaces': free_spaces, 'park_status': park_status, 'park_percent': park_percent, 'total_spaces': total_spaces,\
+                'stops': stops}
         return render(request, 'park_1.html', context)
     else:
         messages.info(request,'HTTP ERROR: 401 - Unauthorized')
         return redirect('/')
+
+def get_stops(user, start_date, end_date, park_num):
+    '''
+    Get all stops with the given filters, bu always filter by user
+    '''
+    #completed_stops_1 filters by start_time that is between start_date and end_date
+    #completed_stops_2 filters by end_time that is between start_date and end_date
+    #then we combine the two querysets
+    print('get_stops')
+    assert(user), 'user is required'
+
+    args = {}
+    args['user'] = user
+    if start_date and end_date:
+        args['start_time__range'] = [start_date, end_date+timedelta(days=1)]
+    if park_num:
+        args['park'] = park_num
+    stops_1 = Stop.objects.filter(**args)
+
+    args = {}
+    args['user'] = user
+    if start_date and end_date:
+        args['end_time__range'] = [start_date, end_date+timedelta(days=1)]
+    if park_num:
+        args['park'] = park_num
+    stops_2 = Stop.objects.filter(**args)
+
+    stops = stops_1 | stops_2
+
+    for stop in stops:
+        payment = Payment.objects.filter(stop=stop).last()
+        if payment:
+            stop.amount = f'{payment.amount}€'
+        elif stop.start_time:
+            stop.amount = f'{ calculate_amount(stop.start_time, timezone.now())["amount"] }€ (not payed)'
+        else:
+            stop.amount = '0€'
+    
+    return stops
 
 def pay(request):
     if request.user.is_authenticated and request.method == 'GET':

@@ -24,6 +24,103 @@
     
 
     </style> -->
+    <style>
+        main{
+            width: 100%;
+            margin-left: auto;
+            margin-right: auto;
+            display: flex;
+            background: #073ca7; 
+            border-radius: 0.5rem;
+        }
+        tbody{
+            max-height: 75vh;
+        }
+        hr{
+            border-top-width: 2px;
+        }
+        .col-chart{
+            padding : 0.5rem;
+            width : 25%;
+            margin-left: 0.125rem;
+            margin-right: 0.125rem;
+            background: #f9fafb00;
+        }
+        .val-chart{
+            white-space: nowrap;
+            padding : 0.5rem;
+            width : 25%;
+            color: rgb(17 24 39);
+        }
+        .price{
+            width: 9.75rem;
+            height: 2.5rem;
+            border-radius: 0.25rem;
+            font-size: 1rem;
+            font-weight: 200;
+            color: rgb(17 24 39);
+        }
+        .indicator {
+            width: 0.5rem;
+            height: 0.5rem;
+            margin-right: 0.25rem;
+            border-radius: 9999px;
+        }
+        .indicator.red{
+            background-color:  #f05252;
+        }
+        .indicator.green{
+            background-color:  #0e9f6e;
+        }
+        .indicator.gray{
+            background-color:  #87909b;
+        } 
+        .lil-span
+        { 
+            padding-left: 0.625rem; 
+            padding-right: 0.625rem;
+            font-size: 0.75rem; 
+            line-height: 1rem;
+            font-weight: 500;
+            margin-right: 0.5rem; 
+            padding-left: 0.625rem;
+            padding-right: 0.625rem;
+            padding-top: 0.125rem;
+            padding-bottom: 0.125rem;
+        }
+        .green-span{
+            color: #03543f; 
+            background-color: #def7ec;
+        }
+        .red-span{
+            color: #9b1c1c;
+            background-color: #f7dede;
+        }
+        .gray-span{
+            color: #494848;
+            background-color: #e2e1e1;
+        }
+        .gate{
+            font-size: 0.875rem;
+            line-height: 1.25rem;
+            color: #f9fafb;
+            font-weight: 500;
+            border-radius: 0.5rem;
+            padding-left: 1.25rem;
+            padding-right: 1.25rem;
+            padding-top: 0.625rem;
+            padding-bottom: 0.625rem;
+            text-align: center;
+            margin-right: 0.5rem;
+            margin-bottom: 0.5rem;
+        }
+        .open{background-color: #046c4f89;}
+        .open.focus{background-color:#046c4e;}
+        .close{background-color: #c81e1e89;}
+        .close.focus{background-color: #c81e1e;}
+        .default{background-color: #3d414989;}
+        .default.focus{background-color: #3d4149;}
+    </style>
 
     <script type="text/javascript" src="../update_price.js"></script>
     <script type="text/javascript" src="../update_parkings.js"></script>
@@ -33,7 +130,7 @@
   
 
 <div class="px-8 py-4">
-    <div class="w-full space-y-2  rounded-lg shadow-md dark:bg-gray-800 dark:border-gray-700">
+    <div class="w-full space-y-2  rounded-lg shadow-md dark:bg-gray-200 dark:border-gray-700">
         <div class="sm:hidden">
             <label for="tabs" class="sr-only">Select tab</label>
             <select id="tabs" class="bg-gray-50 !important border-0 border-b border-gray-200 text-gray-900 text-base rounded-t-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
@@ -53,12 +150,12 @@
                 <button id="faq-tab" data-tabs-target="#faq" type="button" role="tab" aria-controls="faq" aria-selected="false" class="inline-block w-full p-4 rounded-r-lg bg-gray-50 !important hover:bg-gray-100 focus:outline-none dark:bg-gray-700 dark:hover:bg-gray-600">FAQ</button>
             </li>
         </ul>
-        <div id="fullWidthTabContent" class="border-t border-gray-200 dark:border-gray-600">
+        <div id="fullWidthTabContent" class="">
             <div class="flex items-center justify-center hidden p-4 bg-white/75 rounded-lg md:p-8 dark:bg-gray-800" id="home" role="tabpanel" aria-labelledby="home-tab">
-                <a class="flex items-center bg-gray-200 border rounded-lg shadow-md md:flex-row  dark:border-gray-700 dark:bg-gray-800">
+                <a class="flex items-center bg-gray-200 rounded-lg shadow-md md:flex-row  dark:border-gray-700 dark:bg-gray-800">
                     <div id="park1">
 
-                        <img class="object-cover rounded-t-lg max-h-[50vh]" src="/media/park_1.png" alt="">
+                        <img class="object-cover rounded-t-lg max-h-[50vh] border-0" src="/media/park_1.png" alt="">
 
                         <div class="p-3 space-y-4 bg-white rounded-bl-lg">                               
                             <div class="flex justify-between mb-1">
@@ -183,13 +280,47 @@
 
             </div>
             
-            <div class="flex items-start py-4 px-2 bg-white/75 rounded-lg" id="stops" role="tabpanel" aria-labelledby="stops-tab">              
-                <main>
-                    <table class="w-full h-max text-left text-gray-500">
-                        <thead class=" text-xs text-gray-700 uppercase bg-gray-50">
-                            <tr>
+            <div class="hidden bg-white/75 rounded-lg md:p-8 dark:bg-gray-800 flex space-x-4" id="faq" role="tabpanel" aria-labelledby="faq-tab">
+                <div>
+                <aside class="m-0 px-4 py-4 rounded-md bg-white/75 h-auto w-auto" aria-label="Sidenav" style="float: left; scale: 100%; transform-origin: top;">
+                    <form method="post" action="/park_1/">
+                        {% csrf_token %}
+                        <ul class="flex flex-col space-y-2">
+                            <li>
+                                <!-- //datepicker  -->
+                                <div date-rangepicker class="flex flex-col space-y-2">
+                                <div class="relative">
+                                    <div class="absolute inset-y-0 left-0 flex flex-wrap items-center pl-3 pointer-events-none" style="padding: 0.625rem;"> 
+                                        <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path></svg>
+                                    </div>
+                                    <input name="start_filter"  id="start_filter" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5" placeholder="Select date start"  style="padding-left: 2.75rem;">
+                                </div>
+                                <div class="relative">
+                                    <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none" style="padding: 0.625rem;">
+                                        <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path></svg>
+                                    </div>
+                                    <input name="end_filter"  id="end_filter" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 " placeholder="Select date end" style="padding-left: 2.75rem;">
+                                </div>
+                                </div>
+                                <!-- end datapicker -->
+                            </li>
+                            <li class="flex flex-row">
+                                <button name="filter" class="text-gray-100 font-medium rounded-lg text-sm py-2.5 px-6 text-center inline-flex items-center mr-2" style="background: #573b8a; color: #f9fafb;">
+                                    Filter
+                                </button>
+                                <button onclick="location.href='/park_1'" type="button" class="text-gray-100 font-medium rounded-lg text-sm py-2.5 px-6 text-center inline-flex items-center mr-2" style="background: #675d79; color: #f9fafb;">
+                                    Reset</button>
+                            </li>       
+                        </ul>
+                    </form>
+                </aside>
+                </div>
+                <main class="rounded-lg bg-gray-200">
+                    <table class="rounded-lg w-full text-left text-gray-500 w-full">
+                        <thead class="flex rounded-t-lg text-base font-normal text-gray-500 uppercase bg-white w-full">
+                            <tr class="flex w-full rounded-lg">
                                 <th scope="col" class="col-chart">
-                                    User
+                                    Plate
                                 </th>
                                 <th scope="col" class="col-chart">
                                     Start Time
@@ -198,13 +329,16 @@
                                     Finish Time
                                 </th>
                                 <th scope="col" class="col-chart">
-                                    Active
+                                    Amount
+                                </th>
+                                <th class=" w-4">
+                                    
                                 </th>
                             </tr>
                         </thead> 
-                        <tbody>
-                            {% for stop in active_stops %}
-                            <tr class="bg-gray-200 border-b border-gray-900">
+                        <tbody class="flex flex-col  overflow-y-scroll w-full bg-white/0">
+                            {% for stop in stops %}
+                            <tr class="flex w-full  border-gray-900">
                                 <td scope="row" class="val-chart">
                                     {{ stop.user }}
                                 </td>
@@ -215,32 +349,9 @@
                                     {{ stop.end_time }}
                                 </td>
                                 <td scope="row" class="val-chart">
-                                    <span class="red-span lil-span inline-flex items-center rounded-full">
-                                        <span class="indicator red"></span>
-                                        Not Completed
-                                    </span>
+                                    {{ stop.amount }}
                                 </td>
-                                {% endfor %}
-                            </tr>
-                            {% for stop in completed_stops %}
-                            <tr class="bg-gray-200 border-b border-gray-900">
-                                <td scope="row" class="val-chart">
-                                    {{ stop.user }}
-                                </td>
-                                <td scope="row" class="val-chart">
-                                    {{ stop.start_time }}
-                                </td>
-                                <td scope="row" class="val-chart">
-                                    {{ stop.end_time }}
-                                </td>
-                                <td scope="row" class="val-chart">
-                                    <span class="green-span lil-span inline-flex items-center rounded-full">
-                                        <span class="indicator green"></span>
-                                        Completed
-                                    </span>
-                                </td>
-                            </tr>
-                            {% endfor %}
+                                {% endfor %}                      
                         </tbody>
                     </table>
                 </main>

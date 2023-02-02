@@ -116,19 +116,19 @@ def get_active_stops(user, start_date_converted, end_date_converted, park_num):
 
     return active_stops
     
-def get_completed_stops(user, start_date_converted, end_date_converted, park_num):
+def get_completed_stops(user, start_date, end_date, park_num):
     '''
     Get all completed stops with the given filters, based on which is not None
     '''
-    #completed_stops_1 filters by start_time that is between start_date_converted and end_date_converted
-    #completed_stops_2 filters by end_time that is between start_date_converted and end_date_converted
+    #completed_stops_1 filters by start_time that is between start_date and end_date
+    #completed_stops_2 filters by end_time that is between start_date and end_date
     #then we combine the two querysets
     args = {}
     if user:
         args['user__username__icontains'] = user
 
-    if start_date_converted and end_date_converted:
-        args['start_time__range'] = [start_date_converted, end_date_converted+timedelta(days=1)]
+    if start_date and end_date:
+        args['start_time__range'] = [start_date, end_date+timedelta(days=1)]
     args['end_time__isnull'] = False
     if park_num:
         args['park'] = park_num
@@ -137,8 +137,8 @@ def get_completed_stops(user, start_date_converted, end_date_converted, park_num
     args = {}
     if user:
         args['user__username__icontains'] = user
-    if start_date_converted and end_date_converted:
-        args['end_time__range'] = [start_date_converted, end_date_converted+timedelta(days=1)]
+    if start_date and end_date:
+        args['end_time__range'] = [start_date, end_date+timedelta(days=1)]
     args['end_time__isnull'] = False
     if park_num:
         args['park'] = park_num
@@ -147,14 +147,14 @@ def get_completed_stops(user, start_date_converted, end_date_converted, park_num
     completed_stops = completed_stops_1 | completed_stops_2
     return completed_stops
 
-def get_stats(start_date_converted, end_date_converted, park_num):
+def get_stats(start_date, end_date, park_num):
     '''
     Get all stats with the given filters, based on which is not None
     '''
-    #stats filters by start_time that is between start_date_converted and end_date_converted
+    #stats filters by start_time that is between start_date and end_date
     args = {}
-    if start_date_converted and end_date_converted:
-        args['date__range'] = [start_date_converted, end_date_converted]
+    if start_date and end_date:
+        args['date__range'] = [start_date, end_date]
     if park_num:
         args['park'] = park_num
     stats = Statistic.objects.filter(**args)
