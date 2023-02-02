@@ -55,9 +55,12 @@ def map_view(request):
         if request.user.is_superuser:
             return redirect('/administration')
         else:
-            free_spaces, total_spaces = generate_map('parkings/static/park_1.json')
-            park_status = str((total_spaces-free_spaces)) + '/' + str(total_spaces)
-            park_percent = int(((total_spaces-free_spaces)/total_spaces)*100)
+            #read free_spaces and total_spaces from file park_1.txt inside media folder
+            with open('media/park_1.txt', 'r') as f:
+                free_spaces = int(f.readline())
+                total_spaces = int(f.readline())
+            park_status = str(free_spaces) + '/' + str(total_spaces)
+            park_percent = int((free_spaces/total_spaces)*100)
             context = {'park_status': park_status, 'park_percent': park_percent}
             return render(request, 'map.html', context)
             

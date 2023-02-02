@@ -121,6 +121,13 @@ def generate_map(filename):
                 map = cv2.addWeighted(overlay, alpha, map, 1-alpha, 0)
     #save the map as png
     cv2.imwrite("media/park_1.png", map)
+    #save free sensors and total sensors in a file, one per line
+    with open("media/park_1.txt", "w") as f:
+        f.write(f'{free_counter}\n')
+        f.write(f'{sensor_counter}')
+        
+        
+
             #attributes = rest_client.get_attributes(EntityId("69482ca0-7d65-11ed-b021-03cf31a5a03e","DEVICE" ))
             
             # Creating an Asset
@@ -140,7 +147,7 @@ def generate_map(filename):
             # relation = rest_client.save_relation(relation)
 
             #logging.info(" Relation was created:\n%r\n", relation)
-    return sensor_counter - free_counter, sensor_counter
+    return free_counter, sensor_counter
 
 if __name__ == "__main__":
     generate_map('web2/parkings/static/park_1.json')

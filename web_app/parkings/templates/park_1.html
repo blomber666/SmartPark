@@ -8,7 +8,7 @@
 <html>
   <head>
     <title>PARKING 1</title>
-
+    <meta name="viewport" content="width=device-width, height=device-height,  initial-scale=1.0">
     <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
     <!-- <style>html, body {width: 100%;height: 100%;margin: 0;padding: 0;}</style> -->
     <!--each 10 second-->
@@ -29,12 +29,11 @@
             width: 100%;
             margin-left: auto;
             margin-right: auto;
-            display: flex;
             background: #073ca7; 
             border-radius: 0.5rem;
         }
         tbody{
-            max-height: 75vh;
+            max-height: 60vh;
         }
         hr{
             border-top-width: 2px;
@@ -155,7 +154,7 @@
                 <a class="flex items-center bg-gray-200 rounded-lg shadow-md md:flex-row  dark:border-gray-700 dark:bg-gray-800">
                     <div id="park1">
 
-                        <img class="object-cover rounded-t-lg max-h-[50vh] border-0" src="/media/park_1.png" alt="">
+                        <img class="object-cover rounded-tl-lg max-h-[50vh] border-0" src="/media/park_1.png" alt="">
 
                         <div class="p-3 space-y-4 bg-white rounded-bl-lg">                               
                             <div class="flex justify-between mb-1">
@@ -316,7 +315,7 @@
                 </aside>
                 </div>
                 <main class="rounded-lg bg-gray-200">
-                    <table class="rounded-lg w-full text-left text-gray-500 w-full">
+                    <table class="rounded-lg w-full text-left text-gray-500">
                         <thead class="flex rounded-t-lg text-base font-normal text-gray-500 uppercase bg-white w-full">
                             <tr class="flex w-full rounded-lg">
                                 <th scope="col" class="col-chart">
@@ -331,13 +330,208 @@
                                 <th scope="col" class="col-chart">
                                     Amount
                                 </th>
-                                <th class=" w-4">
+                                <th class=" w-5">
                                     
                                 </th>
                             </tr>
                         </thead> 
-                        <tbody class="flex flex-col  overflow-y-scroll w-full bg-white/0">
+                        <tbody class="flex flex-col overflow-y-scroll w-full bg-white/0">
                             {% for stop in stops %}
+                            <tr class="flex w-full  border-gray-900">
+                                <td scope="row" class="val-chart">
+                                    {{ stop.user }}
+                                </td>
+                                <td scope="row" class="val-chart">
+                                    {{ stop.start_time }}
+                                </td>
+                                <td scope="row" class="val-chart">
+                                    {{ stop.end_time }}
+                                </td>
+                                <td scope="row" class="val-chart">
+                                    {{ stop.amount }}
+                                </td>
+                                {% endfor %} 
+                                {% for stop in stops %}
+                            <tr class="flex w-full  border-gray-900">
+                                <td scope="row" class="val-chart">
+                                    {{ stop.user }}
+                                </td>
+                                <td scope="row" class="val-chart">
+                                    {{ stop.start_time }}
+                                </td>
+                                <td scope="row" class="val-chart">
+                                    {{ stop.end_time }}
+                                </td>
+                                <td scope="row" class="val-chart">
+                                    {{ stop.amount }}
+                                </td>
+                                {% endfor %} 
+                                {% for stop in stops %}
+                            <tr class="flex w-full  border-gray-900">
+                                <td scope="row" class="val-chart">
+                                    {{ stop.user }}
+                                </td>
+                                <td scope="row" class="val-chart">
+                                    {{ stop.start_time }}
+                                </td>
+                                <td scope="row" class="val-chart">
+                                    {{ stop.end_time }}
+                                </td>
+                                <td scope="row" class="val-chart">
+                                    {{ stop.amount }}
+                                </td>
+                                {% endfor %} 
+                                {% for stop in stops %}
+                            <tr class="flex w-full  border-gray-900">
+                                <td scope="row" class="val-chart">
+                                    {{ stop.user }}
+                                </td>
+                                <td scope="row" class="val-chart">
+                                    {{ stop.start_time }}
+                                </td>
+                                <td scope="row" class="val-chart">
+                                    {{ stop.end_time }}
+                                </td>
+                                <td scope="row" class="val-chart">
+                                    {{ stop.amount }}
+                                </td>
+                                {% endfor %} 
+                                {% for stop in stops %}
+                            <tr class="flex w-full  border-gray-900">
+                                <td scope="row" class="val-chart">
+                                    {{ stop.user }}
+                                </td>
+                                <td scope="row" class="val-chart">
+                                    {{ stop.start_time }}
+                                </td>
+                                <td scope="row" class="val-chart">
+                                    {{ stop.end_time }}
+                                </td>
+                                <td scope="row" class="val-chart">
+                                    {{ stop.amount }}
+                                </td>
+                                {% endfor %} 
+                                {% for stop in stops %}
+                            <tr class="flex w-full  border-gray-900">
+                                <td scope="row" class="val-chart">
+                                    {{ stop.user }}
+                                </td>
+                                <td scope="row" class="val-chart">
+                                    {{ stop.start_time }}
+                                </td>
+                                <td scope="row" class="val-chart">
+                                    {{ stop.end_time }}
+                                </td>
+                                <td scope="row" class="val-chart">
+                                    {{ stop.amount }}
+                                </td>
+                                {% endfor %} 
+                                {% for stop in stops %}
+                            <tr class="flex w-full  border-gray-900">
+                                <td scope="row" class="val-chart">
+                                    {{ stop.user }}
+                                </td>
+                                <td scope="row" class="val-chart">
+                                    {{ stop.start_time }}
+                                </td>
+                                <td scope="row" class="val-chart">
+                                    {{ stop.end_time }}
+                                </td>
+                                <td scope="row" class="val-chart">
+                                    {{ stop.amount }}
+                                </td>
+                                {% endfor %} 
+                                {% for stop in stops %}
+                            <tr class="flex w-full  border-gray-900">
+                                <td scope="row" class="val-chart">
+                                    {{ stop.user }}
+                                </td>
+                                <td scope="row" class="val-chart">
+                                    {{ stop.start_time }}
+                                </td>
+                                <td scope="row" class="val-chart">
+                                    {{ stop.end_time }}
+                                </td>
+                                <td scope="row" class="val-chart">
+                                    {{ stop.amount }}
+                                </td>
+                                {% endfor %} 
+                                {% for stop in stops %}
+                            <tr class="flex w-full  border-gray-900">
+                                <td scope="row" class="val-chart">
+                                    {{ stop.user }}
+                                </td>
+                                <td scope="row" class="val-chart">
+                                    {{ stop.start_time }}
+                                </td>
+                                <td scope="row" class="val-chart">
+                                    {{ stop.end_time }}
+                                </td>
+                                <td scope="row" class="val-chart">
+                                    {{ stop.amount }}
+                                </td>
+                                {% endfor %} 
+                                {% for stop in stops %}
+                            <tr class="flex w-full  border-gray-900">
+                                <td scope="row" class="val-chart">
+                                    {{ stop.user }}
+                                </td>
+                                <td scope="row" class="val-chart">
+                                    {{ stop.start_time }}
+                                </td>
+                                <td scope="row" class="val-chart">
+                                    {{ stop.end_time }}
+                                </td>
+                                <td scope="row" class="val-chart">
+                                    {{ stop.amount }}
+                                </td>
+                                {% endfor %} 
+                                {% for stop in stops %}
+                            <tr class="flex w-full  border-gray-900">
+                                <td scope="row" class="val-chart">
+                                    {{ stop.user }}
+                                </td>
+                                <td scope="row" class="val-chart">
+                                    {{ stop.start_time }}
+                                </td>
+                                <td scope="row" class="val-chart">
+                                    {{ stop.end_time }}
+                                </td>
+                                <td scope="row" class="val-chart">
+                                    {{ stop.amount }}
+                                </td>
+                                {% endfor %} 
+                                {% for stop in stops %}
+                            <tr class="flex w-full  border-gray-900">
+                                <td scope="row" class="val-chart">
+                                    {{ stop.user }}
+                                </td>
+                                <td scope="row" class="val-chart">
+                                    {{ stop.start_time }}
+                                </td>
+                                <td scope="row" class="val-chart">
+                                    {{ stop.end_time }}
+                                </td>
+                                <td scope="row" class="val-chart">
+                                    {{ stop.amount }}
+                                </td>
+                                {% endfor %} 
+                                {% for stop in stops %}
+                            <tr class="flex w-full  border-gray-900">
+                                <td scope="row" class="val-chart">
+                                    {{ stop.user }}
+                                </td>
+                                <td scope="row" class="val-chart">
+                                    {{ stop.start_time }}
+                                </td>
+                                <td scope="row" class="val-chart">
+                                    {{ stop.end_time }}
+                                </td>
+                                <td scope="row" class="val-chart">
+                                    {{ stop.amount }}
+                                </td>
+                                {% endfor %} 
+                                {% for stop in stops %}
                             <tr class="flex w-full  border-gray-900">
                                 <td scope="row" class="val-chart">
                                     {{ stop.user }}

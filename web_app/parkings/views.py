@@ -20,7 +20,11 @@ def park_1(request, context={}):
         end_filter = None
         end_date_converted = None
         park_num = 1
-        free_spaces, total_spaces = generate_map('parkings/static/park_1.json')
+
+        #read free_spaces and total_spaces from file park_1.txt inside media folder
+        with open('media/park_1.txt', 'r') as f:
+            free_spaces = int(f.readline())
+            total_spaces = int(f.readline())
 
         stop = Stop.objects.filter(user=request.user).last()
         start = stop.start_time if stop and stop.start_time else None
@@ -164,7 +168,7 @@ def calculate_amount(start, end=timezone.now(), price=0.01):
 
 def get_parkings(request):
     if(request.user.is_authenticated):
-        free_spaces, total_spaces = generate_map('parkings/static/park_1.json')
+        free_spaces, total_spaces = 1,1
         park_status = str((total_spaces-free_spaces)) + '/' + str(total_spaces)
         park_percent = int(((total_spaces-free_spaces)/total_spaces)*100)
         context = {'park_status': park_status, 'park_percent': park_percent}

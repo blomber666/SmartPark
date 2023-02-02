@@ -40,9 +40,9 @@ def administration(request, context={}):
             context.update({'override_entry': 'null', 'override_exit': 'null'})
             print('\n\n\n', context, '\n\n\n')
             start_filter = None
-            start_filter = None
+            start_date_converted = None
             end_filter = None
-            end_filter = None
+            end_date_converted = None
             user_filter = None
             park_num = 1
            
@@ -57,11 +57,18 @@ def administration(request, context={}):
 
                 if 'start_filter' in request.POST and request.POST.get("start_filter")!='':
                     start_filter = request.POST.get("start_filter")
+                    #convert to yyyy-mm-dd
+                    start_date_converted = datetime.strptime(start_filter, '%m/%d/%Y').date()
                     context.update({'start_filter': start_filter})
 
                 if 'end_filter' in request.POST and request.POST.get("end_filter")!='':
                     end_filter = request.POST.get("end_filter")
+                    #convert to yyyy-mm-dd
+                    end_date_converted = datetime.strptime(end_filter, '%m/%d/%Y')
+                    end_date_converted = end_date_converted.date()
                     context.update({'end_filter': end_filter})
+                else:
+                    end_date_converted = datetime.today().date()
                 
                 if 'user_filter' in request.POST and request.POST.get("user_filter")!='':
                     user_filter = request.POST.get("user_filter")
@@ -73,10 +80,10 @@ def administration(request, context={}):
             override_exit = tbapi.get_device_by_name(name='override_1_2')
             override_exit = tbapi.get_latest_telemetry(override_exit['id'], telemetry_keys=["value"])["value"][0]['value']
 
-            active_stops = get_active_stops(user_filter, start_filter, end_filter, park_num)
-            completed_stops = get_completed_stops(user_filter, start_filter, end_filter, park_num)
+            active_stops = get_active_stops(user_filter, start_date_converted, end_date_converted, park_num)
+            completed_stops = get_completed_stops(user_filter, start_date_converted, end_date_converted, park_num)
 
-            stats = get_stats(start_filter, end_filter, park_num)
+            stats = get_stats(start_date_converted, end_date_converted, park_num)
             prices = get_prices(park_num='1')
             
             context.update({
@@ -92,22 +99,16 @@ def administration(request, context={}):
         else:
             return redirect('/home')
 
-def get_active_stops(user, start_date, end_date, park_num):
+def get_active_stops(user, start_date_converted, end_date_converted, park_num):
     '''
     Get all active stops with the given filters, based on which is not None
     '''
     #active stops filters by start_time that is between start_date_converted and end_date_converted
-    if start_date:
-        start_date = datetime.strptime(start_date, '%d/%m/%Y').date()
-    if end_date:
-        end_date = datetime.strptime(end_date, '%d/%m/%Y').date()
-    else:
-        end_date = datetime.today().date()
     args = {}
     if user:
         args['user__username__icontains'] = user
-    if start_date and end_date:
-        args['start_time__range'] = [start_date, end_date+timedelta(days=1)]
+    if start_date_converted and end_date_converted:
+        args['start_time__range'] = [start_date_converted, end_date_converted+timedelta(days=1)]
     args['end_time__isnull'] = True 
     if park_num:
         args['park'] = park_num
@@ -122,10 +123,6 @@ def get_completed_stops(user, start_date, end_date, park_num):
     #completed_stops_1 filters by start_time that is between start_date and end_date
     #completed_stops_2 filters by end_time that is between start_date and end_date
     #then we combine the two querysets
-    if start_date:
-        start_date = datetime.strptime(start_date, '%d/%m/%Y').date()
-    if end_date:
-        end_date = datetime.strptime(end_date, '%d/%m/%Y').date()
     args = {}
     if user:
         args['user__username__icontains'] = user
@@ -154,10 +151,6 @@ def get_stats(start_date, end_date, park_num):
     '''
     Get all stats with the given filters, based on which is not None
     '''
-    if start_date:
-        start_date = datetime.strptime(start_date, '%d/%m/%Y').date()
-    if end_date:
-        end_date = datetime.strptime(end_date, '%d/%m/%Y').date()
     #stats filters by start_time that is between start_date and end_date
     args = {}
     if start_date and end_date:
@@ -180,19 +173,6 @@ def get_prices(park_num):
     if park_num:
         args['park'] = park_num
     prices = Price.objects.filter(**args)
-
-    #convert every None value to ""
-    for price in prices:
-        if price.date == None:
-            price.date = ''
-        if price.day == None:
-            price.day = ''
-        if price.start_time == None:
-            print(type(price.start_time))
-            print(price.start_time, str(price.start_time))
-            price.start_time = ''
-        if price.end_time == None:
-            price.end_time = ''
 
     # for price in prices:
     #     if price.start_time == time(0,0,0):
@@ -259,11 +239,6 @@ def price(request):
     else:
         if request.user.is_superuser:
             if request.method == 'POST':
-
-                #cprinte request.post keys
-                for key in request.POST:
-                    print('\n\n\n')
-                    print(key, request.POST[key])
                 args = {}
 
                 args['park'] = '1'
@@ -271,39 +246,31 @@ def price(request):
                     args['id'] = request.POST['price_id']
                 
                 if 'price_date' in request.POST and request.POST['price_date']!="":
-                    args['date'] = request.POST['price_date']
+                    #price date is in format datetime
+                    converted = datetime.strptime(request.POST['price_date'], '%Y-%m-%d')
+                    args['date'] = converted
 
-                if 'price_day' in request.POST and request.POST['price_day']!="" and request.POST['price_day']!='None':
+                if 'price_day' in request.POST and request.POST['price_day']!="":
                     args['day'] = request.POST['price_day']
 
                 if 'price_start_time' in request.POST and request.POST['price_start_time']!="":
-                    args['start_time'] = str(request.POST['price_start_time'])
+                    print('\n\n\n\n', request.POST['price_start_time'], '\n\n\n\n')
+                    args['start_time'] = request.POST['price_start_time']
                 else:
                     args['start_time'] = time(0, 0, 0)
 
                 if 'price_end_time' in request.POST and request.POST['price_end_time']!="":
-                    print('end time: ', request.POST['price_end_time'])
-                    #convert from string  like "00:00" to time
-                    args['end_time'] = str(request.POST['price_end_time'])
-                     
+                    args['end_time'] = request.POST['price_end_time']
                 else:
                     args['end_time'] = time(23, 59, 59)
-
+                
                 if 'price_price' in request.POST and request.POST['price_price']!="":
                     args['price'] = request.POST['price_price']
                 else:
                     args['price'] = 0
 
-                #check if price_date and price_day are in args
-                if not 'date' in args and not 'day' in args:
-                    print('date and day are empty')
-
-                if args['start_time'] > args['end_time']:
-                    messages.info(request,'Start time must be before end time')
-                    return redirect('/administration')
-
                 print('\n\n\n\naregs', args, '\n\n\n\n')
-                
+
                 if 'add' in request.POST:         
                     price = Price.objects.create(**args)
                     price.save()
@@ -311,7 +278,7 @@ def price(request):
 
                 elif 'edit' in request.POST:
                     
-                    price = Price.objects.filter(id = args['id'])
+                    price = Price.objects.filter(**args)
                     
 
                     print('\n\n\n\nprice', price, '\n\n\n\n')
@@ -319,7 +286,10 @@ def price(request):
                     price.update(**args)
 
                 elif 'delete' in request.POST:
-                    price = Price.objects.get(id = args['id'])
+
+                    args = {}
+                    args['price_id'] = request.POST['price_id']
+                    price = Price.objects.filter(**args)
                     price.delete()
 
         return redirect('/administration')        

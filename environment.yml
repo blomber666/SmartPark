@@ -17,3 +17,4 @@ dependencies:
     - django-sslserver
     - django-tailwind
     - django-compressor
+    - django_apscheduler

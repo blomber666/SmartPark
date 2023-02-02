@@ -15,9 +15,13 @@
             margin-left: auto;
             margin-right: auto;
             display: block; 
-            overflow-y: scroll; 
+            /* overflow-y: scroll;  */
             background: #e5e7eb; 
             border-radius: 0.5rem;
+        }
+        tbody{
+            overflow-y: scroll;
+            text-align: ri;
         }
         hr{
             border-top-width: 2px;
@@ -107,8 +111,8 @@
     <head>
       <!--each second-->
       <!-- <meta http-equiv="refresh" content="10"> -->
-        <meta name="viewport" content="width=device-width, height=device-height,  initial-scale=1.0">
-        <title>ADMIN</title>
+      <meta name="viewport" content="width=device-width, height=device-height,  initial-scale=1.0">
+      <title>ADMIN</title>
         <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"> -->
 
         <script src="/static/js/change_buttons.js"></script>
@@ -202,7 +206,7 @@
                 <ul class="flex flex-col space-y-2">
                     <li>
                         <!-- //datepicker  -->
-                        <div date-rangepicker class="flex flex-col space-y-2">
+                        <div date-rangepicker datepicker-format="dd/mm/yyyy" class="flex flex-col space-y-2">
                         <div class="relative">
                             <div class="absolute inset-y-0 left-0 flex flex-wrap items-center pl-3 pointer-events-none" style="padding: 0.625rem;">
                                 <svg aria-hidden="true" class="w-5 h-5 text-gray-500 dark:text-gray-400" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path></svg>
@@ -532,25 +536,30 @@
                             <tbody>
                                 {% for price in prices %}
                                 <tr class="bg-gray-200  border-gray-900">
-                                    <form method="post" action="price/">
-                                        {% csrf_token %}
-                                        <td scope="row" id="date-{{price.id}}" name="{{price.id}}" class="val-chart">
+                                    <form method="post" action="price/" id="price_form-{{price.id}}">{% csrf_token %}</form>                                      
+                                        <td scope="row" id="date-{{price.id}}" name="price_date" form="price_form-{{price.id}}" class="val-chart">
                                             {{ price.date }}
                                         </td>
-                                        <td scope="row" id="day-{{price.id}}" name="{{price.id}}" class="val-chart">
+                                        <td scope="row" id="day-{{price.id}}" name="price_day" form="price_form-{{price.id}}" class="val-chart">
                                             {{ price.day }}
                                         </td>
-                                        <td scope="row" id="s_time-{{price.id}}" name="{{price.id}}" class="val-chart">
+                                        <td scope="row" id="s_time-{{price.id}}" name="price_start_time" form="price_form-{{price.id}}" class="val-chart">
                                             {{ price.start_time }}
                                         </td>
-                                        <td scope="row" id="e_time-{{price.id}}" name="{{price.id}}" class="val-chart">
+                                        <td scope="row" id="e_time-{{price.id}}" name="price_end_time" form="price_form-{{price.id}}" class="val-chart">
                                             {{ price.end_time }}
                                         </td>
-                                        <td scope="row" id="price-{{price.id}}" name="{{price.id}}" class="val-chart">
-                                            {{ price.price }}
+                                        <td scope="row" id="price-{{price.id}}" name="price_price" form="price_form-{{price.id}}" class="val-chart">  
+                                            {{ price.price }}   
                                         </td>
-                                        <td scope="row" class="val-chart flex flex-row space-x-2">
-                                            <button id="edit-{{price.id}}" type="button" onclick='edit_click("{{price.id}}")'>
+
+                                        <input type="hidden" name="price_id" value="{{price.id}}" form="price_form-{{price.id}}">
+                                        <input type="hidden" name="price_start_time" value="{{price.start_time}}" form="price_form-{{price.id}}">
+                                        <input type="hidden" name="price_end_time" value="{{price.end_time}}" form="price_form-{{price.id}}">
+                                        
+                                        
+                                        <td scope="row" form="price_form-{{price.id}}" class="val-chart flex flex-row space-x-2">
+                                            <button id="edit-{{price.id}}" type="button" onclick='edit_click("{{price.id}}")' form="price_form-{{price.id}}">
                                                 <svg style="background: #f9fafb; border-radius: 0.5rem; padding: 0.5rem" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" height="40" width="40">
                                                   <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                                                   <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
@@ -559,7 +568,7 @@
                                                   </g>
                                                 </svg>
                                             </button>
-                                            <button id="remove-{{price.id}}" type="button" onclick='delete_click("{{price.id}}");'>
+                                            <button id="remove-{{price.id}}" type="button" onclick='delete_click("{{price.id}}");' form="price_form-{{price.id}}">
                                                 <svg style="background: #c81e1e; border-radius: 0.5rem; padding: 0.3rem" fill="#f9fafb" viewBox="-6 -6 36.00 36.00" xmlns="http://www.w3.org/2000/svg"  class="icon glyph" stroke="#f9fafb" height="40" width="40">
                                                     <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                                                     <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" stroke="#CCCCCC" stroke-width="0.43200000000000005"></g>
@@ -569,7 +578,7 @@
                                                     </g>
                                                 </svg>
                                             </button>
-                                            <button id="confirm-{{price.id}}" name="" style="display: none;" action="/administration/">
+                                            <button id="confirm-{{price.id}}" name="edit" style="display: none;" form="price_form-{{price.id}}">
                                                 <svg style="background: #046c4e; border-radius: 0.5rem; padding: 0.5rem" fill="#f9fafb" height="40" width="40" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" viewBox="0 0 492 492" xml:space="preserve" transform="rotate(0)">
                                                     <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                                                     <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
@@ -582,7 +591,7 @@
                                                     </g>
                                                 </svg>
                                             </button>
-                                            <button id="cancel-{{price.id}}" type="button" onclick='cancel_click("{{price.id}}");' style="display: none;">
+                                            <button id="cancel-{{price.id}}" type="button" onclick='cancel_click("{{price.id}}");' style="display: none;" form="price_form-{{price.id}}">
                                                 <svg style="background: #f9fafb; border-radius: 0.5rem; padding: 0.5rem" viewBox="0 0 1024 1024" class="icon" version="1.1" xmlns="http://www.w3.org/2000/svg" fill="#c81e1e" stroke="#c81e1e" height="40" width="40">
                                                     <g id="SVGRepo_bgCarrier" stroke-width="0"></g>
                                                     <g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g>
@@ -592,7 +601,7 @@
                                                 </svg>
                                             </button>
                                         </td>
-                                    </form>
+   
                                 </tr>
                                 {% endfor %}
                                 <tr class="bg-gray-200  border-gray-900">
@@ -603,20 +612,20 @@
                                                 <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"  style="padding: 0.625rem;">
                                                     <svg aria-hidden="true" class="w-5 h-5 text-gray-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path></svg>
                                                 </div>
-                                                <input datepicker name="date" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full pl-5" placeholder="Select date" style="padding-left: 2.5rem;">
+                                                <input datepicker datepicker-format="dd/mm/yyyy"  name="price_date" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full pl-5" placeholder="Select date" style="padding-left: 2.5rem;">
                                             </div>
                                         </td>
                                         <td scope="row" class="val-chart">
-                                            <input name="day" class="price" type="text" placeholder="Set day of the week"></input>
+                                            <input name="price_day" class="price" type="text" placeholder="Day of the week"></input>
                                         </td>
                                         <td scope="row" class="val-chart">
-                                            <input name="start_time" class="price" type="text" placeholder="Set start time"></input>
+                                            <input name="price_start_time" class="price" type="time" placeholder="Start time (8:30)"></input>
                                         </td>
                                         <td scope="row" class="val-chart">
-                                            <input name="end_time" class="price" type="text" placeholder="Set end time"></input>
+                                            <input name="price_end_time" class="price" type="time" placeholder="End time (19:30)"></input>
                                         </td>
                                         <td scope="row" class="val-chart">
-                                            <input name="price" class="price" type="text" placeholder="Insert a price"></input>
+                                            <input name="price_price" class="price" type="number" placeholder="Insert a price"></input>
                                         </td>
                                         <td scope="row" class="val-chart">
                                             <button name="add" class="flex flex-row cursor-pointer">

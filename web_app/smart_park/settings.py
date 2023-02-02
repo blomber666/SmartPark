@@ -29,6 +29,12 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
+USE_L10N = False                 # At first, disable USE_L10N, because it overrides the format
+DATETIME_FORMAT = 'd/m/Y H:i:s'  # Set your own datetime format
+DATE_FORMAT = 'd/m/Y'            # Set your own date format
+TIME_FORMAT = 'H:i:s'            # Set your own time format
+
+
 COMPRESS_ROOT = BASE_DIR / 'static'
 COMPRESS_ENABLED = True
 STATICFILES_FINDERS = ('compressor.finders.CompressorFinder',)
@@ -50,7 +56,8 @@ INSTALLED_APPS = [
     'administration',
     'tailwind',
     #'django_browser_reload',
-    'sslserver'
+    'sslserver',
+    'django_apscheduler',
 ]
 
 NPM_BIN_PATH = r"C:\Program Files\nodejs\npm.cmd"
