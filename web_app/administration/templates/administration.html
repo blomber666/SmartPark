@@ -8,34 +8,32 @@
 <meta http-equiv="Expires" content="0" /> -->
 <html>
     <style>
-        main{
-            max-height: 558px;
-            height: auto;
+       main{
             width: 100%;
             margin-left: auto;
             margin-right: auto;
-            display: block; 
-            /* overflow-y: scroll;  */
-            background: #e5e7eb; 
+            background: #073ca7; 
             border-radius: 0.5rem;
+            overflow-x: auto;
         }
         tbody{
-            overflow-y: scroll;
-            text-align: ri;
+            max-height: 60vh;
+            overflow-x: hidden
         }
         hr{
             border-top-width: 2px;
         }
         .col-chart{
-            border-width: 0.125rem;
-            padding: 0.5rem;
+            padding : 0.5rem;
+            width : 25%;
             margin-left: 0.125rem;
             margin-right: 0.125rem;
-            text-align: center;
+            background: #f9fafb00;
         }
         .val-chart{
             white-space: nowrap;
-            padding: 0.5rem;
+            padding : 0.5rem;
+            width : 25%;
             color: rgb(17 24 39);
         }
         .price{
@@ -375,10 +373,10 @@
 
             <div id="fullWidthTabContent">
                 <div class="flex items-start py-4 px-2 bg-white/75 rounded-lg" id="stops" role="tabpanel" aria-labelledby="stops-tab">
-                    <main>
-                        <table class="w-full h-max text-left text-gray-500">
-                            <thead class=" text-xs text-gray-700 uppercase bg-gray-50">
-                                <tr>
+                    <main class="rounded-lg bg-gray-200">
+                        <table class="rounded-lg w-full text-left text-gray-500">
+                            <thead class="flex rounded-t-lg text-base font-normal text-gray-500 uppercase bg-white w-full">
+                                <tr class="flex w-full rounded-lg">
                                     <th scope="col" class="col-chart">
                                         User
                                     </th>
@@ -393,9 +391,9 @@
                                     </th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody class="flex flex-col overflow-y-scroll overflow-x-hidden w-full bg-white/0">
                                 {% for stop in active_stops %}
-                                <tr class="bg-gray-200  border-gray-900">
+                                <tr class="flex w-full rounded-lg">
                                     <td scope="row" class="val-chart">
                                         {{ stop.user }}
                                     </td>
@@ -414,7 +412,7 @@
                                     {% endfor %}
                                 </tr>
                                 {% for stop in completed_stops %}
-                                <tr class="bg-gray-200  border-gray-900">
+                                <tr class="flex w-full rounded-lg">
                                     <td scope="row" class="val-chart">
                                         {{ stop.user }}
                                     </td>
@@ -438,11 +436,10 @@
                 </div>
 
                 <div class="flex items-start py-4 px-2 bg-white/75 rounded-lg" id="stats" role="tabpanel" aria-labelledby="stats-tab">
-
-                    <main>
-                        <table class="w-full h-max text-left text-gray-500 border-spacing-2 border border-slate-500">
-                            <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-                                <tr>
+                    <main class="rounded-lg bg-gray-200">
+                        <table class="rounded-lg w-full text-left text-gray-500">
+                            <thead class="flex rounded-t-lg text-base font-normal text-gray-500 uppercase bg-white w-full">
+                                <tr class="flex w-full rounded-lg">
                                     <th scope="col" class="col-chart">
                                         Date
                                     </th>
@@ -472,9 +469,9 @@
                                     </th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody class="flex flex-col overflow-y-scroll w-full bg-white/0">
                                 {% for stat in stats %}
-                                <tr class="bg-gray-200  border-gray-900">
+                                <tr class="flex w-full rounded-lg">
                                     <td scope="row" class="val-chart">
                                         {{ stat.date }}
                                     </td>
@@ -510,10 +507,10 @@
                 </div>
 
                 <div class="flex items-center justify-center p-4 bg-white/75 rounded-lg" id="price" role="tabpanel" aria-labelledby="price-tab">
-                    <main>
-                        <table class="editable w-full h-max text-left text-gray-500 border-spacing-2 border border-slate-500">
-                            <thead class="text-xs text-gray-700 uppercase bg-gray-50">
-                                <tr>
+                    <main class="rounded-lg bg-gray-200">
+                        <table class="rounded-lg w-full text-left text-gray-500">
+                            <thead class="flex rounded-t-lg text-base font-normal text-gray-500 uppercase bg-white w-full">
+                                <tr class="flex w-full rounded-lg">
                                     <th scope="col" class="col-chart">
                                         Date
                                     </th>
@@ -533,9 +530,9 @@
                                     </th>
                                 </tr>
                             </thead>
-                            <tbody>
+                            <tbody class="flex flex-col overflow-y-scroll w-full bg-white/0">
                                 {% for price in prices %}
-                                <tr class="bg-gray-200  border-gray-900">
+                                <tr class="flex w-full rounded-lg">
                                     <form method="post" action="price/" id="price_form-{{price.id}}">{% csrf_token %}</form>                                      
                                         <td scope="row" id="date-{{price.id}}" name="price_date" form="price_form-{{price.id}}" class="val-chart">
                                             {{ price.date }}
@@ -604,7 +601,7 @@
    
                                 </tr>
                                 {% endfor %}
-                                <tr class="bg-gray-200  border-gray-900">
+                                <tr class="flex w-full rounded-lg">
                                     <form method="post" action="price/">
                                         {% csrf_token %}
                                         <td scope="row" class="val-chart">
