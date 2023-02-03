@@ -6,126 +6,157 @@
 <meta http-equiv="Pragma" content="no-cache" />
 <meta http-equiv="Expires" content="0" /> -->
 <html>
-  <head>
-    <title>PARKING 1</title>
-    <meta name="viewport" content="width=device-width, height=device-height,  initial-scale=1.0">
-    <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
-    <!-- <style>html, body {width: 100%;height: 100%;margin: 0;padding: 0;}</style> -->
-    <!--each 10 second-->
-    <!-- <meta http-equiv="refresh" content="10"> -->
-    <!-- <style>
-    *,
-    ::before,
-    ::after {
-        border-style: hidden;
-        }
-    
+    <head>
+        <title>PARKING 1</title>
+        <meta name="viewport" content="width=device-width, height=device-height,  initial-scale=1.0">
+        <meta http-equiv="content-type" content="text/html; charset=UTF-8" />
+        
+        <style>
+            main{
+                width: 100%;
+                margin-left: auto;
+                margin-right: auto;
+                background: #073ca7; 
+                border-radius: 0.5rem;
+            }
+            tbody{
+                max-height: 60vh;
+            }
+            hr{
+                border-top-width: 2px;
+            }
+            .col-chart{
+                padding : 0.5rem;
+                width : 25%;
+                margin-left: 0.125rem;
+                margin-right: 0.125rem;
+                background: #f9fafb00;
+            }
+            .val-chart{
+                white-space: nowrap;
+                padding : 0.5rem;
+                width : 25%;
+                color: rgb(17 24 39);
+            }
+            .price{
+                width: 9.75rem;
+                height: 2.5rem;
+                border-radius: 0.25rem;
+                font-size: 1rem;
+                font-weight: 200;
+                color: rgb(17 24 39);
+            }
+            .indicator {
+                width: 0.5rem;
+                height: 0.5rem;
+                margin-right: 0.25rem;
+                border-radius: 9999px;
+            }
+            .indicator.red{
+                background-color:  #f05252;
+            }
+            .indicator.green{
+                background-color:  #0e9f6e;
+            }
+            .indicator.gray{
+                background-color:  #87909b;
+            } 
+            .lil-span
+            { 
+                padding-left: 0.625rem; 
+                padding-right: 0.625rem;
+                font-size: 0.75rem; 
+                line-height: 1rem;
+                font-weight: 500;
+                margin-right: 0.5rem; 
+                padding-left: 0.625rem;
+                padding-right: 0.625rem;
+                padding-top: 0.125rem;
+                padding-bottom: 0.125rem;
+            }
+            .green-span{
+                color: #03543f; 
+                background-color: #def7ec;
+            }
+            .red-span{
+                color: #9b1c1c;
+                background-color: #f7dede;
+            }
+            .gray-span{
+                color: #494848;
+                background-color: #e2e1e1;
+            }
+            .gate{
+                font-size: 0.875rem;
+                line-height: 1.25rem;
+                color: #f9fafb;
+                font-weight: 500;
+                border-radius: 0.5rem;
+                padding-left: 1.25rem;
+                padding-right: 1.25rem;
+                padding-top: 0.625rem;
+                padding-bottom: 0.625rem;
+                text-align: center;
+                margin-right: 0.5rem;
+                margin-bottom: 0.5rem;
+            }
+            .open{background-color: #046c4f89;}
+            .open.focus{background-color:#046c4e;}
+            .close{background-color: #c81e1e89;}
+            .close.focus{background-color: #c81e1e;}
+            .default{background-color: #3d414989;}
+            .default.focus{background-color: #3d4149;}
+        </style>
 
-    
+        <script type="text/javascript" src="/static/js/update_price.js"></script>
+        <script type="text/javascript" src="/static/js/update_parkings.js"></script>
+        <script>
+            var focusing = sessionStorage.getItem("focus");
 
-    </style> -->
-    <style>
-        main{
-            width: 100%;
-            margin-left: auto;
-            margin-right: auto;
-            background: #073ca7; 
-            border-radius: 0.5rem;
-        }
-        tbody{
-            max-height: 60vh;
-        }
-        hr{
-            border-top-width: 2px;
-        }
-        .col-chart{
-            padding : 0.5rem;
-            width : 25%;
-            margin-left: 0.125rem;
-            margin-right: 0.125rem;
-            background: #f9fafb00;
-        }
-        .val-chart{
-            white-space: nowrap;
-            padding : 0.5rem;
-            width : 25%;
-            color: rgb(17 24 39);
-        }
-        .price{
-            width: 9.75rem;
-            height: 2.5rem;
-            border-radius: 0.25rem;
-            font-size: 1rem;
-            font-weight: 200;
-            color: rgb(17 24 39);
-        }
-        .indicator {
-            width: 0.5rem;
-            height: 0.5rem;
-            margin-right: 0.25rem;
-            border-radius: 9999px;
-        }
-        .indicator.red{
-            background-color:  #f05252;
-        }
-        .indicator.green{
-            background-color:  #0e9f6e;
-        }
-        .indicator.gray{
-            background-color:  #87909b;
-        } 
-        .lil-span
-        { 
-            padding-left: 0.625rem; 
-            padding-right: 0.625rem;
-            font-size: 0.75rem; 
-            line-height: 1rem;
-            font-weight: 500;
-            margin-right: 0.5rem; 
-            padding-left: 0.625rem;
-            padding-right: 0.625rem;
-            padding-top: 0.125rem;
-            padding-bottom: 0.125rem;
-        }
-        .green-span{
-            color: #03543f; 
-            background-color: #def7ec;
-        }
-        .red-span{
-            color: #9b1c1c;
-            background-color: #f7dede;
-        }
-        .gray-span{
-            color: #494848;
-            background-color: #e2e1e1;
-        }
-        .gate{
-            font-size: 0.875rem;
-            line-height: 1.25rem;
-            color: #f9fafb;
-            font-weight: 500;
-            border-radius: 0.5rem;
-            padding-left: 1.25rem;
-            padding-right: 1.25rem;
-            padding-top: 0.625rem;
-            padding-bottom: 0.625rem;
-            text-align: center;
-            margin-right: 0.5rem;
-            margin-bottom: 0.5rem;
-        }
-        .open{background-color: #046c4f89;}
-        .open.focus{background-color:#046c4e;}
-        .close{background-color: #c81e1e89;}
-        .close.focus{background-color: #c81e1e;}
-        .default{background-color: #3d414989;}
-        .default.focus{background-color: #3d4149;}
-    </style>
+            //alert(focusing);
+            window.addEventListener('load', function (){
+                var home=document.getElementById("home-tab");
+                var history=document.getElementById("history-tab");
+                var info=document.getElementById("info-tab");
+                //alert("variabili settate");
+                switch (focusing) {
+                    case 'home-tab':
+                        home.setAttribute("aria-selected", "true");
+                        history.setAttribute("aria-selected", "false");
+                        info.setAttribute("aria-selected", "false");
+                        break;
+                    case 'history-tab': 
+                        home.setAttribute("aria-selected", "false");
+                        history.setAttribute("aria-selected", "true");
+                        info.setAttribute("aria-selected", "false");
+                        break;
+                    case 'info-tab':
+                        home.setAttribute("aria-selected", "false");
+                        history.setAttribute("aria-selected", "false");
+                        info.setAttribute("aria-selected", "true");
+                        break;
+                    case null:
+                        focusing = "home-tab";
+                        break;
+                };
+                home.addEventListener('click', function(){
+                    focusing = "home-tab";                    
+                });
+                history.addEventListener('click', function(){
+                    focusing = "history-tab";
+                });
+                info.addEventListener('click', function(){
+                    focusing = "info-tab";
+                });
 
-    <script type="text/javascript" src="../update_price.js"></script>
-    <script type="text/javascript" src="../update_parkings.js"></script>
+            });
 
-    
-  </head>
+            window.addEventListener('beforeunload', function () {
+                sessionStorage.setItem("focus", focusing);
+            });
+
+        </script>
+    </head>
   
 
 <div class="px-8 py-4">
@@ -134,8 +165,8 @@
             <label for="tabs" class="sr-only">Select tab</label>
             <select id="tabs" class="bg-gray-50 !important border-0 border-b border-gray-200 text-gray-900 text-base rounded-t-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white dark:focus:ring-blue-500 dark:focus:border-blue-500">
                 <option>Home</option>
-                <option>Services</option>
-                <option>FAQ</option>
+                <option>History</option>
+                <option>Info</option>
             </select>
         </div>
         <ul class="text-xl font-medium text-center text-white !important divide-x divide-gray-200 rounded-lg sm:flex dark:divide-gray-600 dark:text-gray-400" id="fullWidthTab" data-tabs-toggle="#fullWidthTabContent" role="tablist">
@@ -143,10 +174,10 @@
                 <button id="home-tab" data-tabs-target="#home" role="tab" type="button" aria-controls="home" aria-selected="true" class="text-white inline-block w-full p-4 rounded-l-lg bg-gray-50 !important hover:bg-gray-100 focus:outline-none dark:bg-gray-700 dark:hover:bg-gray-600">Home</button>
             </li>
             <li class="w-full">
-                <button id="about-tab" data-tabs-target="#about"  role="tab" aria-controls="about" aria-selected="false" class=" text-white inline-block w-full p-4 bg-gray-50 !important hover:bg-gray-100 focus:outline-none dark:bg-gray-700 dark:hover:bg-gray-600">Services</button>
+                <button id="history-tab" data-tabs-target="#history"  role="tab" type="button" atia-controls="history" aria-selected="false" class=" text-white inline-block w-full p-4 bg-gray-50 !important hover:bg-gray-100 focus:outline-none dark:bg-gray-700 dark:hover:bg-gray-600">History</button>
             </li>
             <li class="w-full">
-                <button id="faq-tab" data-tabs-target="#faq" type="button" role="tab" aria-controls="faq" aria-selected="false" class="inline-block w-full p-4 rounded-r-lg bg-gray-50 !important hover:bg-gray-100 focus:outline-none dark:bg-gray-700 dark:hover:bg-gray-600">FAQ</button>
+                <button id="info-tab" data-tabs-target="#info" type="button" role="tab" aria-controls="info" aria-selected="false" class="inline-block w-full p-4 rounded-r-lg bg-gray-50 !important hover:bg-gray-100 focus:outline-none dark:bg-gray-700 dark:hover:bg-gray-600">Info</button>
             </li>
         </ul>
         <div id="fullWidthTabContent" class="">
@@ -203,12 +234,12 @@
                         {% if start is not None %}
                             {% if payed is None %} 
 
-                                <button onclick="location.href='pay'" type="submit" class=" w-1/2 mx-auto text-white font-bold bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-purple-300 dark:focus:ring-purple-800 shadow-lg shadow-purple-500/50 dark:shadow-lg dark:shadow-purple-800/80 rounded-lg px-5 py-2.5 text-center ">
+                                <button id="pay" onclick="location.href='pay'" type="submit" class=" w-1/2 mx-auto text-white font-bold bg-gradient-to-r from-purple-500 via-purple-600 to-purple-700 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-purple-300 dark:focus:ring-purple-800 shadow-lg shadow-purple-500/50 dark:shadow-lg dark:shadow-purple-800/80 rounded-lg px-5 py-2.5 text-center ">
                                     Pay</button>
 
                             {% else %}
                             <!-- <button type="button" class="text-gray-900 bg-white hover:bg-gray-100 border border-gray-200 focus:ring-4 focus:outline-none focus:ring-gray-100 font-medium rounded-lg text-sm px-5 py-2.5 text-center inline-flex items-center dark:focus:ring-gray-600 dark:bg-gray-800 dark:border-gray-700 dark:text-white dark:hover:bg-gray-700 mr-2 mb-2"> -->
-                            <button type="button" class="mx-auto w-1/2 text-white font-semibold text-lg bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 shadow-lg shadow-green-500/50 dark:shadow-lg dark:shadow-green-800/80 rounded-lg text-sm px-5 py-2.5 inline-flex items-center justify-center mb-2 ">
+                            <button id="pay" type="button" class="mx-auto w-1/2 text-white font-semibold text-lg bg-gradient-to-r from-green-400 via-green-500 to-green-600 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-green-300 dark:focus:ring-green-800 shadow-lg shadow-green-500/50 dark:shadow-lg dark:shadow-green-800/80 rounded-lg text-sm px-5 py-2.5 inline-flex items-center justify-center mb-2 ">
                                 <svg class="pr-2" version="1.1"  xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" width="30" height="30" viewBox="0 0 96 96"  xml:space="preserve"><g><path fill-rule="evenodd" clip-rule="evenodd" fill="#3d3d3d" d="M48,0c26.51,0,48,21.49,48,48S74.51,96,48,96S0,74.51,0,48 S21.49,0,48,0L48,0z M26.764,49.277c0.644-3.734,4.906-5.813,8.269-3.79c0.305,0.182,0.596,0.398,0.867,0.646l0.026,0.025 c1.509,1.446,3.2,2.951,4.876,4.443l1.438,1.291l17.063-17.898c1.019-1.067,1.764-1.757,3.293-2.101 c5.235-1.155,8.916,5.244,5.206,9.155L46.536,63.366c-2.003,2.137-5.583,2.332-7.736,0.291c-1.234-1.146-2.576-2.312-3.933-3.489 c-2.35-2.042-4.747-4.125-6.701-6.187C26.993,52.809,26.487,50.89,26.764,49.277L26.764,49.277z"/></g></svg>                                               
                                     Payed
                             </button>
@@ -218,68 +249,9 @@
                 </a>
             </div>
             
-            <div class="hidden items-center justify-center p-4 flex bg-white/75 rounded-lg md:p-8 dark:bg-gray-800" id="about" role="tabpanel" aria-labelledby="about-tab">
-                <div class=" items-center bg-white border rounded-lg shadow-md md:flex-row  dark:border-gray-700 dark:bg-gray-800">
-                    <h2 class="p-4 text-2xl font-extrabold tracking-tight text-gray-900 dark:text-white">Park details</h2>
-                    <!-- List -->
-                    
-                    <div class="relative mx-4 mb-4 overflow-x-auto shadow-md sm:rounded-lg">
-                        <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
-                            <tbody>
-                                <tr class="bg-gray-200 border-b dark:bg-gray-800 dark:border-gray-700">
-                                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                        Address
-                                    </th>
-                                    <td class="px-6 py-4">
-                                        Via Porta Reno, 80, 44122 Ferrara FE
-                                    </td>
-                                </tr>
-                                <tr class="bg-gray-200 border-b dark:bg-gray-800 dark:border-gray-700">
-                                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                        Status
-                                    </th>
-                                    <td class="px-6 py-4">
-                                        <div class="flex justify-between mb-1">
-                                            <span>{{park_status}}</span>
-                                            <div class="my-[5px] mx-[9px] w-full bg-gray-300 rounded-full h-3 dark:bg-gray-700">
-                                                <div class="bg-[#573b8a] h-3 rounded-full" style="width: {{park_percent}}%"></div>
-                                            </div>
-                                        </div>
-                                        
-                                    </td>
-                                </tr>
-                                <tr class="bg-gray-200 border-b dark:bg-gray-800 dark:border-gray-700">
-                                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                        Capacity
-                                    </th>
-                                    <td class="px-6 py-4">
-                                        {{total_spaces}} slots
-                                    </td>
-                                </tr>
-                                <tr class="bg-gray-200 border-b dark:bg-gray-800 dark:border-gray-700">
-                                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                        Price
-                                    </th>
-                                    <td class="px-6 py-4">
-                                        {{price}} €/minute
-                                    </td>
-                                </tr>
-                                <tr class="bg-gray-200 border-b dark:bg-gray-800 dark:border-gray-700">
-                                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
-                                        Last stop
-                                    </th>
-                                    <td class="px-6 py-4">
-                                        {{last_time}}
-                                    </td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
 
-            </div>
             
-            <div class="hidden bg-white/75 rounded-lg md:p-8 dark:bg-gray-800 flex space-x-4" id="faq" role="tabpanel" aria-labelledby="faq-tab">
+            <div class="hidden bg-white/75 rounded-lg md:p-8 dark:bg-gray-800 flex space-x-4" id="history" role="tabpanel" aria-labelledby="history-tab">
                 <div>
                 <aside class="m-0 px-4 py-4 rounded-md bg-white/75 h-auto w-auto" aria-label="Sidenav" style="float: left; scale: 100%; transform-origin: top;">
                     <form method="post" action="/park_1/">
@@ -354,6 +326,66 @@
                         </tbody>
                     </table>
                 </main>
+            </div>
+            <div class="hidden items-center justify-center p-4 flex bg-white/75 rounded-lg md:p-8 dark:bg-gray-800" id="info" role="tabpanel" aria-labelledby="info-tab">
+                <div class=" items-center bg-white border rounded-lg shadow-md md:flex-row  dark:border-gray-700 dark:bg-gray-800">
+                    <h2 class="p-4 text-2xl font-extrabold tracking-tight text-gray-900 dark:text-white">Park details</h2>
+                    <!-- List -->
+                    
+                    <div class="relative mx-4 mb-4 overflow-x-auto shadow-md sm:rounded-lg">
+                        <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+                            <tbody>
+                                <tr class="bg-gray-200 border-b dark:bg-gray-800 dark:border-gray-700">
+                                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                        Address
+                                    </th>
+                                    <td class="px-6 py-4">
+                                        Via Porta Reno, 80, 44122 Ferrara FE
+                                    </td>
+                                </tr>
+                                <tr class="bg-gray-200 border-b dark:bg-gray-800 dark:border-gray-700">
+                                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                        Status
+                                    </th>
+                                    <td class="px-6 py-4">
+                                        <div class="flex justify-between mb-1">
+                                            <span>{{park_status}}</span>
+                                            <div class="my-[5px] mx-[9px] w-full bg-gray-300 rounded-full h-3 dark:bg-gray-700">
+                                                <div class="bg-[#573b8a] h-3 rounded-full" style="width: {{park_percent}}%"></div>
+                                            </div>
+                                        </div>
+                                        
+                                    </td>
+                                </tr>
+                                <tr class="bg-gray-200 border-b dark:bg-gray-800 dark:border-gray-700">
+                                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                        Capacity
+                                    </th>
+                                    <td class="px-6 py-4">
+                                        {{total_spaces}} slots
+                                    </td>
+                                </tr>
+                                <tr class="bg-gray-200 border-b dark:bg-gray-800 dark:border-gray-700">
+                                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                        Price
+                                    </th>
+                                    <td class="px-6 py-4">
+                                        {{price}} €/minute
+                                    </td>
+                                </tr>
+                                <tr class="bg-gray-200 border-b dark:bg-gray-800 dark:border-gray-700">
+                                    <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
+                                        Last stop
+                                    </th>
+                                    <td class="px-6 py-4">
+                                        {{last_time}}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
             </div>
         </div>
     </div>

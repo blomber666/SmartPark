@@ -302,7 +302,7 @@ def price(request):
                     messages.info(request,'Start time must be before end time')
                     return redirect('/administration')
 
-                print('\n\n\n\naregs', args, '\n\n\n\n')
+                print('\n\n\n\nargs', args, '\n\n\n\n')
                 
                 if 'add' in request.POST:         
                     price = Price.objects.create(**args)

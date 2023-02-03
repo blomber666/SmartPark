@@ -3,7 +3,6 @@ window.addEventListener('load', function() {
     updateLiveGate = 
         function(smartpark, door){
             var url = 'state/door_'+ smartpark +'_'+ door +'/';
-            var div = null
 
             fetch(url)
             .then((response) => {

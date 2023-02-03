@@ -152,48 +152,51 @@
             });
         </script>
         <script>
-            var store = sessionStorage.get("store") || {'focus':""};
+            var focusing = sessionStorage.getItem("focus");
 
+            //alert(focusing);
             window.addEventListener('load', function (){
-                alert("eccoci");
+                // alert("eccoci");
                 var stops=document.getElementById("stops-tab");
                 var stats=document.getElementById("stats-tab");
                 var price=document.getElementById("price-tab");
-                alert("variabili settate");
-                switch (store.focus) {
-                    case 'stops-tabs':
-                        alert("stop focused");
+                // alert("variabili settate");
+                switch (focusing) {
+                    case 'stops-tab':
                         stops.setAttribute("aria-selected", "true");
                         stats.setAttribute("aria-selected", "false");
                         price.setAttribute("aria-selected", "false");
-                    case 'stats-tabs':
-                        alert("stats focused");
+                        break;
+                    case 'stats-tab':
                         stops.setAttribute("aria-selected", "false");
                         stats.setAttribute("aria-selected", "true");
                         price.setAttribute("aria-selected", "false");
-                    case 'price-tabs':
-                        alert("price focused");
+                        break;
+                    case 'price-tab':
                         stops.setAttribute("aria-selected", "false");
                         stats.setAttribute("aria-selected", "false");
                         price.setAttribute("aria-selected", "true");
+                        break;
+                    case null:
+                        focusing = "stops-tab";
+                        break;
                 };
                 stops.addEventListener('click', function(){
-                    alert("focus on stops");
-                    store.focus = "stops-tab";                    
+                    focusing = "stops-tab";                    
                 });
                 stats.addEventListener('click', function(){
-                    alert("focus on stats");
-                    store.focus = "stats-tab";
+                    focusing = "stats-tab";
                 });
                 price.addEventListener('click', function(){
-                    alert("focus on price");
-                    store.focus = "price-tab";
+                    focusing = "price-tab";
                 });
 
             });
+
             window.addEventListener('beforeunload', function () {
-                sessionStorage.setItem("store", store);
+                sessionStorage.setItem("focus", focusing);
             });
+
         </script>
     </head>
 
