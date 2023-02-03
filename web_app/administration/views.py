@@ -271,7 +271,8 @@ def price(request):
                     args['id'] = request.POST['price_id']
                 
                 if 'price_date' in request.POST and request.POST['price_date']!="":
-                    args['date'] = request.POST['price_date']
+                    converted = datetime.strptime(request.POST['price_date'], '%d/%m/%Y').date()
+                    args['date'] = converted
 
                 if 'price_day' in request.POST and request.POST['price_day']!="" and request.POST['price_day']!='None':
                     args['day'] = request.POST['price_day']
@@ -298,7 +299,7 @@ def price(request):
                 if not 'date' in args and not 'day' in args:
                     print('date and day are empty')
 
-                if args['start_time'] > args['end_time']:
+                if str(args['start_time']) > str(args['end_time']):
                     messages.info(request,'Start time must be before end time')
                     return redirect('/administration')
 

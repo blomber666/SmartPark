@@ -233,8 +233,10 @@ def control_exit_gate(tbapi, park_number, old_presence, plate):
                             #find the payment with the same stop id
                             payment = Payment.objects.filter(stop=last_stop)
                             #TODO check if the payment_time is less than 15 minutes ago
-                            if payment and payment[0].payment_time > timezone.now() - timedelta(minutes=15):
+                            if payment :
                                 printc("GREEN",f"payed{payment}")
+                                if payment[0].payment_time < (timezone.now() - timedelta(minutes=15)):
+                                    printc("RED","trying to exit after 15 minutes, for this time we don't charge")
                                 #update the stop
                                 last_stop.end_time = timezone.now()
                                 last_stop.save()

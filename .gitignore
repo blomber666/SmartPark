@@ -4,3 +4,5 @@ web2/parkings/static/park_1.png
 plates_recognition/datasets/*
 web2/media/park_1.png
 web2/theme/static/css/dist/styles.css
+web_app/media/park_1.png
+web_app/media/park_1.txt

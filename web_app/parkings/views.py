@@ -1,7 +1,7 @@
 from django.shortcuts import render
 from parkings.map_tools import generate_map
 #from users import views as users_views
-from parkings.models import Stop, Payment, TbApi
+from parkings.models import Stop, Payment, TbApi, Price
 from users.models import User
 from django.shortcuts import redirect
 from django.utils import timezone
@@ -149,9 +149,14 @@ def pay(request):
 
 
 #API
-def calculate_amount(start, end=timezone.now(), price=0.01):
-    '''calculate the amount in euros, every minute is 'price' cents
-    start and end are datetime.datetime objects'''
+def calculate_amount(start, end=timezone.now()):
+    '''calculate the amount in euros,
+    start and end are datetime.datetime objects.
+    Get the prices from the db'''
+    
+    price = get_price_from_db()
+    print('\n\n\n\n')
+    print('price: ', price)
     #calculate the amount in euors, every minute is 1 cent
     amount = ((end - start).total_seconds()) / 60 * price
     #round to 2 decimal places
@@ -175,3 +180,45 @@ def get_parkings(request):
         return JsonResponse(context)
     else:
         messages.info(request,'HTTP ERROR: 401 - Unauthorized')
+
+def get_price_from_db():
+    '''Get the prices from the db'''
+    prices = Price.objects.all()
+    price = 0.01 #default price
+    if prices:
+        today = datetime.today().date()
+        now = datetime.now().time()
+        #check in order of priority: date, weekday, every day, default price
+        #date is in price.date
+        #weekday is in price.day as "Every day", "Every Monday", "Every Tuesday", ...
+        #every day is in price.day as "Every day"
+        #consider only if the time is between start_time and end_time
+
+        found_day = None
+        found_date = None
+        found_every_day = None
+
+        for p in prices:
+            if p.date and p.date == today:
+                if p.start_time <= now and p.end_time >= now:
+                    found_date = p
+                    break
+            elif p.day and p.day == 'Every ' + today.strftime("%A"):
+                if p.start_time <= now and p.end_time >= now:
+                    found_day = p
+            elif p.day and p.day == 'Every Day':
+                if p.start_time <= now and p.end_time >= now:
+                    found_every_day = p
+
+
+        for p in [found_date, found_day, found_every_day]:
+            if p:
+                price = float(p.price)
+                break
+
+        print('price: ', price)
+
+    return price
+    
+        
+        

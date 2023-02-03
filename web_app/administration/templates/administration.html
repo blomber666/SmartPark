@@ -37,12 +37,17 @@
             color: rgb(17 24 39);
         }
         .price{
-            width: 9.75rem;
-            height: 2.5rem;
-            border-radius: 0.25rem;
-            font-size: 1rem;
+            width: 100%;
+            border-radius: 0.5rem;
+            border-width: 1px;
             font-weight: 200;
+            display: block;
             color: rgb(17 24 39);
+            font-size: 0.875rem;
+            line-height: 1.25rem;
+            background-color: rgb(249 250 251);
+            border-color: rgb(209 213 219);
+             
         }
         .indicator {
             width: 0.5rem;
@@ -98,6 +103,12 @@
             text-align: center;
             margin-right: 0.5rem;
             margin-bottom: 0.5rem;
+        }
+        .hover\:bg-purple:hover {
+            background-color: rgb(144, 0, 255) 
+        }
+        .text-blue-600 {
+            color: rgb(81 ,69,205)
         }
         .open{background-color: #046c4f89;}
         .open.focus{background-color:#046c4e;}
@@ -615,8 +626,20 @@
                                                 <input datepicker datepicker-format="dd/mm/yyyy"  name="price_date" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full pl-5" placeholder="Select date" style="padding-left: 2.5rem;">
                                             </div>
                                         </td>
-                                        <td scope="row" class="val-chart">
-                                            <input name="price_day" class="price" type="text" placeholder="Day of the week"></input>
+                                        <td scope="row" class="val-chart">       
+                                            <select name="price_day" class="bg-gray-50 border border-gray-300 text-gray-500 text-sm rounded-lg block w-full pl-5">
+                                                <option selected>Day</option>
+                                                <option value="Every Day">Every Day</option>
+                                                <option value="Every Monday">Every Monday</option>
+                                                <option value="Every Tuesday">Every Tuesday</option>
+                                                <option value="Every Wednesday">Every Wednesday</option>
+                                                <option value="Every Thursday">Every Thursday</option>
+                                                <option value="Every Friday">Every Friday</option>
+                                                <option value="Every Saturday">Every Saturday</option>\
+                                                <option value="Every Sunday">Every Sunday</option>
+                                                </select>                  
+                                            
+                                            </div>
                                         </td>
                                         <td scope="row" class="val-chart">
                                             <input name="price_start_time" class="price" type="time" placeholder="Start time (8:30)"></input>
@@ -625,7 +648,7 @@
                                             <input name="price_end_time" class="price" type="time" placeholder="End time (19:30)"></input>
                                         </td>
                                         <td scope="row" class="val-chart">
-                                            <input name="price_price" class="price" type="number" placeholder="Insert a price"></input>
+                                            <input name="price_price" class="price text-gray-500" type="number" placeholder="Insert a price"></input>
                                         </td>
                                         <td scope="row" class="val-chart">
                                             <button name="add" class="flex flex-row cursor-pointer">
