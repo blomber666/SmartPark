@@ -6,6 +6,8 @@ window.addEventListener('load', function() {
         fetch(url, {headers:{'Accept': 'application/json','X-Requested-With': 'XMLHttpRequest'},})
         .then(response => response.json())
         .then((dict) => {
+            // alert(dict.park_percent);
+            // alert(dict.park_status);
             document.getElementById('park_status').innerHTML = dict.park_status;
             document.getElementById('park_percent').style.width = String(dict.park_percent)+'%';
             document.getElementById('park1').firstChild.src="/media/park_1.png";
