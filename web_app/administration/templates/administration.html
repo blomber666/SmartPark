@@ -17,7 +17,7 @@
             overflow-x: auto;
         }
         tbody{
-            max-height: 60vh;
+            max-height: 64vh;
             overflow-x: hidden
         }
         hr{
@@ -615,8 +615,10 @@
    
                                 </tr>
                                 {% endfor %}
-                                <tr class="flex w-full rounded-lg">
-                                    <form method="post" action="price/">
+                            </tbody>
+                                <tfoot class="flex rounded-t-lg text-base font-normal text-gray-500 uppercase bg-white w-full">
+                                    <tr class="flex w-full rounded-lg">
+                                        <form method="post" action="price/">
                                         {% csrf_token %}
                                         <td scope="row" class="val-chart">
                                             <div class="relative">
@@ -638,8 +640,6 @@
                                                 <option value="Every Saturday">Every Saturday</option>\
                                                 <option value="Every Sunday">Every Sunday</option>
                                                 </select>                  
-                                            
-                                            </div>
                                         </td>
                                         <td scope="row" class="val-chart">
                                             <input name="price_start_time" class="price" type="time" placeholder="Start time (8:30)"></input>
@@ -655,9 +655,8 @@
                                                 <svg type="submit" name="add"  style="background: #573b8a; border-radius: 0.5rem; padding: 0.5rem" viewBox="-3.36 -3.36 30.72 30.72" xmlns="http://www.w3.org/2000/svg" id="send-alt" class="icon glyph" fill="#f9fafb" stroke="#f9fafb" height="40" width="40" transform="rotate(0)matrix(1, 0, 0, 1, 0, 0)"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" stroke="#CCCCCC" stroke-width="1.584"><path d="M21.88,4.73,16.2,20.65A2,2,0,0,1,14.3,22h0a2,2,0,0,1-1.9-1.31l-2.12-5.52,1.54-1.54,2.49-2.49a1,1,0,1,0-1.42-1.42l-2.49,2.49L8.82,13.76,3.31,11.63a2,2,0,0,1,0-3.83L19.27,2.12a2,2,0,0,1,2.61,2.61Z" style="fill:#f9fafb"></path></g><g id="SVGRepo_iconCarrier"><path d="M21.88,4.73,16.2,20.65A2,2,0,0,1,14.3,22h0a2,2,0,0,1-1.9-1.31l-2.12-5.52,1.54-1.54,2.49-2.49a1,1,0,1,0-1.42-1.42l-2.49,2.49L8.82,13.76,3.31,11.63a2,2,0,0,1,0-3.83L19.27,2.12a2,2,0,0,1,2.61,2.61Z" style="fill:#f9fafb"></path></g></svg><!--add-->
                                             </button>
                                         </td>
-                                    </form>
-                                </tr>
-                            </tbody>
+                                    </form></tr>
+                                </tfoot>
                         </table>
                     </main>
                 </div>
