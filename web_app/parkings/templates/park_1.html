@@ -2,9 +2,9 @@
 {% block content %}
 
 <!DOCTYPE html>
-<!-- <meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
+<meta http-equiv="Cache-Control" content="no-cache, no-store, must-revalidate" />
 <meta http-equiv="Pragma" content="no-cache" />
-<meta http-equiv="Expires" content="0" /> -->
+<meta http-equiv="Expires" content="0" />
 <html>
     <head>
         <title>PARKING 1</title>
@@ -185,7 +185,7 @@
                 <a class="flex items-center bg-gray-200 rounded-lg shadow-md md:flex-row  dark:border-gray-700 dark:bg-gray-800">
                     <div id="park1">
 
-                        <img class="object-cover rounded-tl-lg max-h-[50vh] border-0" src="/media/park_1.png" alt="">
+                        <img id="img-park" class="object-cover rounded-tl-lg max-h-[50vh] border-0" src="/media/park_1.png" alt="">
 
                         <div class="p-3 space-y-4 bg-white rounded-bl-lg">                               
                             <div class="flex justify-between mb-1">
@@ -349,7 +349,7 @@
                                     </th>
                                     <td class="px-6 py-4">
                                         <div class="flex justify-between mb-1">
-                                            <span>{{park_status}}</span>
+                                            <span id="status-details">{{park_status}}</span>
                                             <div class="my-[5px] mx-[9px] w-full bg-gray-300 rounded-full h-3 dark:bg-gray-700">
                                                 <div class="bg-[#573b8a] h-3 rounded-full" style="width: {{park_percent}}%"></div>
                                             </div>
@@ -369,7 +369,7 @@
                                     <th scope="row" class="px-6 py-4 font-medium text-gray-900 whitespace-nowrap dark:text-white">
                                         Price
                                     </th>
-                                    <td class="px-6 py-4">
+                                    <td id="price-per-min" class="px-6 py-4">
                                         {{price}} €/minute
                                     </td>
                                 </tr>

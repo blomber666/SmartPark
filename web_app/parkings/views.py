@@ -176,8 +176,8 @@ def get_parkings(request):
         with open('media/park_1.txt', 'r') as f:
             free_spaces = int(f.readline())
             total_spaces = int(f.readline())
-        print('free_spaces: ', free_spaces)
-        print('total_spaces: ', total_spaces)
+        print('\n\nfree_spaces: ', free_spaces)
+        print('total_spaces: ', total_spaces, "\n\n")
         park_status = str((total_spaces-free_spaces)) + '/' + str(total_spaces)
         park_percent = int(((total_spaces-free_spaces)/total_spaces)*100)
         context = {'park_status': park_status, 'park_percent': park_percent}

@@ -3,7 +3,6 @@ window.addEventListener('load', function() {
     updateLivePrice = function(){
         if (document.getElementById("start").getAttribute("value") == null){
             //alert("no stop")
-            clearInterval(timeout);
             return false;
         }
         else {
@@ -19,8 +18,9 @@ window.addEventListener('load', function() {
             fetch(url)
             .then(response => response.text())
             .then((dict) => {
-                //alert(dict);
-//                document.getElementById('amount').innerHTML = dict.amount;
+                alert(dict.amount);
+               document.getElementById('amount').innerHTML = dict.amount;
+               document.getElementById('price-per-min').innerHTML = dict.amount;
             });
     };
     
