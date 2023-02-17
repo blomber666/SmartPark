@@ -24,6 +24,7 @@
             border-top-width: 2px;
         }
         .col-chart{
+            text-align: center;
             padding : 0.5rem;
             width : 25%;
             margin-left: 0.125rem;
@@ -31,8 +32,9 @@
             background: #f9fafb00;
         }
         .val-chart{
-            white-space: nowrap;
-            padding : 0.5rem;
+            text-align: center;
+            white-space: nowrap !important; 
+            padding : 0.5rem !important;
             width : 25%;
             color: rgb(17 24 39);
         }
@@ -548,27 +550,12 @@
                                 {% for price in prices %}
                                 <tr class="flex w-full rounded-lg">
                                     <form method="post" action="price/" id="price_form-{{price.id}}">{% csrf_token %}</form>                                      
-                                        <td scope="row" id="date-{{price.id}}" name="price_date" form="price_form-{{price.id}}" class="val-chart">
-                                            {{ price.date }}
-                                        </td>
-                                        <td scope="row" id="day-{{price.id}}" name="price_day" form="price_form-{{price.id}}" class="val-chart">
-                                            {{ price.day }}
-                                        </td>
-                                        <td scope="row" id="s_time-{{price.id}}" name="price_start_time" form="price_form-{{price.id}}" class="val-chart">
-                                            {{ price.start_time }}
-                                        </td>
-                                        <td scope="row" id="e_time-{{price.id}}" name="price_end_time" form="price_form-{{price.id}}" class="val-chart">
-                                            {{ price.end_time }}
-                                        </td>
-                                        <td scope="row" id="price-{{price.id}}" name="price_price" form="price_form-{{price.id}}" class="val-chart">  
-                                            {{ price.price }}   
-                                        </td>
-
-                                        <input type="hidden" name="price_id" value="{{price.id}}" form="price_form-{{price.id}}">
-                                        <input type="hidden" name="price_start_time" value="{{price.start_time}}" form="price_form-{{price.id}}">
-                                        <input type="hidden" name="price_end_time" value="{{price.end_time}}" form="price_form-{{price.id}}">
-                                        
-                                        
+                                        <td scope="row" id="date-{{price.id}}" name="price_date" form="price_form-{{price.id}}" class="val-chart">{{ price.date }}</td>
+                                        <td scope="row" id="day-{{price.id}}" name="price_day" form="price_form-{{price.id}}" class="val-chart">{{ price.day }}</td>
+                                        <td scope="row" id="s_time-{{price.id}}" name="price_start_time" form="price_form-{{price.id}}" class="val-chart">{{ price.start_time }}</td>
+                                        <td scope="row" id="e_time-{{price.id}}" name="price_end_time" form="price_form-{{price.id}}" class="val-chart">{{ price.end_time }}</td>
+                                        <td scope="row" id="price-{{price.id}}" name="price_price" form="price_form-{{price.id}}" class="val-chart">{{ price.price }}</td>                                        
+                                  
                                         <td scope="row" form="price_form-{{price.id}}" class="val-chart flex flex-row space-x-2">
                                             <button id="edit-{{price.id}}" type="button" onclick='edit_click("{{price.id}}")' form="price_form-{{price.id}}">
                                                 <svg style="background: #f9fafb; border-radius: 0.5rem; padding: 0.5rem" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg" height="40" width="40">
@@ -616,47 +603,47 @@
                                 </tr>
                                 {% endfor %}
                             </tbody>
-                                <tfoot class="flex rounded-t-lg text-base font-normal text-gray-500 uppercase bg-white w-full">
-                                    <tr class="flex w-full rounded-lg">
-                                        <form method="post" action="price/">
-                                        {% csrf_token %}
-                                        <td scope="row" class="val-chart">
-                                            <div class="relative">
-                                                <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"  style="padding: 0.625rem;">
-                                                    <svg aria-hidden="true" class="w-5 h-5 text-gray-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path></svg>
-                                                </div>
-                                                <input datepicker datepicker-format="dd/mm/yyyy"  name="price_date" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full pl-5" placeholder="Select date" style="padding-left: 2.5rem;">
+                            <tfoot class="flex rounded-t-lg text-base font-normal text-gray-500 uppercase bg-white w-full">
+                                <tr class="flex w-full rounded-lg">
+                                    <form method="post" action="price/">
+                                    {% csrf_token %}
+                                    <td scope="row" class="val-chart">
+                                        <div class="relative">
+                                            <div class="absolute inset-y-0 left-0 flex items-center pl-3 pointer-events-none"  style="padding: 0.625rem;">
+                                                <svg aria-hidden="true" class="w-5 h-5 text-gray-500" fill="currentColor" viewBox="0 0 20 20" xmlns="http://www.w3.org/2000/svg"><path fill-rule="evenodd" d="M6 2a1 1 0 00-1 1v1H4a2 2 0 00-2 2v10a2 2 0 002 2h12a2 2 0 002-2V6a2 2 0 00-2-2h-1V3a1 1 0 10-2 0v1H7V3a1 1 0 00-1-1zm0 5a1 1 0 000 2h8a1 1 0 100-2H6z" clip-rule="evenodd"></path></svg>
                                             </div>
-                                        </td>
-                                        <td scope="row" class="val-chart">       
-                                            <select name="price_day" class="bg-gray-50 border border-gray-300 text-gray-500 text-sm rounded-lg block w-full pl-5">
-                                                <option selected>Day</option>
-                                                <option value="Every Day">Every Day</option>
-                                                <option value="Every Monday">Every Monday</option>
-                                                <option value="Every Tuesday">Every Tuesday</option>
-                                                <option value="Every Wednesday">Every Wednesday</option>
-                                                <option value="Every Thursday">Every Thursday</option>
-                                                <option value="Every Friday">Every Friday</option>
-                                                <option value="Every Saturday">Every Saturday</option>\
-                                                <option value="Every Sunday">Every Sunday</option>
-                                                </select>                  
-                                        </td>
-                                        <td scope="row" class="val-chart">
-                                            <input name="price_start_time" class="price" type="time" placeholder="Start time (8:30)"></input>
-                                        </td>
-                                        <td scope="row" class="val-chart">
-                                            <input name="price_end_time" class="price" type="time" placeholder="End time (19:30)"></input>
-                                        </td>
-                                        <td scope="row" class="val-chart">
-                                            <input name="price_price" class="price text-gray-500" type="number" placeholder="Insert a price"></input>
-                                        </td>
-                                        <td scope="row" class="val-chart">
-                                            <button name="add" class="flex flex-row cursor-pointer">
-                                                <svg type="submit" name="add"  style="background: #573b8a; border-radius: 0.5rem; padding: 0.5rem" viewBox="-3.36 -3.36 30.72 30.72" xmlns="http://www.w3.org/2000/svg" id="send-alt" class="icon glyph" fill="#f9fafb" stroke="#f9fafb" height="40" width="40" transform="rotate(0)matrix(1, 0, 0, 1, 0, 0)"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" stroke="#CCCCCC" stroke-width="1.584"><path d="M21.88,4.73,16.2,20.65A2,2,0,0,1,14.3,22h0a2,2,0,0,1-1.9-1.31l-2.12-5.52,1.54-1.54,2.49-2.49a1,1,0,1,0-1.42-1.42l-2.49,2.49L8.82,13.76,3.31,11.63a2,2,0,0,1,0-3.83L19.27,2.12a2,2,0,0,1,2.61,2.61Z" style="fill:#f9fafb"></path></g><g id="SVGRepo_iconCarrier"><path d="M21.88,4.73,16.2,20.65A2,2,0,0,1,14.3,22h0a2,2,0,0,1-1.9-1.31l-2.12-5.52,1.54-1.54,2.49-2.49a1,1,0,1,0-1.42-1.42l-2.49,2.49L8.82,13.76,3.31,11.63a2,2,0,0,1,0-3.83L19.27,2.12a2,2,0,0,1,2.61,2.61Z" style="fill:#f9fafb"></path></g></svg><!--add-->
-                                            </button>
-                                        </td>
-                                    </form></tr>
-                                </tfoot>
+                                            <input datepicker datepicker-format="dd/mm/yyyy"  name="price_date" type="text" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full pl-5" placeholder="Select date" style="padding-left: 2.5rem;">
+                                        </div>
+                                    </td>
+                                    <td scope="row" class="val-chart">       
+                                        <select name="price_day" class="bg-gray-50 border border-gray-300 text-gray-500 text-sm rounded-lg block w-full pl-5">
+                                            <option selected>Day</option>
+                                            <option value="Every Day">Every Day</option>
+                                            <option value="Every Monday">Every Monday</option>
+                                            <option value="Every Tuesday">Every Tuesday</option>
+                                            <option value="Every Wednesday">Every Wednesday</option>
+                                            <option value="Every Thursday">Every Thursday</option>
+                                            <option value="Every Friday">Every Friday</option>
+                                            <option value="Every Saturday">Every Saturday</option>\
+                                            <option value="Every Sunday">Every Sunday</option>
+                                            </select>                  
+                                    </td>
+                                    <td scope="row" class="val-chart">
+                                        <input name="price_start_time" class="price" type="time" placeholder="Start time (8:30)"></input>
+                                    </td>
+                                    <td scope="row" class="val-chart">
+                                        <input name="price_end_time" class="price" type="time" placeholder="End time (19:30)"></input>
+                                    </td>
+                                    <td scope="row" class="val-chart">
+                                        <input name="price_price" class="price text-gray-500" type="number" placeholder="Insert a price"></input>
+                                    </td>
+                                    <td scope="row" class="val-chart">
+                                        <button name="add" class="flex flex-row cursor-pointer">
+                                            <svg type="submit" name="add"  style="background: #573b8a; border-radius: 0.5rem; padding: 0.5rem" viewBox="-3.36 -3.36 30.72 30.72" xmlns="http://www.w3.org/2000/svg" id="send-alt" class="icon glyph" fill="#f9fafb" stroke="#f9fafb" height="40" width="40" transform="rotate(0)matrix(1, 0, 0, 1, 0, 0)"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round" stroke="#CCCCCC" stroke-width="1.584"><path d="M21.88,4.73,16.2,20.65A2,2,0,0,1,14.3,22h0a2,2,0,0,1-1.9-1.31l-2.12-5.52,1.54-1.54,2.49-2.49a1,1,0,1,0-1.42-1.42l-2.49,2.49L8.82,13.76,3.31,11.63a2,2,0,0,1,0-3.83L19.27,2.12a2,2,0,0,1,2.61,2.61Z" style="fill:#f9fafb"></path></g><g id="SVGRepo_iconCarrier"><path d="M21.88,4.73,16.2,20.65A2,2,0,0,1,14.3,22h0a2,2,0,0,1-1.9-1.31l-2.12-5.52,1.54-1.54,2.49-2.49a1,1,0,1,0-1.42-1.42l-2.49,2.49L8.82,13.76,3.31,11.63a2,2,0,0,1,0-3.83L19.27,2.12a2,2,0,0,1,2.61,2.61Z" style="fill:#f9fafb"></path></g></svg><!--add-->
+                                        </button>
+                                    </td>
+                                </form></tr>
+                            </tfoot>
                         </table>
                     </main>
                 </div>
