@@ -65,13 +65,14 @@ function delete_click(price_id) {
     confirm.style.display = 'block';
     cancel.style.display = 'block';
     confirm.setAttribute("name", "delete");
+    confirm.setAttribute("value", price_id);
 };
 
 function cancel_click(price_id) {
     var keys = ["date-", "day-", "s_time-", "e_time-", "price-"];
     keys.forEach(function(key) {
         var input = document.getElementById(key + price_id);
-        if (input) {
+        if (input.tagName.toLowerCase() === 'input') {
           var td = document.createElement("td");
           td.setAttribute("scope","row");
           td.id = input.id;

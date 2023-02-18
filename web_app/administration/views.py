@@ -5,7 +5,7 @@ from parkings.models import Stop, Payment, Statistic, Price
 from users.models import User
 #, FilterModel
 from django.contrib import messages
-from django.urls import reverse
+# from django.urls import reverse
 
 from push_telemetry import main as push_telemetry
 from datetime import datetime
@@ -261,18 +261,28 @@ def price(request):
             if request.method == 'POST':
 
                 #cprinte request.post keys
-                for key in request.POST:
-                    print('\n\n\n')
-                    print(key, request.POST[key])
+
+                print('\n\n\nREQUEWST.POST')
+                print(request.POST)
                 args = {}
+                if 'delete' in request.POST:
+                    print("boooooo")
+                    price = Price.objects.get(id = request.POST['delete'])
+                    price.delete()
+                    return redirect('/administration')
 
                 args['park'] = '1'
                 if 'price_id' in request.POST and request.POST['price_id']!="":
                     args['id'] = request.POST['price_id']
+
                 
                 if 'price_date' in request.POST and request.POST['price_date']!="":
-                    converted = datetime.strptime(request.POST['price_date'], '%d/%m/%Y').date()
-                    args['date'] = converted
+                    if(datetime. strptime(request.POST['price_date'], '%d/%m/%y %H:%M:%S') > datetime.now()):
+                        converted = datetime.strptime(request.POST['price_date'], '%d/%m/%Y').date()
+                        args['date'] = converted
+                    else:
+                        messages.error(request,'Date must be in the future')
+                        return redirect('/administration')
 
                 if 'price_day' in request.POST and request.POST['price_day']!="" and request.POST['price_day']!='None':
                     args['day'] = request.POST['price_day']
@@ -291,16 +301,22 @@ def price(request):
                     args['end_time'] = time(23, 59, 59)
 
                 if 'price_price' in request.POST and request.POST['price_price']!="":
-                    args['price'] = request.POST['price_price']
+                    if float(request.POST['price_price']) >=0:
+                        args['price'] = request.POST['price_price']
+                    else:
+                        messages.error(request, 'Price must be positive')
+                        redirect('/administration')
                 else:
                     args['price'] = 0
 
                 #check if price_date and price_day are in args
                 if not 'date' in args and not 'day' in args:
                     print('date and day are empty')
+                    messages.error(request,'Date or day must be filled')
+                    return redirect('/administration')
 
                 if str(args['start_time']) > str(args['end_time']):
-                    messages.info(request,'Start time must be before end time')
+                    messages.error(request,'Start time must be before end time')
                     return redirect('/administration')
 
                 print('\n\n\n\nargs', args, '\n\n\n\n')
@@ -311,17 +327,9 @@ def price(request):
                     
 
                 elif 'edit' in request.POST:
-                    
                     price = Price.objects.filter(id = args['id'])
-                    
-
                     print('\n\n\n\nprice', price, '\n\n\n\n')
-                    
                     price.update(**args)
-
-                elif 'delete' in request.POST:
-                    price = Price.objects.get(id = args['id'])
-                    price.delete()
 
         return redirect('/administration')        
 

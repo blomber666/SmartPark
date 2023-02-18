@@ -344,11 +344,11 @@
                             </li>
                             {% if messages %}
                             {% for message in messages %}
-                            <ul class="mt-2 flex flex-col justify-center space-y-2">
-                                <li class="rounded-lg p-2 text-white text-[15px] text-center font-bold" style="background-color: #0e9f6e;">
-                                    {{ message }}
-                                </li>
-                            </ul>
+                            {% if 'info' in message.tags %}
+                            <li class="rounded-lg p-2 text-white text-[15px] text-center font-bold" style="background-color: #0e9f6e;">
+                                {{ message }}
+                            </li>
+                            {% endif %}
                             {% endfor %}
                             {% endif %}
 
@@ -522,7 +522,18 @@
                     </main>
                 </div>
 
-                <div class="flex items-center justify-center p-4 bg-white/75 rounded-lg" id="price" role="tabpanel" aria-labelledby="price-tab">
+                <div class="flex flex-col items-center justify-center p-4 bg-white/75 rounded-lg" id="price" role="tabpanel" aria-labelledby="price-tab">
+                    {% if messages %}
+                    {% for message in messages %}
+                    {% if 'error' in message.tags %}
+                    <ul class="mb-2 flex flex-col justify-center space-y-2">
+                        <li class="rounded-lg p-2 text-white text-[15px] text-center font-bold" style="background-color: #9f0e0e;">
+                            {{ message }}
+                        </li>
+                    </ul>
+                    {% endif %}
+                    {% endfor %}
+                    {% endif %}
                     <main class="rounded-lg bg-gray-200">
                         <table class="rounded-lg w-full text-left text-gray-500">
                             <thead class="flex rounded-t-lg text-base font-normal text-gray-500 uppercase bg-white w-full">
@@ -549,7 +560,7 @@
                             <tbody class="flex flex-col overflow-y-scroll w-full bg-white/0">
                                 {% for price in prices %}
                                 <tr class="flex w-full rounded-lg">
-                                    <form method="post" action="price/" id="price_form-{{price.id}}">{% csrf_token %}</form>                                      
+                                    <form method="post" action="price/" id="price_form-{{price.id}}" name="price_id" value="{{price.id}}">{% csrf_token %}</form>                                      
                                         <td scope="row" id="date-{{price.id}}" name="price_date" form="price_form-{{price.id}}" class="val-chart">{{ price.date }}</td>
                                         <td scope="row" id="day-{{price.id}}" name="price_day" form="price_form-{{price.id}}" class="val-chart">{{ price.day }}</td>
                                         <td scope="row" id="s_time-{{price.id}}" name="price_start_time" form="price_form-{{price.id}}" class="val-chart">{{ price.start_time }}</td>
@@ -599,7 +610,6 @@
                                                 </svg>
                                             </button>
                                         </td>
-   
                                 </tr>
                                 {% endfor %}
                             </tbody>
