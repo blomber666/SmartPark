@@ -136,8 +136,8 @@ def control_entry_gate(tbapi, park_number, old_presence, plate):
                             presence = False
                             plate = None
                         else:
-                            stop = Stop(user=user, start_time=0, end_time=None, park=park_number)
-                            stop.save()
+                            stop = Stop.objects.create(user=user, start_time=timezone.now(), end_time=None, park=park_number)
+
                     #print any exception
                     except User.DoesNotExist:
                         printc("RED", "user does not exist")
@@ -357,11 +357,6 @@ def send_stats(stats, park_number):
         #save the stats
         stats.save()
         printc("GREEN","stats sent")
-
-    
-
-    
-
 
 
 def main(park_name, stats_freq):

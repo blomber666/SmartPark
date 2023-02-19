@@ -22,7 +22,7 @@ from users.models import User
 #create a class for the stops, with stop_id as primary key(auto increment), user as foreign key, start and optional end time
 class Stop(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    start_time = models.DateTimeField(auto_now_add=True)
+    start_time = models.DateTimeField()
     end_time = models.DateTimeField(null=True)
     park = models.CharField(max_length=50)
 
@@ -62,7 +62,7 @@ class Price(models.Model):
     price = models.DecimalField(max_digits=5, decimal_places=2)
     date = models.DateField(null=True)
     #day can be "Every Day", "Every Monday", "Every Tuesday", "Every Wednesday", "Every Thursday", "Every Friday", "Every Saturday", "Every Sunday"
-    day = models.CharField(max_length=14, null=True) 
+    day = models.CharField(max_length=15, null=True) 
 
     def __str__(self):
         return f"{self.park} {self.start_time} {self.end_time} {self.price} {self.date} {self.day}"

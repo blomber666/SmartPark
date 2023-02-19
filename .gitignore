@@ -1,19 +1,9 @@
 *.pyc
 */__pycache__/*
-web2/parkings/static/park_1.png
 plates_recognition/datasets/*
-web2/media/park_1.png
 web2/theme/static/css/dist/styles.css
 web_app/media/park_1.png
 web_app/media/park_1.txt
+*/park_1.png
+*/park_1.txt
 
-price_1						
-door_1_2						
-door_1_1						
-override_1_2						
-override_1_1						
-camera_1_2						
-gate_1_2						
-gate_1_1						
-camera_1_1						
-sensor_1_8
