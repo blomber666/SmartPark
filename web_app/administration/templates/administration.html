@@ -129,7 +129,31 @@
         <script src="/static/js/change_buttons.js"></script>
         <script src="/static/js/update_parkings.js"></script>
         <script src="/static/js/update_doors.js"></script>
-        <!-- <script src="/static/js/session.js"></script> -->
+        <script>
+
+            function giveSelection(selValue) {
+                var option2 = document.querySelector('#sensor_field');
+                alert(option2.innerHTML);
+                alert(selValue);
+                if(selValue.includes("sensor")) {
+                    option2.innerHTML="<option value='free' selected>Free/Occupied (1|0)</option>";
+                }
+                else if(selValue.includes("gate")){
+                    option2.innerHTML="<option value='distance' selected>Distance (Mt)</option>"
+                }
+                else if(selValue.includes("override")) {
+                    option2.innerHTML="<option value='override' selected>Override (1|0)</option>";
+                }
+                else if(selValue.includes("door")){
+                    option2.innerHTML="<option value='open' selected>Open/Close (1|0)</option>";
+                }
+                else if(selValue.includes("camera")){
+                    options2.innerHTML="<option value='plate' selected>Plate</option>";
+                }
+                }
+            giveSelection(sel1.value);
+
+        </script>
         <script>
             // if start_filter is in context
             // change the value of the datepicker to the variable in context start_filter and username in context
@@ -329,12 +353,32 @@
 
                             <li>
                                 <a class="flex items-center text-base font-normal text-gray-900 rounded-lg  group">
-                                    <input name="sensor_name" id="sensor_name" type="text" class="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 " placeholder="Sensor name">
+                                <select name="sensor_name" id="sensor_name" type="text" class="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 " placeholder="Sensor name" onchange="giveSelection(this.value)">
+                                    <option selected></option>
+                                    <option value="door_1_1">Entry Gate</option>
+                                    <option value="door_1_2">Exit Gate</option>
+                                    <option value="override_1_1">Entry Override</option>
+                                    <option value="override_1_2">Exit Override</option>
+                                    <option value="gate_1_1">Entry ProxSensor</option>
+                                    <option value="gate_1_2">Exit ProxSensor</option>
+                                    <option value="camera_1_1">Entry Camera</option>\
+                                    <option value="camera_1_2">Exit Camera</option>
+                                    <option value="sensor_1_1">Parking Lot 1</option>
+                                    <option value="sensor_1_2">Parking Lot 2</option>
+                                    <option value="sensor_1_3">Parking Lot 3</option>
+                                    <option value="sensor_1_4">Parking Lot 4</option>
+                                    <option value="sensor_1_5">Parking Lot 5</option>
+                                    <option value="sensor_1_6">Parking Lot 6</option>
+                                    <option value="sensor_1_7">Parking Lot 7</option>
+                                    <option value="sensor_1_8">Parking Lot 8</option>
+                                </select> 
                                 </a>
                             </li>
                             <li>
                                 <a class="flex items-center text-base font-normal text-gray-900 rounded-lg  group">
-                                    <input name="sensor_field" id="sensor_field" type="text" class="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 " placeholder="Field">
+                                    <select name="sensor_field" id="sensor_field" type="text" class="bg-gray-100 border border-gray-300 text-gray-900 text-sm rounded-lg block w-full p-2.5 " placeholder="Field">
+                                     "GO"
+                                    </select> 
                                 </a>
                             </li>
                             <li>
@@ -636,7 +680,7 @@
                                             <option value="Every Friday">Every Friday</option>
                                             <option value="Every Saturday">Every Saturday</option>\
                                             <option value="Every Sunday">Every Sunday</option>
-                                            </select>                  
+                                        </select>                  
                                     </td>
                                     <td scope="row" class="val-chart">
                                         <input name="price_start_time" class="price" type="time" placeholder="Start time (8:30)"></input>
