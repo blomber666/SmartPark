@@ -13,7 +13,7 @@
             "state": {
               "type": "markdown",
               "state": {
-                "file": "Comandi utili.md",
+                "file": "Relazione Progetto SmartPark.md",
                 "mode": "source",
                 "source": false
               }
@@ -53,8 +53,7 @@
               }
             }
           }
-        ],
-        "currentTab": 3
+        ]
       }
     ],
     "direction": "vertical"
@@ -181,12 +180,12 @@
       "command-palette:Open command palette": false
     }
   },
-  "active": "868df96184c97815",
+  "active": "71928d2b86af3f43",
   "lastOpenFiles": [
+    "Comandi utili.md",
+    "Relazione Progetto SmartPark.md",
     "other/Progetto - Smart Parking.md",
     "other/queue-service-tb.png",
-    "Relazione Progetto SmartPark.md",
-    "Comandi utili.md",
     "other/src/Smartpark.png",
     "other/Lab Industria 4.0.pdf",
     "other/Specifica dei Requisiti.md",
