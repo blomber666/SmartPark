@@ -1,3 +1,7 @@
+![[logo unife.png|center|650]]
+
+<div style="page-break-after: always; visibility: hidden"> \pagebreak </div>
+
 
 ## Introduzione
 La presente relazione descrive una piattaforma per la gestione di un multi-parcheggio automatizzato e intelligente (*SmartPark*), il cui obiettivo è di coordinare l'accesso e rilevare i posti occupati al suo interno.
@@ -24,8 +28,6 @@ L'infrastruttura deve soddisfare i seguenti requisiti non funzionali:
 4. **Bassa Latenza.** Data la possibilità di avere una moltitudine di parcheggi e utenti sarà necessario implementare soluzioni di *Edge Computing* per ridurre la latenza di comunicazione e il carico sul server.
 
 ## Architettura
-![[Smartpark.png|center|500]]
-
 La piattaforma é caratterizzata da un'infrastruttura IoT basata su una serie di sensori di prossimità e telecamere che collaborano per gestire il multi parcheggio intelligente con gestione degli accessi e rilevamento dei posti occupati. 
 All'esterno di ogni SmartPark, sia all'ingresso che all'uscita, saranno presenti un sensore di prossimità per rilevare la presenza di veicoli e una telecamera per leggere la targa. Invece, all'interno sltri sensori di prossimità permetteranno di rilevare se lo stato dei parcheggi (occupato/libero). 
 I dati provenienti dai sensori di ogni parcheggio vengono inviati al gateway (uno per SmartPark) in cui é presente un'istanza di Thingsboard Edge, quest'ultima processa localmente i dati e invia al server centrale le informazioni riassuntive giornaliere. 
@@ -33,12 +35,9 @@ La comunicazione tra dispositivi e gateway avviene tramite di alcune RaspberryPI
 Il server ospita un'istanza dokerizzata di Thingsboard Server che, oltre ad interfacciarsi con i gateway, comunica con un'applicativo web per permettere agli utenti di poter ususfruire del servizio di parcheggio.
 I dati non sono memorizzati in maniera centralizzata, infatti i dati relativi ai sensori vengono archiviati all'interno del database di Thingsboard Server, invece i dati utili alla WebApp sono presenti all'interno di un database PostgreSQL (database differenti ma stesso DBMS).
 
-Le funzionalità edge permettono una forte scalabilità, in quanto una importante parte della computazione viene svolta dai gateway, un aggiunta di un nuovo SmartPark infatti non aggiunge un carico eccessivo al server.
-È importante evidenziare che alcune sezioni non sono adatte nel caso di un' applicazione reale, infatti i dispositivi come sensori o telecamere dovrebbero essere in grado di comunicare tramite LoRa, per consentire la comunicazione anche nel caso di parcheggi con dimensioni elevate.
-Inoltre in relazione alla rilevazione della targa sarebbe opportuno utilizzare un' hardware più performante per constire l' utilizzo di immagini ad alta risoluzione mantenendo un buon livello di prestazioni.
-Inoltre sarebbe opportuno utilizzare sensori e sistemi di acquisizione immagini con caratteristiche adatte a questo ambiente, come ad esempio resistenza agli agenti atmosferici, affidablità o consumo ridotto.
-Infine gli amminsitratori dovrebbero avere la possbilità di visualizzare il video acquisito dalla telecamera
+![[Smartpark.png|center|500]]
 
+Le funzionalità edge migliorano la scalabilità e la latenza, in quanto una importante parte della computazione viene svolta dai gateway, un aggiunta di un nuovo SmartPark infatti non aggiunge un carico eccessivo al server.
 
 ## Funzionamento
 Il funzionamento del software prevede l'utilizzo di una telecamera e un sensore di prossimità per ogni accesso, in grado di rilevare le auto e le relative targhe, l'accesso viene registrato e utilizzato per il pagamento, che prevede diverse fasce orarie. L'utente può visualizzare la sosta e il relativo importo in qualsiasi momento e pagare. Entro 15 minuti dal pagamento, l'utente deve presentarsi all'uscita, dove la telecamera leggerà la targa e salverà su database la fermata compresa di ora di uscita, permettendo all'utente di uscire. Il sistema permette di uscire solo previo pagamento, e in caso siano passati 15 minuti dal pagamento, sarà necessario contattare l'assistenza.
@@ -97,26 +96,23 @@ Per effettuare questi test, è stato utilizzato il testing automatizzato di Djan
 In sintesi, la fase di testing del software ha permesso di verificare il corretto funzionamento delle view e delle funzioni di sistema, garantendo che il software soddisfi pienamente le esigenze e le aspettative.
 
 ## Possibili miglioramenti e Problematiche
-Assicurare la scalabilità di un sistema di parcheggio intelligente è di fondamentale importanza per far fronte all'aumento del traffico e del numero di utenti. In questa sezione, saranno elencati alcuni possibili miglioramenti che potrebbero essere apportati al sistema per migliorare la scalabilità e superare eventuali problematiche.
-
-1.  **Migliorare l'efficienza del sistema di riconoscimento targa:** Il sistema di riconoscimento targa è uno dei componenti principali del sistema di parcheggio intelligente. Per migliorare la sua efficienza e velocità, è possibile utilizzare hardware più performante e modelli di reti neurali più affidabili
-
-3.  **Implementare un sistema di prenotazione dei parcheggi:** Un sistema di prenotazione dei parcheggi potrebbe consentire agli utenti di prenotare un posto auto in anticipo, migliorando la pianificazione e la gestione del traffico. Ciò sarebbe possibile tramite la web e richiede un sistema che impedisca l' utilizzo di parcheiggi prenotati ma non ancora occupati
-
-3.  **Migliorare l'infrastruttura:** L'infrastruttura del sistema di parcheggio intelligente dovrebbe essere robusta e resiliente. Si potrebbe considerare l'utilizzo di replicazione hardware o software per garantire la disponibilità del sistema. 
-
-5.  **Integrare il sistema con i servizi di navigazione:** L'integrazione del sistema con i servizi di navigazione GPS potrebbe aiutare gli utenti a trovare facilmente parcheggi disponibili. Inoltre, ciò potrebbe consentire al sistema di parcheggio di comunicare con i veicoli per fornire indicazioni sulla disponibilità dei parcheggi vicini.
-
-6. **Autenticazione:** Consentire ad un utente di registrare  e utilizzare diverse targhe, e consente a due utenti diversi di utilizzare la stessa auto, implementando ad esempio u sistema di autenticazione che permetta ad ogni ingresso di associare correttamente la targa letta all' utente corretto.
-
-7. **Migliorare l'esperienza utente:** Infine, è possibile migliorare l'esperienza utente tramite l'introduzione di funzionalità come la possibilità di trovare la propria auto all' interno del parcheggio, o di fornire feedback.
-   
-In ogni caso, è importante tenere a mente che l'implementazione di nuove funzionalità e miglioramenti potrebbe richiedere un'infrastruttura più robusta e una maggior capacità di elaborazione. Pertanto, è necessario pianificare attentamente ogni aggiornamento per garantire la scalabilità del sistema di parcheggio intelligente.
+1. **Migliorare l'efficienza del sistema di riconoscimento targa.** Il sistema di riconoscimento targa è uno dei componenti principali del sistema di parcheggio intelligente. Per migliorare la sua efficienza e velocità, è possibile utilizzare hardware più performante e modelli di reti neurali più affidabili.
+2. **Implementare un sistema di prenotazione dei parcheggi.** Un sistema di prenotazione dei parcheggi consentirebbe agli utenti di prenotare un posto auto in anticipo. Ciò sarebbe possibile tramite l'interfaccia web e richiede un sistema che impedisca l' utilizzo di parcheggi prenotati ma non ancora occupati.
+3. **Migliorare l'infrastruttura.** L'infrastruttura del sistema di parcheggio intelligente dovrebbe essere robusta e resiliente. Si potrebbe considerare l'utilizzo di replicazione hardware o software per garantire la disponibilità del sistema. 
+4. **Integrare il sistema con i servizi di navigazione.** L'integrazione del sistema con i servizi di navigazione GPS potrebbe aiutare gli utenti a trovare facilmente parcheggi disponibili. Inoltre, ciò potrebbe consentire al sistema di parcheggio di comunicare con i veicoli per fornire indicazioni sulla disponibilità dei parcheggi vicini.
+5. **Autenticazione con targhe multiple.** Consentire ad un utente di registrare e utilizzare diverse targhe, e consente a due utenti diversi di utilizzare la stessa auto, implementando ad esempio u sistema di autenticazione che permetta ad ogni ingresso di associare correttamente la targa letta all' utente corretto.
+6. **Migliorare l'esperienza utente.** Infine, è possibile migliorare l'esperienza utente tramite l'introduzione di ulteriori funzionalità come la possibilità di localizzare la propria auto all'interno del parcheggio, o di fornire feedback.
+7. **Comunicazione a lungo raggio.** L'uso di dispositivi come sensori o telecamere per la rilevazione dei parcheggi dovrebbe essere pensato in modo da garantire la comunicazione anche in caso di parcheggi con dimensioni elevate. Una possibile soluzione potrebbe essere l'utilizzo di tecnologie di comunicazione a lungo raggio come LoRa per garantire la trasmissione dei dati anche su distanze maggiori.
+8. **Dispositivi special purpose.** È importante utilizzare sensori e sistemi di acquisizione immagini con caratteristiche adatte ad un contesto reale, come la resistenza agli agenti atmosferici, l'affidabilità o il consumo ridotto. Ciò consentirà di ridurre i costi di manutenzione e garantire una maggiore efficienza del sistema.
+9. **Telecamere in live streaming.** Gli amministratori del sistema dovrebbero avere la possibilità di visualizzare in diretta il video acquisito dalle telecamere. Questo consentirà loro di monitorare il flusso del traffico e identificare eventuali problemi o situazioni di emergenza.
 
 ## Conclusioni
-Il software di gestione di un multi parcheggio intelligente con gestione degli accessi e rilevamento dei posti occupati è un'applicazione complessa che richiede una solida architettura IoT per funzionare correttamente. La telecamera e il sensore di prossimità in ogni accesso, che inviano i dati tramite MQTT/LoRa ad un gateway edge, costituiscono la parte di sensoristica del sistema, mentre le tecnologie come Yolo+Tesseract, DJango, Thingsboard, PostgreSQL/Oracle, API per la comunicazione REST tra webserver e Thingsboard forniscono il supporto necessario per la gestione degli accessi e il rilevamento dei posti occupati. L'uso del testing automatizzato di Django per lo sviluppo di diversi test, sia per le diverse view che per le diverse funzioni di sistema, migliora il livello di qualità del software. 
+Il software di gestione di un multi parcheggio intelligente con gestione degli accessi e rilevamento dei posti occupati è un'applicazione complessa che richiede una solida architettura IoT per funzionare correttamente.
+Le telecamere e i sensori di prossimità che inviano i dati tramite MQTT/LoRa ad un gateway edge, costituiscono la parte di sensoristica del sistema, mentre le tecnologie come Yolo+Tesseract, Django, Thingsboard, PostgreSQL, API REST per la comunicazione tra webserver e Thingsboard forniscono il supporto necessario per la gestione degli accessi e il rilevamento dei posti occupati. 
+L'uso del testing automatizzato di Django per lo sviluppo di diversi test, sia per le diverse *view* che per le diverse funzioni di sistema, migliora il livello di qualità del software. 
 
-Tuttavia, il processo di sviluppo del sistema non è stato privo di sfide. La gestione della scalabilità e il coordinamento tra le diverse tecnologie utilizzate hanno rappresentato un altro fattore critico per garantire il corretto funzionamento.Inoltre la creazione del dataset personalizzato per il riconoscimento della targa e l'addestramento della rete hanno richiesto tempo e risorse significative.
+Tuttavia, il processo di sviluppo del sistema non è stato privo di sfide. 
+La gestione della scalabilità e il coordinamento tra le diverse tecnologie utilizzate hanno rappresentato un altro fattore critico per garantire il corretto funzionamento, inoltre la creazione del dataset personalizzato per il riconoscimento della targa e l'addestramento della rete hanno richiesto tempo e risorse significative.
 
 In definitiva, la realizzazione di un sistema di gestione del parcheggio come quello descritto richiede un'attenta pianificazione e una conoscenza approfondita delle tecnologie utilizzate, al fine di garantire la scalabilità, l'affidabilità e la disponibilità del sistema. Tuttavia, quando gestito in modo efficiente, può fornire importanti vantaggi in termini di automazione e miglioramento dell'esperienza degli utenti del parcheggio.
 
