@@ -1,6 +1,0 @@
-{
-    "python.analysis.extraPaths": [
-        "./web/src"
-    ],
-    "python.analysis.typeCheckingMode": "off"
-}
