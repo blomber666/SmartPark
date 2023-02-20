@@ -16,8 +16,8 @@ Alcuni garage sono dotati di semafori per ogni spazio di parcheggio: se lo spazi
 	Il progetto dovrà essere sviluppato utilizzando le tecniche presentate a lezione e in particolare dovrà
 	- [x] essere concordato in anticipo con i docenti (Marco Alberti, lbrmrc@unife.it, Damiano Azzolini, damiano.azzolini@unife.it)
 	- [x] essere svolto da non più di due studenti
-	- [] essere accompagnato da una relazione scritta da discutere o da una presentazione
-	- [] avere una specifica dei requisiti almeno parziale
+	- [x] essere accompagnato da una relazione scritta da discutere o da una presentazione
+	- [x] avere una specifica dei requisiti almeno parziale
 	- [x] essere gestito in un repository Git ospitato su BitBucket o GitHub
 	- [x] utilizzare uno degli strumenti di building standard per il linguaggio utilizzato (ad esempio Maven per Java)
 	- [x] comprendere una suite di test automatizzati

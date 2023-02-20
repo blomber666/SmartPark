@@ -39,16 +39,6 @@ def park_1(request, context={}):
         if last_time != 'Never':
             last_time = last_time.date()
 
-        #get the price of the park from the device park_1
-        # ThingsBoard REST API URL
-        url = "http://192.168.1.197:8080"
-        # Default Tenant Administrator credentials
-        username = "tenant@thingsboard.org"
-        password = "tenant"
-        tbapi = TbApi(url, username, password)
-        price_device = tbapi.get_device_by_name('price_1')
-        price = tbapi.get_telemetry(price_device['id']['id'], telemetry_keys=["price"])['price'][0]['value']
-
         payment = Payment.objects.filter(stop=stop).last() if stop else None
         if payment:
             amount = f'{payment.amount}€'
@@ -80,7 +70,7 @@ def park_1(request, context={}):
 
         stops = get_stops(request.user, start_date_converted, end_date_converted, park_num)
 
-        context = {'username': username, 'start': start, 'end': end , 'last_time':last_time, 'amount': amount, 'payed': payed, \
+        context = {'username': request.userz, 'start': start, 'end': end , 'last_time':last_time, 'amount': amount, 'payed': payed, \
             'free_spaces': free_spaces, 'park_status': park_status, 'park_percent': park_percent, 'total_spaces': total_spaces,\
                 'stops': stops}
         return render(request, 'park_1.html', context)

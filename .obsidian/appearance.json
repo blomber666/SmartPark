@@ -1,3 +1,10 @@
 {
-  "accentColor": ""
+  "accentColor": "",
+  "baseFontSize": 14,
+  "theme": "moonstone",
+  "enabledCssSnippets": [
+    "stile",
+    "mio"
+  ],
+  "translucency": false
 }
