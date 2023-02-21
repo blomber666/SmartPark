@@ -57,7 +57,7 @@ In particolare, all'interno del nostro database abbiamo definito 5 tabelle princ
 
 5.  **parkings_price:** contiene i record relativi alla tariffazione oraria. Questa tabella specifica la tariffazione oraria per una singola data (date) o per un giorno della settimana (day), ad esempio ogni giorno o ogni domenica, comprensiva dell'orario.
 
-![[django_db - public3.png]]
+![[django_db.png]]
 ## Strumenti Utilizzati
 Questa sezione fornirà un elenco degli strumenti utilizzati per lo sviluppo del software descritto e una breve descrizione di come sono stati utilizzati.
 
@@ -68,7 +68,7 @@ Questa sezione fornirà un elenco degli strumenti utilizzati per lo sviluppo del
 
 **Software**
 -   **Django**: Django è stato utilizzato come framework web per lo sviluppo dell'applicazione web. È stato utilizzato per gestire le richieste e la logica dell'applicazione.
--   T**ailwind e Flowbite**: Tailwind e Flowbite sono stati utilizzati per la realizzazione dell'interfaccia grafica web. 
+-   **Tailwind e Flowbite**: Tailwind e Flowbite sono stati utilizzati per la realizzazione dell'interfaccia grafica web. 
 -   **PostgreSQL / Oracle**: PostgreSQL e Oracle sono stati utilizzati come database relazionale per memorizzare i dati del sistema.
 -   **Django per il testing**: Django è stato utilizzato per il testing grazie alle librerie che sfruttano un metodo basato su classi derivate dal modulo unittest di Python. Sono stati utilizzati per testare le funzioni di sistema e il funzionamento delle view.
 -   **Thingsboard**: Thingsboard è uno strumento fondamentale per la realizzazione e gestione dell'infrastruttura. Sono state utilizzate entrambe le istanze (server ed edge), containerizzate con Docker, per elaborare e trasferire i dati tra i dispositivi.
@@ -105,6 +105,7 @@ In sintesi, la fase di testing del software ha permesso di verificare il corrett
 7. **Comunicazione a lungo raggio.** L'uso di dispositivi come sensori o telecamere per la rilevazione dei parcheggi dovrebbe essere pensato in modo da garantire la comunicazione anche in caso di parcheggi con dimensioni elevate. Una possibile soluzione potrebbe essere l'utilizzo di tecnologie di comunicazione a lungo raggio come LoRa per garantire la trasmissione dei dati anche su distanze maggiori.
 8. **Dispositivi special purpose.** È importante utilizzare sensori e sistemi di acquisizione immagini con caratteristiche adatte ad un contesto reale, come la resistenza agli agenti atmosferici, l'affidabilità o il consumo ridotto. Ciò consentirà di ridurre i costi di manutenzione e garantire una maggiore efficienza del sistema.
 9. **Telecamere in live streaming.** Gli amministratori del sistema dovrebbero avere la possibilità di visualizzare in diretta il video acquisito dalle telecamere. Questo consentirà loro di monitorare il flusso del traffico e identificare eventuali problemi o situazioni di emergenza.
+
 
 ## Conclusioni
 Il software di gestione di un multi parcheggio intelligente con gestione degli accessi e rilevamento dei posti occupati è un'applicazione complessa che richiede una solida architettura IoT per funzionare correttamente.
