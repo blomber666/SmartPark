@@ -107,13 +107,13 @@ def generate_map(filename):
         if device_type == "park_sensor":
             name = device['name']
             sensor_counter += 1
-            telemetry = tbapi.get_telemetry(device['id'], telemetry_keys=["free"])
+            telemetry = tbapi.get_telemetry(device['id'], telemetry_keys=["distance"])
             #get the latest free attribute
             distance = telemetry['distance'][0]['value']
 
             print(name,distance)
 
-            free = distance > DISTANCE_THRESHOLD
+            free = float(distance) > DISTANCE_THRESHOLD
             #if the device is free, fill a polygon with green
             if int(free):
                 free_counter += 1

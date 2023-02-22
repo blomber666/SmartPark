@@ -374,7 +374,7 @@ def sensor_control(request):
                 
             #send telemetry
             elif 'sensor_send' in request.POST:
-                push_telemetry(sensor_name, sensor_field, sensor_value)
+                push_telemetry(sensor_name, sensor_value)
                 #add message sent
                 messages.info(request,f'Telemetry sent to {sensor_name}')
 

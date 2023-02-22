@@ -9,7 +9,7 @@ window.addEventListener('load', function() {
             .then((dict) => {
                 document.getElementById('park_status').innerHTML = dict.park_status;
                 document.getElementById('park_percent').style.width = String(dict.park_percent)+'%';
-                document.getElementById('park1').firstChild.src="/media/park_1.png";
+                document.getElementById('park1').firstChild.src="/media/park_1.png?t="+ new Date().getTime();;
                 alert('ok');
                 console.log(dict.park_status);
             });

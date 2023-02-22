@@ -130,16 +130,26 @@
         <script src="/static/js/update_parkings.js"></script>
         <script src="/static/js/update_doors.js"></script>
         <script>
+            window.addEventListener('load', function() {
+                var sel1 = document.querySelector('#sensor_name');
+                // repeat giveSelection 5times in 10seconds
+                setInterval(function() {
+                    giveSelection(sel1.value);
+                }, 3000);
+
+            });
+            
+
 
             function giveSelection(selValue) {
                 var option2 = document.querySelector('#sensor_field');
-                alert(option2.innerHTML);
-                alert(selValue);
+                //alert(option2.innerHTML);
+                //alert(selValue);
                 if(selValue.includes("sensor")) {
-                    option2.innerHTML="<option value='free' selected>Free/Occupied (1|0)</option>";
+                    option2.innerHTML="<option value='distance' selected>Distance (cm)</option>";
                 }
                 else if(selValue.includes("gate")){
-                    option2.innerHTML="<option value='distance' selected>Distance (Mt)</option>"
+                    option2.innerHTML="<option value='distance' selected>Distance (cm)</option>"
                 }
                 else if(selValue.includes("override")) {
                     option2.innerHTML="<option value='override' selected>Override (1|0)</option>";
@@ -150,8 +160,11 @@
                 else if(selValue.includes("camera")){
                     options2.innerHTML="<option value='plate' selected>Plate</option>";
                 }
-                }
+            }
+            
             giveSelection(sel1.value);
+
+            
 
         </script>
         <script>
