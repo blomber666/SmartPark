@@ -39,8 +39,8 @@ def parse_opt():
     parser.add_argument("name", help="the sensor name like: sensor_1_1", type=str, default="sensor_1_1")
     parser.add_argument("value", help="the value to send", type=str, default=1)
 
-    opt = parser.parse_args(args=['sensor_1_1', '111'])
-    #opt = parser.parse_args()
+    # opt = parser.parse_args(args=['sensor_1_1', '111'])
+    opt = parser.parse_args()
     return opt
 
 def on_publish(client,userdata,result):             #create function for callback

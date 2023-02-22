@@ -589,6 +589,13 @@
                         </li>
                     </ul>
                     {% endif %}
+                    {% if 'warning' in message.tags %}
+                    <ul class="mb-2 flex flex-col justify-center space-y-2">
+                        <li class="rounded-lg p-2 text-white text-[15px] text-center font-bold" style="background-color: #9f8c0e;">
+                            {{ message }}
+                        </li>
+                    </ul>
+                    {% endif %}
                     {% endfor %}
                     {% endif %}
                     <main class="rounded-lg bg-gray-200">
@@ -622,7 +629,8 @@
                                         <td scope="row" id="day-{{price.id}}" name="price_day" form="price_form-{{price.id}}" class="val-chart">{{ price.day }}</td>
                                         <td scope="row" id="s_time-{{price.id}}" name="price_start_time" form="price_form-{{price.id}}" class="val-chart">{{ price.start_time }}</td>
                                         <td scope="row" id="e_time-{{price.id}}" name="price_end_time" form="price_form-{{price.id}}" class="val-chart">{{ price.end_time }}</td>
-                                        <td scope="row" id="price-{{price.id}}" name="price_price" form="price_form-{{price.id}}" class="val-chart">{{ price.price }}</td>                                        
+                                        <td scope="row" id="price-{{price.id}}" name="price_price" form="price_form-{{price.id}}" class="val-chart">{{ price.price }}</td>     
+                                        <input type="hidden" name="price_id" value="{{price.id}}" form="price_form-{{price.id}}">
                                   
                                         <td scope="row" form="price_form-{{price.id}}" class="val-chart flex flex-row space-x-2">
                                             <button id="edit-{{price.id}}" type="button" onclick='edit_click("{{price.id}}")' form="price_form-{{price.id}}">
@@ -684,7 +692,7 @@
                                     </td>
                                     <td scope="row" class="val-chart">       
                                         <select name="price_day" class="bg-gray-50 border border-gray-300 text-gray-500 text-sm rounded-lg block w-full pl-5">
-                                            <option selected>Day</option>
+                                            <option selected></option>
                                             <option value="Every Day">Every Day</option>
                                             <option value="Every Monday">Every Monday</option>
                                             <option value="Every Tuesday">Every Tuesday</option>
@@ -696,10 +704,10 @@
                                         </select>                  
                                     </td>
                                     <td scope="row" class="val-chart">
-                                        <input name="price_start_time" class="price" type="time" placeholder="Start time (8:30)"></input>
+                                        <input name="price_start_time" class="price" type="time" step="1" placeholder="Start time (8:30)"></input>
                                     </td>
                                     <td scope="row" class="val-chart">
-                                        <input name="price_end_time" class="price" type="time" placeholder="End time (19:30)"></input>
+                                        <input name="price_end_time" class="price" type="time" step="1" placeholder="End time (19:30)"></input>
                                     </td>
                                     <td scope="row" class="val-chart">
                                         <input name="price_price" class="price text-gray-500" type="number" placeholder="Insert a price"></input>

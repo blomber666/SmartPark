@@ -23,6 +23,7 @@ class UrlTest(TestCase):
 
     def test_administration(self):
         #logged behaviour
+        self.client.logout()
         self.client.login(**self.credentials)
         response = self.client.get('/administration/', self.credentials, follow=True)
         self.assertEqual(response.status_code, 200)
@@ -45,7 +46,7 @@ class UrlTest(TestCase):
         self.assertIn('stats', response.context)
         self.assertIn('prices', response.context)
 
-        #test the non logged behaviour
+        #non logged behaviour
         self.client.logout()
         self.client.login(username='wrong', password='wrong')
         response = self.client.get('/administration/', follow=True)
@@ -56,6 +57,7 @@ class UrlTest(TestCase):
 
     def test_override(self):
         #logged behaviour
+        self.client.logout()
         self.client.login(**self.credentials)
         response = self.client.post('/administration/override/', self.credentials, follow=True)
         self.assertEqual(response.status_code, 200)
@@ -122,7 +124,7 @@ class UrlTest(TestCase):
         #check that timestamp is less than 10 seconds from now
         self.assertLess(time.time() - last_tel['ts'], 10)
         
-        #test the non logged behaviour
+        #non logged behaviour
         self.client.logout()
         self.client.login(username='wrong', password='wrong')
         response = self.client.post('/administration/override/', follow=True)
@@ -132,6 +134,7 @@ class UrlTest(TestCase):
 
     def test_price(self):
         #logged behaviour
+        self.client.logout()
         self.client.login(**self.credentials)
         response = self.client.post('/administration/price/', self.credentials, follow=True)
         self.assertEqual(response.status_code, 200)
@@ -156,7 +159,7 @@ class UrlTest(TestCase):
         #check that new row is in the database
         self.assertTrue(Price.objects.filter(day="Every Monday", price=1.0).exists())
 
-        #test the non logged behaviour
+        #non logged behaviour
         self.client.logout()
         self.client.login(username='wrong', password='wrong')
         response = self.client.post('/administration/price/', follow=True)

@@ -11,7 +11,7 @@ from push_telemetry import main as push_telemetry
 from datetime import datetime
 from datetime import timedelta
 from datetime import time
-from push_telemetry import main as push_telemetry
+from parkings.views import time_intersect
 
 
 # ThingsBoard REST API URL
@@ -19,17 +19,6 @@ url = "http://192.168.1.197:8080"
 username = "tenant@thingsboard.org"
 password = "tenant"
 tbapi = TbApi(url, username, password)
-
-week_days = {
-    '0' : 'Monday',
-    '1' : 'Tuesday',
-    '2' : 'Wednesday',
-    '3' : 'Thursday',
-    '4' : 'Friday',
-    '5' : 'Saturday',
-    '6' : 'Sunday',
-    'None' : '',
-}
 
 def administration(request, context={}):
     if not request.user.is_authenticated:
@@ -194,14 +183,6 @@ def get_prices(park_num):
         if price.end_time == None:
             price.end_time = ''
 
-    # for price in prices:
-    #     if price.start_time == time(0,0,0):
-    #         price.start_time = '00:00:00'
-
-    #     if price.end_time == time(23, 59, 59):
-    #         price.end_time = '23:59:59'
-    #     price.day = week_days[str(price.day)]
-
     return prices
 
 def get_door_state(request, door):
@@ -266,17 +247,21 @@ def price(request):
 
                 args = price_control(request)
 
-                print('\n\n\n\nargs', args, '\n\n\n\n')
-                
-                if 'add' in request.POST:         
-                    price = Price.objects.create(**args)
-                    price.save()
-                    
+                if args == None:
+                    return redirect('/administration')
 
-                elif 'edit' in request.POST:
-                    price = Price.objects.filter(id = args['id'])
-                    print('\n\n\n\nprice', price, '\n\n\n\n')
-                    price.update(**args)
+                else:
+                    print('\n\n\n\nargs', args, '\n\n\n\n')
+                    
+                    if 'add' in request.POST:         
+                        price = Price.objects.create(**args)
+                        price.save()
+                        
+
+                    elif 'edit' in request.POST:
+                        price = Price.objects.filter(id = args['id'])
+                        print('\n\n\n\nprice', price, '\n\n\n\n')
+                        price.update(**args)
 
         return redirect('/administration')        
 
@@ -286,7 +271,6 @@ def price_control(request):
     if 'price_id' in request.POST and request.POST['price_id']!="":
         args['id'] = request.POST['price_id']
 
-    
     if 'price_date' in request.POST and request.POST['price_date']!="":
         print('date: ', request.POST['price_date'])
         if(datetime. strptime(request.POST['price_date'], '%d/%m/%Y') > datetime.now()):
@@ -301,17 +285,22 @@ def price_control(request):
         args['day'] = request.POST['price_day']
 
     if 'price_start_time' in request.POST and request.POST['price_start_time']!="":
-        args['start_time'] = str(request.POST['price_start_time'])
+        start_time = request.POST['price_start_time']
+        if len(request.POST['price_start_time']) == 5:
+            start_time = start_time + ':00'
+        args['start_time'] = str(start_time)
     else:
-        args['start_time'] = time(0, 0, 0)
+        messages.warning(request, 'start time automatically set to 00:00:00')
+        args['start_time'] = str(time(0, 0, 0))
 
     if 'price_end_time' in request.POST and request.POST['price_end_time']!="":
-        print('end time: ', request.POST['price_end_time'])
-        #convert from string  like "00:00" to time
-        args['end_time'] = str(request.POST['price_end_time'])
-            
+        end_time = request.POST['price_end_time']
+        if len(request.POST['price_end_time']) == 5:
+            end_time = end_time + ':00'
+        args['end_time'] = str(end_time)   
     else:
-        args['end_time'] = time(23, 59, 59)
+        messages.warning(request, 'end time automatically set to 23:59:59')
+        args['end_time'] = str(time(23, 59, 59))
 
     if 'price_price' in request.POST and request.POST['price_price']!="":
         if float(request.POST['price_price']) >=0:
@@ -322,17 +311,70 @@ def price_control(request):
     else:
         args['price'] = 0
 
+    if check_price(request, args):
+        return args
+    else:
+        return None
+
+
+def check_price(request, args):
+    '''
+    check if the new/edited price is valid, 
+    and if it doesn't overlaps with an existing one
+    '''
     #check if price_date and price_day are in args
     if not 'date' in args and not 'day' in args:
         print('date and day are empty')
         messages.error(request,'Date or day must be filled')
-        return redirect('/administration')
+        return False
+    
+    if 'date' in args and 'day' in args:
+        print('date and day are filled')
+        messages.error(request,'Date and day cannot be filled at the same time')
+        return False
 
     if str(args['start_time']) > str(args['end_time']):
         messages.error(request,'Start time must be before end time')
-        return redirect('/administration')
+        return False
 
-    return args
+    if 'date' in args:
+        #get all prices with the same date as input
+        prices = Price.objects.filter(date = args['date'])
+        #remove the price being edited
+        if 'id' in args:
+            prices = prices.exclude(id = args['id'])
+            print('filtered prices: ', prices)
+        print('date prices: ', prices)
+        if new_time_overlap(request, prices, args):
+            messages.error(request,'Price overlaps with existing price')
+            return False
+
+    elif 'day' in args:
+        #get all prices with the same day as input
+        prices = Price.objects.filter(day = args['day'])
+        #remove the price being edited
+        if 'id' in args:
+            prices = prices.exclude(id = args['id'])
+            print('filtered prices: ', prices)
+        print('day prices: ', prices)
+        if new_time_overlap(request, prices, args):
+            messages.error(request,'Price overlaps with existing price')
+            return False
+        
+    return True
+
+def new_time_overlap(request, prices, args):
+    '''
+    check if the new/edited price overlaps with any existing one
+    '''
+    #convert to datetime.time
+    new_start_time = datetime.strptime(args['start_time'], '%H:%M:%S').time()
+    new_end_time = datetime.strptime(args['end_time'], '%H:%M:%S').time()
+    for price in prices:
+        if time_intersect(new_start_time, new_end_time, price.start_time, price.end_time):
+            return True
+    return False
+
 def sensor_control(request):
         context = {}
         if request.method == 'POST':

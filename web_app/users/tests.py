@@ -1,54 +1,90 @@
 from django.test import TestCase
-from django.urls import reverse
-from django.contrib.auth.models import User
+from users.models import User
+from thingsboard_api_tools import TbApi
 
-# class HomeViewTest(TestCase):
+class UrlTest(TestCase):
+    def setUp(self):
+        self.credentials_super = {
+            'username': 'super',
+            'password': '12345678'}
+        User.objects.create_superuser(**self.credentials_super)
+        self.credentials = {
+            'username': 'fogli',
+            'password': '12345678'}
+        User.objects.create_user(**self.credentials)
+        # ThingsBoard REST API URL
+        url = "http://192.168.1.197:8080"
+        # Default Tenant Administrator credentials
+        username = "tenant@thingsboard.org"
+        password = "tenant"
+        self.tbapi = TbApi(url, username, password)
 
-#     def test_home_view_authenticated_user(self):
-#         # Test with authenticated user who is not a superuser
-#         user = User.objects.create_user(username='testuser', password='testpass')
-#         self.client.force_login(user)
-#         response = self.client.get(reverse('home'))
-#         self.assertEqual(response.status_code, 200)
-#         self.assertTemplateUsed(response, 'map.html')
-#         self.assertIn('park_status', response.context)
-#         self.assertIn('park_percent', response.context)
-#         # Test with authenticated superuser
-#         user.is_superuser = True
-#         user.save()
-#         response = self.client.get(reverse('home'))
-#         self.assertRedirects(response, '/administration')
+    def test_home(self):
+        #normal user behaviour
+        self.client.logout()
+        self.client.login(**self.credentials)
+        response = self.client.get('/home/', self.credentials, follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.context['request'].user.is_authenticated)
+        self.assertTemplateUsed(response, 'map.html')
+        #check the context
+        self.assertIn('park_status', response.context)
+        self.assertIn('park_percent', response.context)
 
-#     def test_home_view_unauthenticated_user(self):
-#         response = self.client.get(reverse('home'))
-#         self.assertRedirects(response, '/')
+        #super user behaviour
+        self.client.logout()
+        self.client.login(**self.credentials_super)
+        response = self.client.get('/home/', self.credentials_super, follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.context['request'].user.is_authenticated)
+        self.assertTrue(response.context['request'].user.is_superuser)
+        self.assertTemplateUsed(response, 'administration.html')
 
 
-# class AuthViewTest(TestCase):
+        #non logged behaviour
+        self.client.logout()
+        self.client.login(username='wrong', password='wrong')
+        response = self.client.get('/home/', follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertFalse(response.context['request'].user.is_authenticated)
+        self.assertTemplateUsed(response, 'login.html')
 
-#     def test_auth_view_authenticated_user(self):
-#         # Test with authenticated user who is not a superuser
-#         user = User.objects.create_user(username='testuser', password='testpass')
-#         self.client.force_login(user)
-#         response = self.client.get(reverse('login'))
-#         self.assertRedirects(response, '/home')
-#         # Test with authenticated superuser
-#         user.is_superuser = True
-#         user.save()
-#         response = self.client.get(reverse('login'))
-#         self.assertRedirects(response, '/administration')
 
-#     def test_auth_view_unauthenticated_user(self):
-#         response = self.client.get(reverse('login'))
-#         self.assertEqual(response.status_code, 200)
-#         self.assertTemplateUsed(response, 'login.html')
-#         self.assertIn('login_form', response.context)
-#         self.assertIn('signup_form', response.context)
+    def test_auth(self):
+        #normal user behaviour
+        self.client.logout()
+        self.client.login(**self.credentials)
+        response = self.client.get('/', self.credentials, follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.context['request'].user.is_authenticated)
+        self.assertTemplateUsed(response, 'map.html')
 
-#     def test_home_view_login_post(self):
-#         response = self.client.post(reverse('login'), {'login': True, 'username': 'testuser', 'password': 'testpass'})
-#         self.assertRedirects(response, '/home')
+        #super user behaviour
+        self.client.logout()
+        self.client.login(**self.credentials_super)
+        response = self.client.get('/', self.credentials_super, follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertTrue(response.context['request'].user.is_authenticated)
+        self.assertTemplateUsed(response, 'administration.html')
 
-#     def test_home_view_signup_post(self):
-#         response = self.client.post(reverse('login'), {'signup': True, 'username': 'newuser', 'password1': 'newpass', 'password2': 'newpass'})
-#         self.assertRedirects(response, '/login')
+        #non logged post login behaviour
+        self.client.logout()
+        response = self.client.post('/', {'login': ''}, follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertFalse(response.context['request'].user.is_authenticated)
+        self.assertTemplateUsed(response, 'login.html')
+        #check the context
+        self.assertIn('login_form', response.context)
+        self.assertIn('signup_form', response.context)
+
+        #non logged post signup behaviour
+        self.client.logout()
+        response = self.client.post('/', {'signup': ''}, follow=True)
+        self.assertEqual(response.status_code, 200)
+        self.assertFalse(response.context['request'].user.is_authenticated)
+        self.assertTemplateUsed(response, 'login.html')
+        #check the context
+        self.assertIn('login_form', response.context)
+        self.assertIn('signup_form', response.context)
+        
+

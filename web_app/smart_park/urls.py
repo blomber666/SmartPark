@@ -24,7 +24,7 @@ from django.conf.urls.static import static
 urlpatterns = [
     path("__reload__/", include("django_browser_reload.urls")),
     path('admin/', admin.site.urls),
-    path('', users_views.auth, name='login'),
+    path('', users_views.auth, name='auth'),
     path('logout/', users_views.user_logout, name='logout'),
     path('home/', users_views.home, name='home'),
     path('park_1/', parkings_views.park_1, name='park_1'),
