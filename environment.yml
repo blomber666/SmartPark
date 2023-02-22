@@ -18,3 +18,4 @@ dependencies:
     - django-tailwind
     - django-compressor
     - django_apscheduler
+    - tb-mqtt-client

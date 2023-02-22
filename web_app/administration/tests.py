@@ -1,8 +1,8 @@
 from django.test import TestCase
 from users.models import User
-from parkings.models import Stop, Statistic, Price
+from parkings.models import Price
 from thingsboard_api_tools import TbApi
-import time
+import datetime, time
 # Create your tests here.
 class UrlTest(TestCase):
     def setUp(self):
@@ -139,19 +139,22 @@ class UrlTest(TestCase):
         self.assertTemplateUsed(response, 'administration.html')
 
         #simulate the form with date and price as the button with name 'add' is pressed
-        response = self.client.post('/administration/price/', {'add':'', 'date': '2019-01-01', 'price': '1.0'}, follow=True)
+
+        tomorrow1 = datetime.date.today() + datetime.timedelta(days=1) 
+        # conert tomorrow in dd/mm/yyyy format
+        tomorrow = tomorrow1.strftime('%d/%m/%Y')
+         
+        response = self.client.post('/administration/price/', {'add':'', 'price_date': tomorrow, 'price_price': '1.0'}, follow=True)
         #check that new row is in the database
-        self.assertTrue(Price.objects.filter(date='2019-01-01', price='1.0').exists())
+        print('all prices: ', Price.objects.all())
+
+        print(Price.objects.filter(date=tomorrow1, price='1.0'))
+        self.assertTrue(Price.objects.filter(date=tomorrow1, price='1.0').exists())
 
         #simulate the form with day and price as the button with name 'add' is pressed
-        response = self.client.post('/administration/price/', {'add':'', 'day': 1, 'price': 1.0}, follow=True)
+        response = self.client.post('/administration/price/', {'add':'', 'price_day': 'Every Monday', 'price_price': 1.0}, follow=True)
         #check that new row is in the database
-        self.assertTrue(Price.objects.filter(day=1, price=1.0).exists())
-
-        #simulate the form with start_time and end_time and price as the button with name 'add' is pressed
-        response = self.client.post('/administration/price/', {'add':'', 'start_time': '00:00', 'end_time': '23:59', 'price': 1.0}, follow=True)
-        #check that new row is in the database
-        self.assertTrue(Price.objects.filter(start_time='00:00', end_time='23:59', price=1.0).exists())
+        self.assertTrue(Price.objects.filter(day="Every Monday", price=1.0).exists())
 
         #test the non logged behaviour
         self.client.logout()

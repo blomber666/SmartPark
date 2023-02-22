@@ -97,12 +97,12 @@ def control_entry_gate(tbapi, park_number, old_presence, plate):
 
     if override_value != 'null':
         if override_value == 'open':
-            push_telemetry(door_name, "open", 1)
+            push_telemetry(door_name, 1)
             printc('GREEN',"entry(override)")
             return None, None
 
         elif override_value == 'close':
-            push_telemetry(door_name, "open", 0)
+            push_telemetry(door_name, 0)
             printc('MAGENTA',"entry(override)")
             return None, None
         
@@ -154,11 +154,11 @@ def control_entry_gate(tbapi, park_number, old_presence, plate):
 
             if plate:
                 printc('YELLOW',"entry opened")
-                push_telemetry(door_name, "open", 1)
+                push_telemetry(door_name, 1)
 
             elif door_open:
                 printc('YELLOW',"entry closed")
-                push_telemetry(door_name, "open", 0)
+                push_telemetry(door_name, 0)
             #control the gate
 
         #get door telemetry
@@ -188,12 +188,12 @@ def control_exit_gate(tbapi, park_number, old_presence, plate):
 
     if  override_value != 'null':
         if override_value == 'open':
-            push_telemetry(door_name, "open", 1)
+            push_telemetry(door_name, 1)
             printc('GREEN',"exit(override)")
             return True, None
 
         elif override_value == 'close':
-            push_telemetry(door_name, "open", 0)
+            push_telemetry(door_name, 0)
             printc('MAGENTA',"exit(override)")
             return False, None
 
@@ -259,10 +259,10 @@ def control_exit_gate(tbapi, park_number, old_presence, plate):
                 plate = None
             if plate:
                 printc('YELLOW',"exit opened")
-                push_telemetry(door_name, "open", 1)
+                push_telemetry(door_name,1)
             elif door_open:
                 printc('YELLOW',"exit closed")
-                push_telemetry(door_name, "open", 0)
+                push_telemetry(door_name, 0)
 
         #get door telemetry
         door_telemetry = tbapi.get_telemetry(door['id'], telemetry_keys=["open"])

@@ -227,27 +227,20 @@ def override(request):
             if request.method == 'POST':
 
                 if 'entry_open' in request.POST:
-                    push_telemetry('override_1_1', 'value', 'open')
-                    #push_telemetry('door_1_1', 'value', '1')
+                    push_telemetry('override_1_1', 'open')
                 elif 'entry_close' in request.POST:
-                    push_telemetry('override_1_1', 'value', 'close')
-                    push_telemetry('door_1_1', 'value', '0')
+                    push_telemetry('override_1_1', 'close')
                 elif 'entry_default' in request.POST:
-                    push_telemetry('override_1_1', 'value', 'null')
-                    #push_telemetry('door_1_1', 'value', '0')
+                    push_telemetry('override_1_1', 'null')
                 elif 'exit_open' in request.POST:
-                    push_telemetry('override_1_2', 'value', 'open')
-                    #push_telemetry('door_1_2', 'value', '1')
+                    push_telemetry('override_1_2', 'open')
                 elif 'exit_close' in request.POST:
-                    push_telemetry('override_1_2', 'value', 'close')
-                    #push_telemetry('door_1_2', 'value', '0')
+                    push_telemetry('override_1_2', 'close')
                 elif 'exit_default' in request.POST:
-                    push_telemetry('override_1_2', 'value', 'null')
-                    #push_telemetry('door_1_1', 'value', '0')  
+                    push_telemetry('override_1_2', 'null')
                 else:
                     print('unknown button')
-                #wait 2 seconds
-                # time.sleep(2)
+
                 return redirect('/administration')
         else:
             return redirect('/home')
@@ -262,7 +255,7 @@ def price(request):
 
                 #cprinte request.post keys
 
-                print('\n\n\nREQUEWST.POST')
+                print('\n\n\nREQUEST.POST')
                 print(request.POST)
                 args = {}
                 if 'delete' in request.POST:
@@ -271,53 +264,7 @@ def price(request):
                     price.delete()
                     return redirect('/administration')
 
-                args['park'] = '1'
-                if 'price_id' in request.POST and request.POST['price_id']!="":
-                    args['id'] = request.POST['price_id']
-
-                
-                if 'price_date' in request.POST and request.POST['price_date']!="":
-                    if(datetime. strptime(request.POST['price_date'], '%d/%m/%y %H:%M:%S') > datetime.now()):
-                        converted = datetime.strptime(request.POST['price_date'], '%d/%m/%Y').date()
-                        args['date'] = converted
-                    else:
-                        messages.error(request,'Date must be in the future')
-                        return redirect('/administration')
-
-                if 'price_day' in request.POST and request.POST['price_day']!="" and request.POST['price_day']!='None':
-                    args['day'] = request.POST['price_day']
-
-                if 'price_start_time' in request.POST and request.POST['price_start_time']!="":
-                    args['start_time'] = str(request.POST['price_start_time'])
-                else:
-                    args['start_time'] = time(0, 0, 0)
-
-                if 'price_end_time' in request.POST and request.POST['price_end_time']!="":
-                    print('end time: ', request.POST['price_end_time'])
-                    #convert from string  like "00:00" to time
-                    args['end_time'] = str(request.POST['price_end_time'])
-                     
-                else:
-                    args['end_time'] = time(23, 59, 59)
-
-                if 'price_price' in request.POST and request.POST['price_price']!="":
-                    if float(request.POST['price_price']) >=0:
-                        args['price'] = request.POST['price_price']
-                    else:
-                        messages.error(request, 'Price must be positive')
-                        redirect('/administration')
-                else:
-                    args['price'] = 0
-
-                #check if price_date and price_day are in args
-                if not 'date' in args and not 'day' in args:
-                    print('date and day are empty')
-                    messages.error(request,'Date or day must be filled')
-                    return redirect('/administration')
-
-                if str(args['start_time']) > str(args['end_time']):
-                    messages.error(request,'Start time must be before end time')
-                    return redirect('/administration')
+                args = price_control(request)
 
                 print('\n\n\n\nargs', args, '\n\n\n\n')
                 
@@ -333,6 +280,59 @@ def price(request):
 
         return redirect('/administration')        
 
+def price_control(request):
+    args = {}
+    args['park'] = '1'
+    if 'price_id' in request.POST and request.POST['price_id']!="":
+        args['id'] = request.POST['price_id']
+
+    
+    if 'price_date' in request.POST and request.POST['price_date']!="":
+        print('date: ', request.POST['price_date'])
+        if(datetime. strptime(request.POST['price_date'], '%d/%m/%Y') > datetime.now()):
+            converted = datetime.strptime(request.POST['price_date'], '%d/%m/%Y').date()
+            print('converted: ', converted)
+            args['date'] = converted
+        else:
+            messages.error(request,'Date must be in the future')
+            return redirect('/administration')
+
+    if 'price_day' in request.POST and request.POST['price_day']!="" and request.POST['price_day']!='None':
+        args['day'] = request.POST['price_day']
+
+    if 'price_start_time' in request.POST and request.POST['price_start_time']!="":
+        args['start_time'] = str(request.POST['price_start_time'])
+    else:
+        args['start_time'] = time(0, 0, 0)
+
+    if 'price_end_time' in request.POST and request.POST['price_end_time']!="":
+        print('end time: ', request.POST['price_end_time'])
+        #convert from string  like "00:00" to time
+        args['end_time'] = str(request.POST['price_end_time'])
+            
+    else:
+        args['end_time'] = time(23, 59, 59)
+
+    if 'price_price' in request.POST and request.POST['price_price']!="":
+        if float(request.POST['price_price']) >=0:
+            args['price'] = request.POST['price_price']
+        else:
+            messages.error(request, 'Price must be positive')
+            redirect('/administration')
+    else:
+        args['price'] = 0
+
+    #check if price_date and price_day are in args
+    if not 'date' in args and not 'day' in args:
+        print('date and day are empty')
+        messages.error(request,'Date or day must be filled')
+        return redirect('/administration')
+
+    if str(args['start_time']) > str(args['end_time']):
+        messages.error(request,'Start time must be before end time')
+        return redirect('/administration')
+
+    return args
 def sensor_control(request):
         context = {}
         if request.method == 'POST':

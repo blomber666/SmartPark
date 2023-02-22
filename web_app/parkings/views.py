@@ -70,7 +70,7 @@ def park_1(request, context={}):
 
         stops = get_stops(request.user, start_date_converted, end_date_converted, park_num)
 
-        context = {'username': request.userz, 'start': start, 'end': end , 'last_time':last_time, 'amount': amount, 'payed': payed, \
+        context = {'username': request.user, 'start': start, 'end': end , 'last_time':last_time, 'amount': amount, 'payed': payed, \
             'free_spaces': free_spaces, 'park_status': park_status, 'park_percent': park_percent, 'total_spaces': total_spaces,\
                 'stops': stops}
         return render(request, 'park_1.html', context)

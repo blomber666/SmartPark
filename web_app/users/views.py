@@ -48,7 +48,7 @@ def user_logout(request):
     logout(request)
     return redirect('/')
 
-def map_view(request):
+def home(request):
     #if not os.path.exists("parkings/templates/map.html"): 
     #    create_map()
     if request.user.is_authenticated:
@@ -70,7 +70,7 @@ def map_view(request):
 
 
 
-def home(request):
+def auth(request):
     if request.user.is_authenticated:
         if request.user.is_superuser:
             return redirect('/administration')

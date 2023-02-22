@@ -16,6 +16,7 @@ url = "http://192.168.1.197:8080"
 username = "tenant@thingsboard.org"
 password = "tenant"
 
+DISTANCE_THRESHOLD = 0.5 #in centimeters
 
 logging.basicConfig(level=logging.DEBUG,
                     format='%(asctime)s - %(levelname)s - %(module)s - %(lineno)d - %(message)s',
@@ -108,10 +109,11 @@ def generate_map(filename):
             sensor_counter += 1
             telemetry = tbapi.get_telemetry(device['id'], telemetry_keys=["free"])
             #get the latest free attribute
-            free = telemetry['free'][0]['value']
+            distance = telemetry['distance'][0]['value']
 
-            print(name,free)
+            print(name,distance)
 
+            free = distance > DISTANCE_THRESHOLD
             #if the device is free, fill a polygon with green
             if int(free):
                 free_counter += 1
