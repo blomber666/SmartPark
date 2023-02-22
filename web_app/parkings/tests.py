@@ -119,7 +119,6 @@ class UrlsTest(TestCase):
 class CalculateAmontTest(TestCase):
     def test_calculate_amount(self):
         #price is for every minute
-
         # Test case 0
         default_price = 10
         Price.objects.all().delete()

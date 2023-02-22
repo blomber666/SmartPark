@@ -227,21 +227,17 @@ def override(request):
             return redirect('/home')
 
 def price(request):
+    print('price request',request)
     if not request.user.is_authenticated:
         messages.info(request,'HTTP ERROR: 401 - Unauthorized')
         return redirect('/')
     else:
         if request.user.is_superuser:
             if request.method == 'POST':
-
-                #cprinte request.post keys
-
-                print('\n\n\nREQUEST.POST')
-                print(request.POST)
                 args = {}
                 if 'delete' in request.POST:
-                    print("boooooo")
-                    price = Price.objects.get(id = request.POST['delete'])
+                    id = request.POST['price_id']
+                    price = Price.objects.get(id = id)
                     price.delete()
                     return redirect('/administration')
 
@@ -250,14 +246,11 @@ def price(request):
                 if args == None:
                     return redirect('/administration')
 
-                else:
-                    print('\n\n\n\nargs', args, '\n\n\n\n')
-                    
+                else:                  
                     if 'add' in request.POST:         
                         price = Price.objects.create(**args)
                         price.save()
                         
-
                     elif 'edit' in request.POST:
                         price = Price.objects.filter(id = args['id'])
                         print('\n\n\n\nprice', price, '\n\n\n\n')
@@ -270,6 +263,10 @@ def price_control(request):
     args['park'] = '1'
     if 'price_id' in request.POST and request.POST['price_id']!="":
         args['id'] = request.POST['price_id']
+    else:
+        if 'edit' in request.POST:
+            messages.error(request,'Price id is missing')
+            return None
 
     if 'price_date' in request.POST and request.POST['price_date']!="":
         print('date: ', request.POST['price_date'])
@@ -308,8 +305,6 @@ def price_control(request):
         else:
             messages.error(request, 'Price must be positive')
             redirect('/administration')
-    else:
-        args['price'] = 0
 
     if check_price(request, args):
         return args
@@ -322,6 +317,11 @@ def check_price(request, args):
     check if the new/edited price is valid, 
     and if it doesn't overlaps with an existing one
     '''
+
+    if 'price' not in args:
+        messages.error(request,'Price must be filled')
+        return False
+
     #check if price_date and price_day are in args
     if not 'date' in args and not 'day' in args:
         print('date and day are empty')
