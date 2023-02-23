@@ -276,7 +276,7 @@ def control_exit_gate(tbapi, park_number, old_presence, plate):
 def get_plate(tbapi, camera_name):
     i = 0
     #try to get the plate for 10 seconds
-    while i < 10:
+    while i < 5:
         camera = tbapi.get_device_by_name(name=camera_name)
         telemetry = tbapi.get_telemetry(camera['id'], telemetry_keys=["plate"])
         #get the latest telemetry (the first one)
@@ -395,9 +395,6 @@ def main(park_name, stats_freq):
         printc('GREEN',"found stats for today") 
 
     while 1:
-
-        time.sleep(1)
-
         #create new stats if it is a new day
         #remove the time from the stats_date
         # stats_date = stats.date.date()
@@ -420,10 +417,6 @@ def main(park_name, stats_freq):
             #update the stats_time by adding stats_freq to it
             stats_time = (datetime.combine(date.today(), stats_time) + timedelta(hours=stats_freq.hour, minutes=stats_freq.minute)).time()
             printc('CYAN',f"next_stats_update: {stats_time}")
-
-
-            
-
 
         entry_presence, entry_plate = control_entry_gate(tbapi, park_number, entry_presence, entry_plate)
 

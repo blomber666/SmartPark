@@ -148,8 +148,9 @@ def get_parkings(request):
         messages.info(request,'HTTP ERROR: 401 - Unauthorized')
         return JsonResponse({})
         
-def calculate_amount(start, end=timezone.localtime(timezone.now()), default_price=0.01): 
-
+def calculate_amount(start, end=None, default_price=0.01): 
+    if end is None:
+        end = timezone.localtime(timezone.now())
     remaining_times = [(start, end)]
     remaining_times = split_times(remaining_times)
     prices = Price.objects.all()
@@ -269,6 +270,7 @@ def calculate_amount(start, end=timezone.localtime(timezone.now()), default_pric
 
     assert amount >= 0, 'amount is negative'
     context = {'amount': amount}
+    print('amount from ', start, ' to ', end, ' is ', amount)
     return context
 
 def time_intersect(start1, end1, start2, end2):

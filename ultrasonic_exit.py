@@ -3,6 +3,7 @@ import RPi.GPIO as GPIO
 import time
 import argparse
 from thingsboard_api_tools import TbApi
+from push_telemetry import main as push_telemetry
 
 '''
 send a telemetry to a device
@@ -81,8 +82,9 @@ class Door:
     def __del__(self):
         GPIO.cleanup()
 
-sensor1 = Ultrasonic(3, 2)
-door1 = Door(4, 14)
+gate_1_2 = Ultrasonic(3, 2)
+park_1_2 = Ultrasonic(18, 17)
+door_1_2 = Door(4, 14)
 
 
 # ThingsBoard REST API URL
@@ -94,38 +96,36 @@ password = "tenant"
 tbapi = TbApi(url, username, password)
 devices = tbapi.get_tenant_devices()
 
-#find the device using the name
 for d in devices:
-    if d['name'] == 'gate_1_1':
-        gate_1_1 = d
-        break
-gate_1_1_token = tbapi.get_device_token(gate_1_1)
-
-for d in devices:
-    if d['name'] == 'door_1_1':
-        door_1_1 = d
+    if d['name'] == 'door_1_2':
+        door_1_2 = d
         break
 
 if __name__ == '__main__':
     try:
         while True:
-            dist1 = sensor1.get_distance()
-            print("Measured Distance 1 = %.1f cm" % dist1)
+            try:
+                dist_gate = gate_1_2.get_distance()
+                dist_park = park_1_2.get_distance()
+                print("Measured Distance GATE = %.1f cm" % dist_gate)
+                print("Measured Distance PARK = %.1f cm" % dist_park)
+                push_telemetry('gate_1_2', dist_gate)
+                push_telemetry('sensor_1_4', dist_park)
 
-            telemetry_1 = { str('distance'): dist1} 
-            result_1 = tbapi.send_telemetry(gate_1_1_token, telemetry_1)
-            #check if result is an empty dict
-            if not result_1:
-                printc("OK", "Sent ", telemetry_1, "to device: ", gate_1_1['name'])
+                door_1_2_telemetry = tbapi.get_telemetry(door_1_2['id'], telemetry_keys=["open"])   
 
-            door_1_1_telemetry = tbapi.get_telemetry(door_1_1['id'], telemetry_keys=["open"])   
+                if int(door_1_2_telemetry['open'][0]['value']) == 1:
+                    door_1_2.open()
+                else:
+                    door_1_2.close()
+                print("\n\n")
+                time.sleep(0.5)
+            except OSError as e:
+                #continue the while loop
+                printc("RED", "OSError: ", e)
+                continue
+            
 
-            if int(door_1_1_telemetry['open'][0]['value']) == 1:
-                door1.open()
-            else:
-                door1.close()
-            print("\n\n")
-            time.sleep(0.5)
 
         # Reset by pressing CTRL + C
     except KeyboardInterrupt:

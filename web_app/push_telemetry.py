@@ -43,9 +43,6 @@ def parse_opt():
     opt = parser.parse_args()
     return opt
 
-def on_publish(client,userdata,result):             #create function for callback
-    printc("OK", "data published \r")
-
 def main(name, value):
     tokens = {  
         'sensor_1_1': '3bPMNFmgEXcQoZvSiN8T',
@@ -102,10 +99,13 @@ def main(name, value):
     # Sending telemetry and checking the delivery status (QoS = 1 by default)
     if client.is_connected():
         client.send_telemetry(telemetry)
+        client.disconnect()
         printc("OK", f'Sent {key} = {value} to {name}')
     else:
         printc("FAIL", "connection failed")
+        client.disconnect()
     # Disconnect from ThingsBoard
+    client.disconnect()
     client.disconnect()
 
 

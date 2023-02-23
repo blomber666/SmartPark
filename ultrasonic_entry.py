@@ -3,6 +3,7 @@ import RPi.GPIO as GPIO
 import time
 import argparse
 from thingsboard_api_tools import TbApi
+from push_telemetry import main as push_telemetry
 
 '''
 send a telemetry to a device
@@ -44,6 +45,7 @@ class Ultrasonic:
     def __init__(self, trigger, echo):
         self.trigger = trigger
         self.echo = echo
+        self.id = None
         GPIO.setup(self.trigger, GPIO.OUT)
         GPIO.setup(self.echo, GPIO.IN)
         GPIO.output(self.trigger, False)
@@ -68,6 +70,7 @@ class Door:
     def __init__(self, green, red):
         self.green = green
         self.red = red
+        self.id = None
         GPIO.setup(self.green, GPIO.OUT)
         GPIO.setup(self.red, GPIO.OUT)
         GPIO.output(self.green, False)
@@ -81,8 +84,22 @@ class Door:
     def __del__(self):
         GPIO.cleanup()
 
-sensor1 = Ultrasonic(3, 2)
-door1 = Door(4, 14)
+class Led:
+    def __init__(self, pin):
+        self.pin = pin
+        GPIO.setup(self.pin, GPIO.OUT)
+        GPIO.output(self.pin, False)
+    def free(self):
+        GPIO.output(self.pin, True)
+    def occupied(self):
+        GPIO.output(self.pin, False)
+    def __del__(self):
+        GPIO.cleanup()
+
+gate_1_1 = Ultrasonic(3, 2)
+park_1_4 = Ultrasonic(18, 17)
+park_light_1_4 = Led(15)
+door_1_1 = Door(4, 14)
 
 
 # ThingsBoard REST API URL
@@ -94,38 +111,47 @@ password = "tenant"
 tbapi = TbApi(url, username, password)
 devices = tbapi.get_tenant_devices()
 
-#find the device using the name
-for d in devices:
-    if d['name'] == 'gate_1_1':
-        gate_1_1 = d
-        break
-gate_1_1_token = tbapi.get_device_token(gate_1_1)
-
 for d in devices:
     if d['name'] == 'door_1_1':
-        door_1_1 = d
+        door_1_1.id = d['id']
+        break
+
+for d in devices:
+    if d['name'] == 'sensor_1_4':
+        gate_1_1.id = d['id']
         break
 
 if __name__ == '__main__':
     try:
         while True:
-            dist1 = sensor1.get_distance()
-            print("Measured Distance 1 = %.1f cm" % dist1)
+            try:
+                dist_gate = gate_1_1.get_distance()
+                dist_park = park_1_4.get_distance()
+                print("Measured Distance GATE = %.1f cm" % dist_gate)
+                print("Measured Distance PARK = %.1f cm" % dist_park)
+                push_telemetry('gate_1_1', dist_gate)
+                push_telemetry('sensor_1_4', dist_park)
 
-            telemetry_1 = { str('distance'): dist1} 
-            result_1 = tbapi.send_telemetry(gate_1_1_token, telemetry_1)
-            #check if result is an empty dict
-            if not result_1:
-                printc("OK", "Sent ", telemetry_1, "to device: ", gate_1_1['name'])
+                door_1_1_telemetry = tbapi.get_telemetry(door_1_1.id, telemetry_keys=["open"])   
+                if int(door_1_1_telemetry['open'][0]['value']) == 1:
+                    door_1_1.open()
+                else:
+                    door_1_1.close()
 
-            door_1_1_telemetry = tbapi.get_telemetry(door_1_1['id'], telemetry_keys=["open"])   
+                park_light_1_4_telemetry = tbapi.get_telemetry(park_1_4.id, telemetry_keys=["distance"])
+                if int(park_light_1_4_telemetry['distance'][0]['value']) < 10:
+                    park_light_1_4.occupied()
+                else:
+                    park_light_1_4.free()
 
-            if int(door_1_1_telemetry['open'][0]['value']) == 1:
-                door1.open()
-            else:
-                door1.close()
-            print("\n\n")
-            time.sleep(0.5)
+                print("\n\n")
+                time.sleep(0.5)
+            except OSError as e:
+                #continue the while loop
+                printc("RED", "OSError: ", e)
+                continue
+            
+
 
         # Reset by pressing CTRL + C
     except KeyboardInterrupt:

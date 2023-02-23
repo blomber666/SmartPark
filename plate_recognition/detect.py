@@ -266,7 +266,7 @@ def run(
                     if save_crop:
                         save_one_box(xyxy, imc, file=save_dir / 'crops' / names[c] / f'{p.stem}.jpg', BGR=True)
                     
-                    if conf > 0.75:
+                    if conf > 0.6:
                         cropped = img_copy[int(xyxy[1]):int(xyxy[3]), int(xyxy[0]):int(xyxy[2])]
                         #read the plate with tesseract
                         cropped = cv2.cvtColor(cropped, cv2.COLOR_BGR2GRAY)
