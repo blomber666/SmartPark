@@ -232,24 +232,24 @@ def calculate_amount(start, end=None, default_price=0.01):
         if found:
             found_price = float(found.price)
             if found_start <= start and found_end >= end:
-                amount += (end - start).total_seconds() / 60 * found_price
+                amount += ((end - start).total_seconds() / (60*60)) * found_price
                 remaining_times.pop(0)
 
             elif found_start <= start: #and found_end >= start.time():
-                amount += (found_end - start).total_seconds() / 60 * found_price
+                amount += ((found_end - start).total_seconds() / (60*60)) * found_price
                 if found_end < end:
                     remaining_times.append([found_end+timedelta(seconds=1), end])
                 remaining_times.pop(0)
 
             elif found_end >= end: #and found_start <= end.time():
-                amount += (end - found_start).total_seconds() / 60 * found_price
+                amount += ((end - found_start).total_seconds() / (60*60)) * found_price
                 if start < found_start:
                     remaining_times.append([start, found_start-timedelta(seconds=1)])
                 remaining_times.pop(0)
               
             elif found_start >= start and found_end <= end:
                 assert(time_intersect(found_start, found_end, start, end))
-                amount += (found_end - found_start).total_seconds() / 60 * found_price
+                amount += ((found_end - found_start).total_seconds() / (60*60)) * found_price
                 if start < found_start:
                     remaining_times.append([start, found_start-timedelta(seconds=1)])
                 if found_end < end:
@@ -259,7 +259,7 @@ def calculate_amount(start, end=None, default_price=0.01):
             assert(1 > 0), 'should not reach here'
 
         else:
-            amount += (end - start).total_seconds() / 60 * default_price
+            amount += ((end - start).total_seconds() / (60*60)) * default_price # hours * default price
             remaining_times.pop(0)
             
     amount = round(amount, 2)

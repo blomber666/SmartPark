@@ -192,7 +192,7 @@ def run(
     # Dataloader
     bs = 1  # batch_size
     if webcam:
-        view_img = check_imshow(warn=True)
+        # view_img = check_imshow(warn=True)
         dataset = LoadStreams(source, img_size=imgsz, stride=stride, auto=pt, vid_stride=vid_stride)
         bs = len(dataset)
     elif screenshot:
@@ -266,7 +266,7 @@ def run(
                     if save_crop:
                         save_one_box(xyxy, imc, file=save_dir / 'crops' / names[c] / f'{p.stem}.jpg', BGR=True)
                     
-                    if conf > 0.6:
+                    if conf > 0.4:
                         cropped = img_copy[int(xyxy[1]):int(xyxy[3]), int(xyxy[0]):int(xyxy[2])]
                         #read the plate with tesseract
                         cropped = cv2.cvtColor(cropped, cv2.COLOR_BGR2GRAY)
@@ -284,19 +284,19 @@ def run(
                             print("fixed plate: ", plate_text)
                         
                         #if last 3 plates are the same, then we have a valid plate
-                        if len(plates) > 3:
-                            if plates[-1] == plates[-2] == plates[-3]:
-                                print("plate read 3 times, sending: ", plates[-1])
+                        if len(plates) > 2:
+                            if plates[-1] == plates[-2]:
+                                print("plate read 2 times, sending: ", plates[-1])
                                 plate = plates[-1]
                                 #send the plate to the server
                                 telemetry_1 = {"plate": plate}
                                 result_1 = tbapi.send_telemetry(camera_1_1_token,telemetry_1)
-                                result_2 = tbapi.send_telemetry(camera_1_2_token,telemetry_1)
+                                # result_2 = tbapi.send_telemetry(camera_1_2_token,telemetry_1)
                                 if not result_1:
                                     printc("OK", "Sent ", telemetry_1, "to device: ", camera_1_1['name'])
                                 
-                                if not result_2:
-                                    printc("OK", "Sent ", telemetry_1, "to device: ", camera_1_2['name'])
+                                # if not result_2:
+                                #     printc("OK", "Sent ", telemetry_1, "to device: ", camera_1_2['name'])
                                 #clear the plates list
                                 plates = []
 

@@ -75,7 +75,7 @@ def get_car_presence(tbapi, gate_name):
     distances.sort(key=lambda x: x['ts'])
     distance = float(distances[-1]['value'])
     
-    if distance < 20:
+    if distance < 10:
         return True
     else:
         return False
@@ -276,7 +276,7 @@ def control_exit_gate(tbapi, park_number, old_presence, plate):
 def get_plate(tbapi, camera_name):
     i = 0
     #try to get the plate for 10 seconds
-    while i < 5:
+    while i < 3:
         camera = tbapi.get_device_by_name(name=camera_name)
         telemetry = tbapi.get_telemetry(camera['id'], telemetry_keys=["plate"])
         #get the latest telemetry (the first one)
@@ -349,13 +349,14 @@ def send_stats(stats, park_number):
         stats.completed_stops = len(completed_stops)
         stats.active_stops = len(all_stops) - len(completed_stops)
         stats.average_time = average_time
-        stats.average_price = average_price
-        stats.average_income_per_hour = average_income_per_hour
-        stats.average_stops_per_hour = average_stops_per_hour
+        stats.average_price = 0
+        stats.average_income_per_hour = 0
+        stats.average_stops_per_hour = 0
         #change the date to now
         stats.date = datetime.now().date()
         #save the stats
         stats.save()
+        print('STATS', stats)
         printc("GREEN","stats sent")
 
 
@@ -374,8 +375,8 @@ def main(park_name, stats_freq):
     #get the time of the last stats sent
     stats_time = datetime.now().time()
 
-    entry_presence = False
-    exit_presence = False
+    entry_presence = None
+    exit_presence = None
     entry_plate = None
     exit_plate = None
     #get the statistics for the park for today

@@ -3,15 +3,7 @@ import RPi.GPIO as GPIO
 import time
 import argparse
 from thingsboard_api_tools import TbApi
-from push_telemetry import main as push_telemetry
-
-'''
-send a telemetry to a device
-usage:
-python push_telemetry.py DEVICE_NAME KEY VALUE
-example:
-python push_telemetry.py sensor_1_1 1
-'''
+from tb_device_mqtt import TBDeviceMqttClient
 class bcolors:
     OK = '\033[92m' #GREEN
     WARNING = '\033[93m' #YELLOW
@@ -46,6 +38,8 @@ class Ultrasonic:
         self.trigger = trigger
         self.echo = echo
         self.id = None
+        self.key = 'distance'
+        self.token = None
         GPIO.setup(self.trigger, GPIO.OUT)
         GPIO.setup(self.echo, GPIO.IN)
         GPIO.output(self.trigger, False)
@@ -118,42 +112,47 @@ for d in devices:
 
 for d in devices:
     if d['name'] == 'sensor_1_4':
-        gate_1_1.id = d['id']
+        park_1_4.id = d['id']
         break
+
+gate_1_1.token = 'N3SVjK5kG3VHe33lM1C5'
+gate_1_1.key = 'distance'
+gate_client = TBDeviceMqttClient(host="192.168.1.197", username=gate_1_1.token)
+gate_client.connect()
+park_1_4.token = '58pQDxOT9VColdN8kyXH'
+park_1_4.key = 'distance'
+park_client = TBDeviceMqttClient(host="192.168.1.197", username=park_1_4.token)
+park_client.connect()
+
 
 if __name__ == '__main__':
     try:
         while True:
-            try:
-                dist_gate = gate_1_1.get_distance()
-                dist_park = park_1_4.get_distance()
-                print("Measured Distance GATE = %.1f cm" % dist_gate)
-                print("Measured Distance PARK = %.1f cm" % dist_park)
-                push_telemetry('gate_1_1', dist_gate)
-                push_telemetry('sensor_1_4', dist_park)
+            dist_gate = gate_1_1.get_distance()
+            dist_park = park_1_4.get_distance()
+            print("Distance GATE_1_1 = %.1f cm" % dist_gate)
+            print("Distance PARK = %.1f cm" % dist_park)
+            gate_client.send_telemetry({gate_1_1.key: dist_gate})
+            park_client.send_telemetry({park_1_4.key: dist_park})
 
-                door_1_1_telemetry = tbapi.get_telemetry(door_1_1.id, telemetry_keys=["open"])   
-                if int(door_1_1_telemetry['open'][0]['value']) == 1:
-                    door_1_1.open()
-                else:
-                    door_1_1.close()
+            door_telemetry = tbapi.get_telemetry(door_1_1.id, telemetry_keys=["open"])   
+            if int(door_telemetry['open'][0]['value']) == 1:
+                door_1_1.open()
+            else:
+                door_1_1.close()
 
-                park_light_1_4_telemetry = tbapi.get_telemetry(park_1_4.id, telemetry_keys=["distance"])
-                if int(park_light_1_4_telemetry['distance'][0]['value']) < 10:
-                    park_light_1_4.occupied()
-                else:
-                    park_light_1_4.free()
+            park_light_telemetry = tbapi.get_telemetry(park_1_4.id, telemetry_keys=["distance"])
+            if float(park_light_telemetry['distance'][0]['value']) < 10:
+                park_light_1_4.occupied()
+            else:
+                park_light_1_4.free()
 
-                print("\n\n")
-                time.sleep(0.5)
-            except OSError as e:
-                #continue the while loop
-                printc("RED", "OSError: ", e)
-                continue
-            
-
+            print("\n\n")
+            time.sleep(2)
 
         # Reset by pressing CTRL + C
     except KeyboardInterrupt:
         print("Measurement stopped by User")
+        gate_client.disconnect()
+        park_client.disconnect()
         GPIO.cleanup()
