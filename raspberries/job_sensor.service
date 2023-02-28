@@ -1,0 +1,16 @@
+[Unit]
+Description=SmartPark Sensor Service
+After=network.target
+
+[Service]
+ExecStart=/etc/sensor/job_sensor.sh
+Restart=on-failure
+User=pi
+RemainAfterExit=yes
+Restart=always
+RestartSec=5
+TimeoutSec=60
+RuntimeMaxSec=infinity
+
+[Install]
+WantedBy=multi-user.target

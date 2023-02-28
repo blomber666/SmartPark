@@ -1,133 +1,94 @@
 #Libraries
-import RPi.GPIO as GPIO
 import time
 import argparse
 from thingsboard_api_tools import TbApi
-
-'''
-send a telemetry to a device
-usage:
-python push_telemetry.py DEVICE_NAME KEY VALUE
-example:
-python push_telemetry.py sensor_1_1 1
-'''
-class bcolors:
-    OK = '\033[92m' #GREEN
-    WARNING = '\033[93m' #YELLOW
-    FAIL = '\033[91m' #RED
-    END = '\033[0m' #RESET COLOR
-    CYAN = '\033[36m'
-    GREEN = '\033[32m' # Dark Green
-    YELLOW = '\033[33m' # Dark Yellow
-    RED = '\033[31m' # Dark Red
-    BLUE = '\033[34m' # Dark Blue
-    MAGENTA = '\033[35m' # Dark Magenta
-    WHITE = '\033[37m' # Dark White
-    BLACK = '\033[30m' # Dark Black
-    UNDERLINE = '\033[4m'
-    BOLD = '\033[1m'
-    INVISIBLE = '\033[08m'
-    REVERSE = '\033[07m'
-
-
-def printc(*args):
-    color = args[0]
-    strings = args[1::]
-    c = getattr(bcolors,color)
-    string=' '.join(map(str, strings))
-    print(c + string + bcolors.END)
-
-
-#GPIO Mode (BOARD / BCM)
-GPIO.setmode(GPIO.BCM)
-class Ultrasonic:
-    def __init__(self, trigger, echo):
-        self.trigger = trigger
-        self.echo = echo
-        GPIO.setup(self.trigger, GPIO.OUT)
-        GPIO.setup(self.echo, GPIO.IN)
-        GPIO.output(self.trigger, False)
-        time.sleep(2)
-    def get_distance(self):
-        GPIO.output(self.trigger, True)
-        time.sleep(0.00001)
-        GPIO.output(self.trigger, False)
-        StartTime = time.time()
-        StopTime = time.time()
-        while GPIO.input(self.echo) == 0:
-            StartTime = time.time()
-        while GPIO.input(self.echo) == 1:
-            StopTime = time.time()
-        TimeElapsed = StopTime - StartTime
-        distance = (TimeElapsed * 34300) / 2
-        return distance
-    def __del__(self):
-        GPIO.cleanup()
-
-class Door:
-    def __init__(self, green, red):
-        self.green = green
-        self.red = red
-        GPIO.setup(self.green, GPIO.OUT)
-        GPIO.setup(self.red, GPIO.OUT)
-        GPIO.output(self.green, False)
-        GPIO.output(self.red, False)
-    def open(self):
-        GPIO.output(self.green, True)
-        GPIO.output(self.red, False)
-    def close(self):
-        GPIO.output(self.green, False)
-        GPIO.output(self.red, True)
-    def __del__(self):
-        GPIO.cleanup()
-
-sensor1 = Ultrasonic(3, 2)
-door1 = Door(4, 14)
-
-
-# ThingsBoard REST API URL
-url = "http://192.168.1.197:8080"
-# Default Tenant Administrator credentials
-username = "tenant@thingsboard.org"
-password = "tenant"
-
-tbapi = TbApi(url, username, password)
-devices = tbapi.get_tenant_devices()
-
-#find the device using the name
-for d in devices:
-    if d['name'] == 'gate_1_1':
-        gate_1_1 = d
-        break
-gate_1_1_token = tbapi.get_device_token(gate_1_1)
-
-for d in devices:
-    if d['name'] == 'door_1_1':
-        door_1_1 = d
-        break
-
+from tb_device_mqtt import TBDeviceMqttClient
 if __name__ == '__main__':
-    try:
-        while True:
-            dist1 = sensor1.get_distance()
-            print("Measured Distance 1 = %.1f cm" % dist1)
+    class bcolors:
+        OK = '\033[92m' #GREEN
+        WARNING = '\033[93m' #YELLOW
+        FAIL = '\033[91m' #RED
+        END = '\033[0m' #RESET COLOR
+        CYAN = '\033[36m'
+        GREEN = '\033[32m' # Dark Green
+        YELLOW = '\033[33m' # Dark Yellow
+        RED = '\033[31m' # Dark Red
+        BLUE = '\033[34m' # Dark Blue
+        MAGENTA = '\033[35m' # Dark Magenta
+        WHITE = '\033[37m' # Dark White
+        BLACK = '\033[30m' # Dark Black
 
-            telemetry_1 = { str('distance'): dist1} 
-            result_1 = tbapi.send_telemetry(gate_1_1_token, telemetry_1)
-            #check if result is an empty dict
-            if not result_1:
-                printc("OK", "Sent ", telemetry_1, "to device: ", gate_1_1['name'])
 
-            door_1_1_telemetry = tbapi.get_telemetry(door_1_1['id'], telemetry_keys=["open"])   
+        BG_PURPLE = '\033[48;5;57m'      #That is, \033[48;5;<BG COLOR>m
+        RAINBOW = '\033[48;5;57m'      #That is, \033[48;5;<BG COLOR>m
+        PURPLE = '\033[38;5;206m'     #That is, \033[38;5;<FG COLOR>m
+        BOLD = '\033[1m'
+        RED_BOLD = '\033[1;31m'
+        GREEN_BOLD = '\033[1;32m'
+        UNDERLINE = '\033[4m'
+        BOLD = '\033[1m'
+        INVISIBLE = '\033[08m'
+        REVERSE = '\033[07m'
 
-            if int(door_1_1_telemetry['open'][0]['value']) == 1:
-                door1.open()
+
+    def printc(*args):
+        color = args[0]
+        strings = args[1::]
+        c = getattr(bcolors,color)
+        string=' '.join(map(str, strings))
+        print(c + string + bcolors.END)
+
+    def printc_inline(strings):
+        #delete all characters in line
+        print('\033[2K', end='\r')
+        for i, arg in enumerate(strings):
+            color = arg[0]
+            texts = arg[1::]
+            c = getattr(bcolors,color)
+            text = ' '.join(map(str, texts))
+            #if last argument
+            if i != len(strings)-1:
+                print(c + text + bcolors.END, end='')
             else:
-                door1.close()
-            print("\n\n")
-            time.sleep(0.5)
+                print(c + text + bcolors.END, end='\r')
 
-        # Reset by pressing CTRL + C
-    except KeyboardInterrupt:
-        print("Measurement stopped by User")
-        GPIO.cleanup()
+
+    def print_results(dist_gate, dist_park, door_telemetry, park_telemetry):
+        gate_name = 'GATE_1_1'
+        park_name = 'PARK_1_4'
+        string = []
+        DISTANCE_THRESHOLD = 10
+
+        #door telemetry
+        if door_telemetry < DISTANCE_THRESHOLD:
+            string.append(['RED_BOLD', gate_name, ' = '])
+        else:
+            string.append(['GREEN_BOLD', gate_name, ' = '])
+
+        #gate distance
+        if dist_gate < DISTANCE_THRESHOLD:
+            string.append(['RED_BOLD', dist_gate, ' cm'])
+        else:
+            string.append(['GREEN_BOLD', dist_gate, ' cm'])
+
+        #tab
+        string.append(['WHITE', '\t'])
+
+        #park telemetry
+        if park_telemetry < DISTANCE_THRESHOLD:
+            string.append(['RED_BOLD', park_name, ' = '])
+        else:
+            string.append(['GREEN_BOLD', park_name, ' = '])
+
+        #park distance
+        if dist_park < DISTANCE_THRESHOLD:
+            string.append(['RED_BOLD', dist_park, ' cm'])
+        else:
+            string.append(['GREEN_BOLD', dist_park, ' cm'])
+    
+        printc_inline(string)
+        
+for a in range(0, 100):
+    for b in range(100, 0, -1):
+        print_results(a, b, a, b)
+        time.sleep(0)
